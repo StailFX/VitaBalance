@@ -373,7 +373,7 @@ export default function Analytics() {
                     }))
                   if (radarData.length < 3) return null
                   return (
-                    <div className="bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-100 dark:border-white/[0.06] p-6">
+                    <div className="bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-200 dark:border-white/[0.08] shadow-sm p-6">
                       <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">Радарное сравнение</h3>
                       <div className="h-72">
                         <ResponsiveContainer width="100%" height="100%">

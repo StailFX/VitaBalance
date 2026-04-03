@@ -330,7 +330,7 @@ export default function Home() {
                   {i < 2 && (
                     <div className="hidden sm:block absolute top-14 -right-3 sm:-right-3.5 w-6 sm:w-7 border-t-2 border-dashed border-gray-200 dark:border-white/[0.08] z-0" />
                   )}
-                  <div className="relative bg-white/80 dark:bg-white/[0.03] backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-7 border border-gray-100 dark:border-white/[0.06] card-hover hover-lift h-full">
+                  <div className="relative bg-white/80 dark:bg-white/[0.03] backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-7 border border-gray-200 dark:border-white/[0.08] shadow-sm card-hover hover-lift h-full">
                     <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center text-white mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                       {item.icon}
                     </div>
@@ -385,7 +385,7 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
               {vitamins.slice(0, 6).map((v) => (
-                <div key={v.name} className="flex items-center gap-2.5 p-3 rounded-xl bg-white/70 dark:bg-white/[0.04] border border-gray-100 dark:border-white/[0.06] backdrop-blur-sm">
+                <div key={v.name} className="flex items-center gap-2.5 p-3 rounded-xl bg-white/70 dark:bg-white/[0.04] border border-gray-200 dark:border-white/[0.08] shadow-sm backdrop-blur-sm">
                   <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${v.color} flex items-center justify-center text-sm shadow-sm flex-shrink-0`}>
                     {v.icon}
                   </div>

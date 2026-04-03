@@ -121,7 +121,7 @@ export default function Dashboard() {
         </div>
 
         {/* Profile card */}
-        <div className="bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-100 dark:border-white/[0.06] shadow-sm overflow-hidden mb-8">
+        <div className="bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-200 dark:border-white/[0.08] shadow-sm overflow-hidden mb-8">
           <div className="bg-gradient-to-r from-primary-500 to-accent-500 px-6 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">

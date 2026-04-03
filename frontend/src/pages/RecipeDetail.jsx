@@ -67,7 +67,7 @@ export default function RecipeDetail() {
     return (
       <PageTransition>
         <div className="max-w-4xl mx-auto px-4 py-8">
-          <div className="bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-100 dark:border-white/[0.06] overflow-hidden">
+          <div className="bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-200 dark:border-white/[0.08] shadow-sm overflow-hidden">
             <Skeleton className="h-72 w-full rounded-none" />
             <div className="p-8 space-y-4">
               <Skeleton className="h-8 w-2/3" />
@@ -106,7 +106,7 @@ export default function RecipeDetail() {
           Назад к рецептам
         </Link>
 
-        <div className="bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-100 dark:border-white/[0.06] shadow-sm overflow-hidden">
+        <div className="bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-200 dark:border-white/[0.08] shadow-sm overflow-hidden">
           {/* Hero image */}
           <div className="relative h-72 bg-gradient-to-br from-primary-100 to-accent-100 dark:from-primary-900/30 dark:to-accent-900/30">
             {recipe.image_url ? (
@@ -233,7 +233,7 @@ export default function RecipeDetail() {
                 <Link
                   key={r.id}
                   to={`/recipes/${r.id}`}
-                  className="group bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-100 dark:border-white/[0.06] overflow-hidden card-hover"
+                  className="group bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-200 dark:border-white/[0.08] shadow-sm overflow-hidden card-hover"
                 >
                   <div className="relative h-32 bg-gradient-to-br from-primary-100 to-accent-100 dark:from-primary-900/30 dark:to-accent-900/30 overflow-hidden">
                     {r.image_url ? (

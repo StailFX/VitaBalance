@@ -72,7 +72,7 @@ export default function ProductSearch() {
           <p className="text-gray-500 dark:text-gray-300 mt-2">Найдите продукты по названию или содержанию витаминов</p>
         </div>
 
-        <div className="bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-100 dark:border-white/[0.06] shadow-sm p-6 mb-8">
+        <div className="bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-200 dark:border-white/[0.08] shadow-sm p-6 mb-8">
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Название продукта</label>
@@ -117,7 +117,7 @@ export default function ProductSearch() {
         ) : (
           <div className="grid md:grid-cols-2 gap-4">
             {products.map((product) => (
-              <div key={product.id} className="bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-100 dark:border-white/[0.06] p-5 card-hover">
+              <div key={product.id} className="bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-200 dark:border-white/[0.08] shadow-sm p-5 card-hover">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-500/15 dark:to-orange-500/15 flex items-center justify-center flex-shrink-0 text-xl">
                     {categoryEmoji[product.category] || '🍽️'}
