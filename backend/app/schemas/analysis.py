@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 class VitaminAnalysisItem(BaseModel):
     vitamin_id: int
+    vitamin_code: str
     vitamin_name: str
     value: Optional[float]
     unit: str
@@ -15,9 +16,12 @@ class VitaminAnalysisItem(BaseModel):
 
 class HistoryVitaminEntry(BaseModel):
     vitamin_id: int
+    vitamin_code: str
     vitamin_name: str
     value: float
     unit: str
+    norm_min: float
+    norm_max: float
     status: str
 
     class Config:

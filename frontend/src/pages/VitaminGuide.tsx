@@ -30,7 +30,7 @@ export default function VitaminGuide() {
   const { addToast } = useToast()
 
   useEffect(() => {
-    cachedGet(api, '/vitamins/', { ttl: 10 * 60 * 1000 }).then((res) => {
+    cachedGet<Vitamin[]>(api, '/vitamins/', { ttl: 10 * 60 * 1000 }).then((res) => {
       setVitamins(res.data)
       setLoading(false)
     }).catch(() => {
