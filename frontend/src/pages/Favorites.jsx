@@ -132,7 +132,7 @@ export default function Favorites() {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {sortedRecipes.map((fav) => (
-                <div key={fav.recipe_id} className="group bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-100 dark:border-white/[0.06] overflow-hidden card-hover">
+                <div key={fav.recipe_id} className="group bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-200 dark:border-white/[0.08] shadow-sm overflow-hidden card-hover">
                   <div className="relative h-48 bg-gradient-to-br from-rose-100 to-primary-100 dark:from-rose-900/30 dark:to-primary-900/30">
                     {fav.recipe?.image_url ? (
                       <img src={fav.recipe.image_url} alt={fav.recipe.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />

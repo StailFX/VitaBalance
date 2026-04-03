@@ -124,7 +124,7 @@ export default function AnalysisHistory() {
           </div>
         ) : (
           <>
-            <div className="bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-100 dark:border-white/[0.06] shadow-sm p-6 mb-8">
+            <div className="bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-200 dark:border-white/[0.08] shadow-sm p-6 mb-8">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Динамика показателей</h2>
               <div className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
@@ -189,7 +189,7 @@ export default function AnalysisHistory() {
             <div className="space-y-4">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Записи</h2>
               {history.map((record, idx) => (
-                <div key={idx} className="bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-100 dark:border-white/[0.06] p-5">
+                <div key={idx} className="bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-200 dark:border-white/[0.08] shadow-sm p-5">
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-100 to-accent-100 dark:from-primary-900/40 dark:to-accent-900/40 flex items-center justify-center">
                       <svg className="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

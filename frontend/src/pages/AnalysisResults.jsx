@@ -183,7 +183,7 @@ export default function AnalysisResults() {
               <div className="text-3xl font-bold text-amber-600 dark:text-amber-400">{excessCount}</div>
               <div className="text-sm text-amber-400 mt-1">Избыток</div>
             </div>
-            <div className="bg-gradient-to-br from-gray-50 to-slate-50 dark:from-white/[0.02] dark:to-white/[0.02] rounded-2xl p-5 border border-gray-100 dark:border-white/[0.06]">
+            <div className="bg-gradient-to-br from-gray-50 to-slate-50 dark:from-white/[0.02] dark:to-white/[0.02] rounded-2xl p-5 border border-gray-200 dark:border-white/[0.08] shadow-sm">
               <div className="text-3xl font-bold text-gray-600 dark:text-gray-300">{analysis.filter(a => a.status === 'no_data').length}</div>
               <div className="text-sm text-gray-400 mt-1">Нет данных</div>
             </div>
@@ -234,7 +234,7 @@ export default function AnalysisResults() {
           })()}
 
           {/* Charts */}
-          <AnimateIn variant="blur" className="bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-100 dark:border-white/[0.06] shadow-sm p-6 mb-8">
+          <AnimateIn variant="blur" className="bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-200 dark:border-white/[0.08] shadow-sm p-6 mb-8">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Визуализация</h2>
               <div className="bg-gray-100 dark:bg-white/[0.06] rounded-xl p-1 inline-flex gap-1">
@@ -302,7 +302,7 @@ export default function AnalysisResults() {
                 ? Math.min((item.value / item.norm_max) * 100, RADAR_CHART_MAX)
                 : 0
               return (
-                <div key={item.vitamin_id} className="bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-100 dark:border-white/[0.06] p-5 card-hover stagger-item" style={{ animationDelay: `${idx * 60}ms` }}>
+                <div key={item.vitamin_id} className="bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-200 dark:border-white/[0.08] shadow-sm p-5 card-hover stagger-item" style={{ animationDelay: `${idx * 60}ms` }}>
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <div className={`w-3 h-3 rounded-full ${config.dot}`}></div>

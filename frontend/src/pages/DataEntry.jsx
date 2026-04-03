@@ -176,7 +176,7 @@ export default function DataEntry() {
         </div>
 
         {mode === 'lab' ? (
-          <form onSubmit={handleLabSubmit} className="bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-100 dark:border-white/[0.06] shadow-sm overflow-hidden">
+          <form onSubmit={handleLabSubmit} className="bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-200 dark:border-white/[0.08] shadow-sm overflow-hidden">
             <div className="bg-gradient-to-r from-primary-50 to-blue-50 dark:from-primary-900/20 dark:to-blue-900/20 px-6 py-4 border-b border-gray-100 dark:border-white/[0.06]">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center">
@@ -247,7 +247,7 @@ export default function DataEntry() {
             </div>
           </form>
         ) : (
-          <form onSubmit={handleSymptomSubmit} className="bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-100 dark:border-white/[0.06] shadow-sm overflow-hidden">
+          <form onSubmit={handleSymptomSubmit} className="bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-200 dark:border-white/[0.08] shadow-sm overflow-hidden">
             <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 px-6 py-4 border-b border-gray-100 dark:border-white/[0.06]">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center">

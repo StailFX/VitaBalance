@@ -52,9 +52,9 @@ export default function Layout() {
   const userInitial = user?.email ? user.email.charAt(0).toUpperCase() : null
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fafbff] dark:bg-[#0d1117] mesh-bg">
+    <div className="min-h-screen flex flex-col bg-gray-100 dark:bg-[#0d1117] mesh-bg">
       {/* Navbar */}
-      <header className="sticky top-0 z-50 glass border-b border-white/30 dark:border-gray-700/50 shadow-sm">
+      <header className="sticky top-0 z-50 glass border-b border-gray-200 dark:border-gray-700/50 shadow-sm">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center shadow-md">

@@ -73,7 +73,7 @@ export default function Register() {
             <p className="text-gray-500 dark:text-gray-300 mt-2">Начните следить за витаминным балансом</p>
           </div>
 
-          <div className="bg-white dark:bg-white/[0.03] p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-white/[0.06]">
+          <div className="bg-white dark:bg-white/[0.03] p-8 rounded-3xl shadow-sm border border-gray-200 dark:border-white/[0.08] shadow-sm">
             {error && (
               <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-4 rounded-2xl mb-6 text-sm flex items-center gap-3">
                 <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

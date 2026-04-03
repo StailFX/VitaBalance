@@ -109,7 +109,7 @@ export default function VitaminGuide() {
               <div
                 key={v.id}
                 className={`bg-white dark:bg-white/[0.03] rounded-3xl border overflow-hidden transition-all duration-300 ${
-                  isOpen ? 'border-gray-200 dark:border-white/[0.1] shadow-md' : 'border-gray-100 dark:border-white/[0.06] shadow-sm'
+                  isOpen ? 'border-primary-200 dark:border-primary-500/30 shadow-md shadow-primary-100/50 dark:shadow-none' : 'border-gray-200 dark:border-white/[0.08] shadow-sm'
                 }`}
               >
                 <button
