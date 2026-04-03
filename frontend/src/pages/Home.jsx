@@ -76,13 +76,22 @@ function AnimatedStat({ value, suffix = '', label, color, enabled }) {
   )
 }
 
+function plural(n, one, few, many) {
+  const abs = Math.abs(n) % 100
+  const last = abs % 10
+  if (abs > 10 && abs < 20) return many
+  if (last > 1 && last < 5) return few
+  if (last === 1) return one
+  return many
+}
+
 function StatsRow({ counts }) {
   const [ref, visible] = useInView()
 
   const stats = [
-    { value: counts.vitamins, suffix: '', label: 'Витаминов', color: 'text-primary-600 dark:text-primary-400' },
-    { value: counts.recipes, suffix: '+', label: 'Рецептов', color: 'text-cyan-600 dark:text-cyan-400' },
-    { value: counts.products, suffix: '+', label: 'Продуктов', color: 'text-accent-600 dark:text-accent-400' },
+    { value: counts.vitamins, suffix: '', label: plural(counts.vitamins, 'Витамин', 'Витамина', 'Витаминов'), color: 'text-primary-600 dark:text-primary-400' },
+    { value: counts.recipes, suffix: '+', label: plural(counts.recipes, 'Рецепт', 'Рецепта', 'Рецептов'), color: 'text-cyan-600 dark:text-cyan-400' },
+    { value: counts.products, suffix: '+', label: plural(counts.products, 'Продукт', 'Продукта', 'Продуктов'), color: 'text-accent-600 dark:text-accent-400' },
   ]
   return (
     <div ref={ref} className="flex items-center gap-8 sm:gap-10 pt-6 border-t border-gray-200/60 dark:border-white/[0.06]">
@@ -374,7 +383,7 @@ export default function Home() {
                 </div>
               ))}
             </div>
-            <p className="text-center text-xs text-gray-400 mt-4">...и ещё {counts.vitamins - 6} показателей</p>
+            <p className="text-center text-xs text-gray-400 mt-4">...и ещё {counts.vitamins - 6} {plural(counts.vitamins - 6, 'показатель', 'показателя', 'показателей')}</p>
           </div>
         </section>
 
