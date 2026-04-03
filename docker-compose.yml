@@ -20,8 +20,7 @@ services:
     environment:
       DATABASE_URL: "postgresql+asyncpg://${POSTGRES_USER:-vitamin_user}:${POSTGRES_PASSWORD:-vitamin_pass}@db:5432/${POSTGRES_DB:-vitamin_db}"
       DATABASE_URL_SYNC: "postgresql+psycopg2://${POSTGRES_USER:-vitamin_user}:${POSTGRES_PASSWORD:-vitamin_pass}@db:5432/${POSTGRES_DB:-vitamin_db}"
-    ports:
-      - "8000:8000"
+    # No exposed port — nginx proxies internally via Docker network
     networks:
       - app-network
 
