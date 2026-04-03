@@ -15,7 +15,7 @@ const vitaminMap = {
   IRON:       { emoji: '💪', gradient: 'from-red-400 to-red-500', bg: 'bg-red-50 dark:bg-red-500/15' },
   CALCIUM:    { emoji: '🦴', gradient: 'from-sky-400 to-blue-500', bg: 'bg-sky-50 dark:bg-sky-500/15' },
   MAGNESIUM:  { emoji: '🧠', gradient: 'from-purple-400 to-violet-500', bg: 'bg-purple-50 dark:bg-purple-500/15' },
-  ZINC:       { emoji: '🛡️', gradient: 'from-slate-400 to-zinc-500', bg: 'bg-slate-50 dark:bg-slate-500/15' },
+  ZINC:       { emoji: '🛡️', gradient: 'from-sky-300 to-slate-400', bg: 'bg-slate-50 dark:bg-slate-500/15' },
   SELENIUM:   { emoji: '🌿', gradient: 'from-teal-400 to-emerald-500', bg: 'bg-teal-50 dark:bg-teal-500/15' },
   PHOSPHORUS: { emoji: '🧪', gradient: 'from-blue-400 to-indigo-500', bg: 'bg-blue-50 dark:bg-blue-500/15' },
   POTASSIUM:  { emoji: '🍌', gradient: 'from-yellow-400 to-lime-500', bg: 'bg-yellow-50 dark:bg-lime-500/15' },

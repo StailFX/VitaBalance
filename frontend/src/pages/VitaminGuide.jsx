@@ -6,6 +6,20 @@ import { ListSkeleton } from '../components/Skeleton'
 import { getVitaminIcon } from '../utils/vitaminIcons'
 import { useToast } from '../context/ToastContext'
 
+// Map for keyboard layout conversion (en→ru, ru→en)
+const enToRu = { q:'й',w:'ц',e:'у',r:'к',t:'е',y:'н',u:'г',i:'ш',o:'щ',p:'з','[':'х',']':'ъ',a:'ф',s:'ы',d:'в',f:'а',g:'п',h:'р',j:'о',k:'л',l:'д',';':'ж',"'":'э',z:'я',x:'ч',c:'с',v:'м',b:'и',n:'т',m:'ь',',':'б','.':'ю' }
+const ruToEn = Object.fromEntries(Object.entries(enToRu).map(([k, v]) => [v, k]))
+
+function convertLayout(str) {
+  const lower = str.toLowerCase()
+  let toRu = '', toEn = ''
+  for (const ch of lower) {
+    toRu += enToRu[ch] || ch
+    toEn += ruToEn[ch] || ch
+  }
+  return [lower, toRu, toEn]
+}
+
 export default function VitaminGuide() {
   const [vitamins, setVitamins] = useState([])
   const [loading, setLoading] = useState(true)
@@ -37,13 +51,12 @@ export default function VitaminGuide() {
 
   const filteredVitamins = useMemo(() => {
     if (!search.trim()) return vitamins
-    const q = search.toLowerCase()
-    return vitamins.filter((v) =>
-      v.name?.toLowerCase().includes(q) ||
-      v.description?.toLowerCase().includes(q) ||
-      v.deficiency_symptoms?.toLowerCase().includes(q) ||
-      v.excess_symptoms?.toLowerCase().includes(q)
-    )
+    const variants = convertLayout(search.trim())
+    return vitamins.filter((v) => {
+      const fields = [v.name, v.description, v.deficiency_symptoms, v.excess_symptoms]
+        .filter(Boolean).map(s => s.toLowerCase()).join(' ')
+      return variants.some(q => fields.includes(q) || fields.indexOf(q) !== -1)
+    })
   }, [vitamins, search])
 
   if (loading) {
@@ -102,8 +115,8 @@ export default function VitaminGuide() {
                   onClick={() => toggleExpanded(v.id)}
                   className="w-full flex items-center gap-4 px-6 py-5 text-left hover:bg-gray-50/50 dark:hover:bg-white/[0.04] transition-colors"
                 >
-                  <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${icon.gradient} flex items-center justify-center flex-shrink-0 shadow-sm`}>
-                    <span className="text-xl">{icon.emoji}</span>
+                  <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${icon.gradient} flex items-center justify-center flex-shrink-0 shadow-md ring-1 ring-black/5 dark:ring-white/10`}>
+                    <span className="text-xl drop-shadow-sm">{icon.emoji}</span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-gray-900 dark:text-white text-lg">{v.name}</h3>
