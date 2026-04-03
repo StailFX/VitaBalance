@@ -22,7 +22,7 @@ const vitamins = [
   { name: 'Железо', icon: '💪', color: 'from-red-400 to-red-500' },
   { name: 'Кальций', icon: '🦴', color: 'from-sky-400 to-blue-500' },
   { name: 'Магний', icon: '🧠', color: 'from-purple-400 to-violet-500' },
-  { name: 'Цинк', icon: '🛡️', color: 'from-slate-400 to-zinc-500' },
+  { name: 'Цинк', icon: '🛡️', color: 'from-sky-300 to-slate-400' },
   { name: 'Селен', icon: '🌿', color: 'from-teal-400 to-emerald-500' },
   { name: 'Фосфор', icon: '🧪', color: 'from-blue-400 to-indigo-500' },
   { name: 'Калий', icon: '🍌', color: 'from-yellow-400 to-lime-500' },
