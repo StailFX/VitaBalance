@@ -46,7 +46,7 @@ VitaBalance --- трёхуровневое веб-приложение:
 ```
 ┌─────────────────────────────────────────────────┐
 │                   Клиент (Browser)              │
-│  React 19 + Vite 8 + Tailwind CSS 4 + Recharts │
+│  React 19 + TypeScript 5 + Vite 8 + Tailwind 4  │
 └────────────────────┬────────────────────────────┘
                      │ HTTP/HTTPS (JSON)
 ┌────────────────────▼────────────────────────────┐
@@ -67,7 +67,7 @@ VitaBalance --- трёхуровневое веб-приложение:
 
 **Поток данных:**
 1. Пользователь открывает SPA (React) в браузере
-2. React делает запросы к `/api/*` через Axios
+2. React делает запросы к `/api/v1/*` через типизированный Axios-клиент
 3. Nginx проксирует `/api/*` на FastAPI-бэкенд (порт 8000)
 4. FastAPI валидирует запрос (Pydantic), проверяет JWT-токен
 5. Сервисный слой выполняет бизнес-логику
@@ -87,22 +87,22 @@ VitaBalance --- трёхуровневое веб-приложение:
 - **Rate Limiting** --- через библиотеку `slowapi`. Лимиты задаются на уровне эндпоинтов (например, 5 запросов/мин на регистрацию).
 - **Request Logging Middleware** --- логирует каждый запрос: метод, путь, код ответа, время выполнения в мс. Помогает при отладке производительности.
 - **Swagger UI** --- автодокументация API. Включена только в development-режиме (`ENVIRONMENT != production`). Доступна по `/docs`.
-- **Монтирование роутеров** --- 6 роутеров подключаются с префиксом `/api/`:
-  - `/api/auth/` --- аутентификация
-  - `/api/profile/` --- профиль пользователя
-  - `/api/vitamins/` --- витамины, анализы, продукты
-  - `/api/recipes/` --- рецепты, план питания
-  - `/api/favorites/` --- избранное
-  - `/api/notifications/` --- уведомления
+- **Монтирование роутеров** --- 6 роутеров подключаются с префиксом `/api/v1/`:
+  - `/api/v1/auth/` --- аутентификация
+  - `/api/v1/profile/` --- профиль пользователя
+  - `/api/v1/vitamins/` --- витамины, анализы, продукты
+  - `/api/v1/recipes/` --- рецепты, план питания
+  - `/api/v1/favorites/` --- избранное
+  - `/api/v1/notifications/` --- уведомления
 
 #### `backend/app/config.py`
 Настройки приложения через `pydantic-settings`. Все значения читаются из `.env` файла или переменных окружения:
 
 | Переменная | Назначение | Значение по умолчанию |
 |-----------|-----------|----------------------|
-| `DATABASE_URL` | Async-подключение к БД | `postgresql+asyncpg://...` |
-| `DATABASE_URL_SYNC` | Sync-подключение (для seed-скриптов) | `postgresql+psycopg2://...` |
-| `SECRET_KEY` | Ключ подписи JWT-токенов | `change-me-...` |
+| `DATABASE_URL` | Async-подключение к БД | обязательно (нет по умолч.) |
+| `DATABASE_URL_SYNC` | Sync-подключение (для seed-скриптов) | обязательно (нет по умолч.) |
+| `SECRET_KEY` | Ключ подписи JWT-токенов | обязательно (нет по умолч.) |
 | `ALGORITHM` | Алгоритм JWT | `HS256` |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | Время жизни access-токена | `60` |
 | `REFRESH_TOKEN_EXPIRE_DAYS` | Время жизни refresh-токена | `30` |
@@ -124,17 +124,16 @@ engine = create_async_engine(
 )
 ```
 
-**`get_db()`** --- FastAPI-зависимость (dependency injection). Создаёт AsyncSession для каждого запроса и гарантирует rollback при ошибке:
+**`get_db()`** --- FastAPI-зависимость (dependency injection). Создаёт AsyncSession внутри транзакционного контекста `session.begin()`. Транзакция автоматически коммитится при успешном завершении запроса и откатывается при исключении:
 
 ```python
 async def get_db():
     async with async_session() as session:
-        try:
+        async with session.begin():
             yield session
-        except Exception:
-            await session.rollback()
-            raise
 ```
+
+Благодаря `session.begin()` роутеры и сервисы **не вызывают `commit()`/`rollback()` вручную** --- это обеспечивает атомарность всех операций в рамках запроса. При необходимости получить авто-генерируемые ID до завершения транзакции используется `await db.flush()`.
 
 Каждый роутер/сервис получает `db: AsyncSession` через `Depends(get_db)`.
 
@@ -489,12 +488,13 @@ async def cached_vitamins(db):
 
 **`check_and_notify(user_id, analysis, db)`:**
 
-Автоматически создаёт уведомления после каждого анализа:
-- **Критический дефицит** (severity >= 30%): "Критический дефицит: Витамин D, Железо. Рекомендуем скорректировать рацион."
-- **Избыток** (severity >= 20%): "Избыток: Витамин A. Проверьте дозировку."
-- **Все в норме**: "Все витамины в норме! Продолжайте в том же духе."
+Автоматически создаёт уведомления после каждого анализа с **дедупликацией (24-часовое окно)**:
+- Перед созданием проверяет `_has_recent_notification(user_id, notif_type, db)` --- ищет непрочитанные уведомления того же типа за последние 24 часа
+- **Критический дефицит** (severity >= 30%, type=`"deficiency"`): "Критический дефицит: Витамин D, Железо. Рекомендуем скорректировать рацион."
+- **Избыток** (severity >= 20%, type=`"excess"`): "Избыток: Витамин A. Проверьте дозировку."
+- **Все в норме** (type=`"achievement"`): "Все витамины в норме! Продолжайте в том же духе."
 
-Уведомления сохраняются в БД, но на фронтенде отображаются как toast-уведомления (без отдельной страницы).
+Уведомления сохраняются в БД и отображаются как toast-уведомления на фронтенде.
 
 #### `backend/app/services/utils.py` --- Утилиты
 
@@ -544,12 +544,14 @@ async def cached_vitamins(db):
 
 ## 3. Frontend: клиентское приложение
 
+Весь фронтенд написан на **TypeScript**. Доменные типы определены в `src/types/` и зеркалят серверные Pydantic-схемы. Сборка включает `tsc --noEmit` для проверки типов перед `vite build`.
+
 ### 3.1. Точка входа и маршрутизация
 
-#### `frontend/src/main.jsx`
+#### `frontend/src/main.tsx`
 Рендерит `<App />` в `#root` с `React.StrictMode`.
 
-#### `frontend/src/App.jsx`
+#### `frontend/src/App.tsx`
 Определяет дерево провайдеров и маршруты:
 
 ```
@@ -580,9 +582,9 @@ ThemeProvider
 
 ### 3.2. API-клиент (Axios)
 
-#### `frontend/src/api/client.js`
+#### `frontend/src/api/client.ts`
 
-Создаёт Axios-инстанс с базовым URL `/api`:
+Создаёт типизированный Axios-инстанс с базовым URL `/api/v1`. Определены интерфейсы `QueueItem` и `RetryableConfig` для механизма автообновления токенов:
 
 **Request interceptor:**
 ```javascript
@@ -592,33 +594,33 @@ headers.Authorization = `Bearer ${localStorage.getItem('token')}`
 
 **Response interceptor (обработка 401):**
 1. При получении 401 (токен истёк) --- пробует refresh
-2. Берёт `refreshToken` из localStorage, отправляет `POST /auth/refresh`
+2. Берёт `refreshToken` из localStorage, отправляет `POST /api/v1/auth/refresh`
 3. Если refresh успешен --- сохраняет новые токены, повторяет оригинальный запрос
 4. Если refresh не удался --- вызывает `logout()` и редиректит на `/login`
 5. **Защита от дублей:** используется флаг `isRefreshing` и очередь `failedQueue`. Пока идёт refresh, все новые 401-запросы добавляются в очередь и выполняются после получения нового токена.
 
 ### 3.3. Контексты (глобальное состояние)
 
-#### `frontend/src/context/AuthContext.jsx`
+#### `frontend/src/context/AuthContext.tsx`
 
-Управляет авторизацией:
-- **State:** `user` (объект или null), `loading` (boolean)
+Типизированный контекст авторизации (интерфейс `AuthContextValue`):
+- **State:** `user: UserOut | null`, `loading: boolean`
 - **При монтировании:** если есть `token` в localStorage → запрашивает `GET /profile/me`. Если 401 → очищает токены.
 - **`login(email, password)`** → `POST /auth/login` → сохраняет токены → загружает профиль
 - **`register(email, password)`** → `POST /auth/register` → сохраняет токены → загружает профиль
 - **`logout()`** → очищает localStorage → `user = null`
 - Устанавливает callback `onLogout` для API-клиента
 
-#### `frontend/src/context/ThemeContext.jsx`
+#### `frontend/src/context/ThemeContext.tsx`
 
-Тёмная/светлая тема:
+Типизированный контекст темы (интерфейс `ThemeContextValue`):
 - Читает начальное значение из `localStorage('theme')` или `prefers-color-scheme: dark`
 - При переключении добавляет/убирает класс `dark` на `<html>`
 - **`toggle()`** --- переключает тему и сохраняет в localStorage
 
-#### `frontend/src/context/ToastContext.jsx`
+#### `frontend/src/context/ToastContext.tsx`
 
-Система toast-уведомлений:
+Типизированная система toast-уведомлений (union-тип `ToastType`, интерфейс `ToastItem`):
 - **`addToast(message, type)`** --- создаёт уведомление (success / error / info)
 - Максимум 3 одновременно (FIFO --- первый добавлен, первый удалён)
 - Автоудаление через 3 секунды
@@ -627,7 +629,7 @@ headers.Authorization = `Bearer ${localStorage.getItem('token')}`
 
 ### 3.4. Компоненты
 
-#### `frontend/src/components/Layout.jsx` (288 строк)
+#### `frontend/src/components/Layout.tsx` (288 строк)
 
 Основной layout приложения:
 
@@ -648,7 +650,7 @@ headers.Authorization = `Bearer ${localStorage.getItem('token')}`
 - Дисклеймер: "Не является медицинской рекомендацией"
 - Копирайт
 
-#### `frontend/src/components/AnimateIn.jsx`
+#### `frontend/src/components/AnimateIn.tsx`
 
 Scroll-анимации через IntersectionObserver:
 
@@ -664,26 +666,28 @@ Scroll-анимации через IntersectionObserver:
 
 #### Другие компоненты
 
-- **`PrivateRoute.jsx`** --- проверка auth, редирект на /login, спиннер при загрузке
-- **`ErrorBoundary.jsx`** --- React Error Boundary, показывает fallback UI при крэше
-- **`PageTransition.jsx`** --- обёртка с CSS-анимацией `animate-slide-up`
-- **`Skeleton.jsx`** --- placeholder-скелетоны при загрузке данных (пульсирующая анимация)
-- **`Input.jsx`** --- стилизованный input-компонент
+- **`PrivateRoute.tsx`** --- проверка auth, редирект на /login, спиннер при загрузке
+- **`ErrorBoundary.tsx`** --- React Error Boundary, показывает fallback UI при крэше
+- **`PageTransition.tsx`** --- обёртка с CSS-анимацией `animate-slide-up`
+- **`Skeleton.tsx`** --- placeholder-скелетоны при загрузке данных (пульсирующая анимация)
+- **`Input.tsx`** --- стилизованный input-компонент
 
 ### 3.5. Хуки
 
-#### `frontend/src/hooks/useAnimations.js`
+#### `frontend/src/hooks/useAnimations.ts`
 
-**`useInView(options)`:**
-```javascript
-// Возвращает [ref, isVisible]
+Типизированные хуки с интерфейсами `InViewOptions` и `CountUpOptions`.
+
+**`useInView(options: InViewOptions)`:**
+```typescript
+// Возвращает [ref: RefObject<Element>, isVisible: boolean]
 // Использует IntersectionObserver
 // options: { threshold: 0.15, rootMargin: '0px', once: true }
 ```
 Привязываешь `ref` к DOM-элементу --- `isVisible` станет `true` при прокрутке до него.
 
-**`useCountUp(target, options)`:**
-```javascript
+**`useCountUp(target: number, options: CountUpOptions)`:**
+```typescript
 // Анимированный счётчик от 0 до target
 // options: { duration: 1500, enabled: true }
 // Easing: ease-out cubic (быстрый старт, плавное замедление)
@@ -692,7 +696,7 @@ Scroll-анимации через IntersectionObserver:
 
 ### 3.6. Страницы
 
-#### `Home.jsx` --- Главная (~430 строк)
+#### `Home.tsx` --- Главная (~430 строк)
 
 **Секции:**
 1. **Hero** --- заголовок "Ваш витаминный помощник", описание, CTA-кнопки, анимированные витаминные карточки (десктоп)
@@ -702,7 +706,7 @@ Scroll-анимации через IntersectionObserver:
 5. **Мобильная витаминная витрина** --- сетка 6 витаминов + "...и ещё N показателей"
 6. **CTA-секция** --- призыв к регистрации с blur-анимацией
 
-#### `Login.jsx` / `Register.jsx` --- Вход/Регистрация
+#### `Login.tsx` / `Register.tsx` --- Вход/Регистрация
 
 Формы с валидацией:
 - Login: email + пароль → `auth.login()` → редирект на `/dashboard`
@@ -711,20 +715,20 @@ Scroll-анимации через IntersectionObserver:
 - Показ/скрытие пароля (иконка глаза)
 - Toast-уведомления при ошибках
 
-#### `Dashboard.jsx` --- Кабинет (~280 строк)
+#### `Dashboard.tsx` --- Кабинет (~280 строк)
 
 Личный кабинет пользователя:
 - **Профиль**: отображение и редактирование (gender, age, height, weight). Inline-форма с сохранением через API.
 - **Quick-actions**: карточки быстрого доступа (Ввод данных, Анализ, Рецепты, Избранное) со stagger-анимацией и hover-lift эффектом.
 - Бейдж: дата последнего анализа, кол-во дефицитов.
 
-#### `DataEntry.jsx` --- Ввод данных (~320 строк)
+#### `DataEntry.tsx` --- Ввод данных (~320 строк)
 
 Два режима:
 1. **Лабораторные анализы:** для каждого витамина --- input с числовым значением. Отображает единицу, нормы с учётом пола, иконку витамина. Прогресс-бар заполненности. При отправке: `POST /vitamins/entries`.
 2. **Анкета симптомов:** multi-select симптомов. Каждый симптом показывает связанный витамин. Счётчик выбранных. При отправке: `POST /vitamins/entries/symptoms`.
 
-#### `AnalysisResults.jsx` --- Результаты анализа (~370 строк)
+#### `AnalysisResults.tsx` --- Результаты анализа (~370 строк)
 
 Визуализация текущего витаминного баланса:
 - **Summary-карточки**: кол-во дефицитов (красный), в норме (зелёный), избыток (оранжевый)
@@ -734,7 +738,7 @@ Scroll-анимации через IntersectionObserver:
 - **Toast-уведомления**: после загрузки анализа --- критические дефициты (error), избытки (warning), всё в норме (success)
 - **Кнопки**: перейти к рецептам, экспорт в PDF
 
-#### `AnalysisHistory.jsx` --- История (~230 строк)
+#### `AnalysisHistory.tsx` --- История (~230 строк)
 
 - **Line Chart**: тренды витаминов во времени (Recharts)
 - Фильтр по витаминам
@@ -742,14 +746,14 @@ Scroll-анимации через IntersectionObserver:
 - % изменения между записями
 - Пагинация
 
-#### `Analytics.jsx` --- Аналитика (~490 строк)
+#### `Analytics.tsx` --- Аналитика (~490 строк)
 
 Три вкладки:
 1. **Тепловая карта**: витамины (строки) × даты (столбцы). Цвет ячейки: зелёный (норма), красный (дефицит), оранжевый (избыток).
 2. **Сравнение**: выбор двух дат. Side-by-side бары, % изменения, радар-наложение двух периодов.
 3. **Обзор**: горизонтальные бары (% от нормы), рейтинг дефицитов по severity, summary-статистика.
 
-#### `Recipes.jsx` --- Рецепты (~350 строк)
+#### `Recipes.tsx` --- Рецепты (~350 строк)
 
 - Поиск по названию/описанию (debounce 300ms)
 - Фильтр по времени приготовления
@@ -757,7 +761,7 @@ Scroll-анимации через IntersectionObserver:
 - Карточки рецептов: изображение, название, описание, время, relevance score, кнопка избранного
 - Пагинация (20 на страницу)
 
-#### `RecipeDetail.jsx` --- Детали рецепта (~270 строк)
+#### `RecipeDetail.tsx` --- Детали рецепта (~270 строк)
 
 - Hero-изображение
 - Витаминный состав рецепта (рассчитывается через ингредиенты)
@@ -766,27 +770,27 @@ Scroll-анимации через IntersectionObserver:
 - Кнопка избранного
 - Похожие рецепты
 
-#### `ProductSearch.jsx` --- Поиск продуктов (~140 строк)
+#### `ProductSearch.tsx` --- Поиск продуктов (~140 строк)
 
 - Поиск по имени (debounce)
 - Фильтр по содержанию конкретного витамина
 - Карточки продуктов: категория, витаминный состав (таблица на 100г)
 
-#### `MealPlan.jsx` --- План питания (~120 строк)
+#### `MealPlan.tsx` --- План питания (~120 строк)
 
 4 приёма пищи с цветовой кодировкой:
 - Завтрак (жёлтый), Обед (зелёный), Ужин (фиолетовый), Перекус (розовый)
 - Каждый --- рецепт из рекомендаций, ссылка на детали
 - Кнопка перегенерации
 
-#### `Favorites.jsx` --- Избранное (~200 строк)
+#### `Favorites.tsx` --- Избранное (~200 строк)
 
 - Сортировка: по дате, названию, времени
 - Удаление с подтверждением
 - Счётчик с русским склонением
 - Empty state при пустом списке
 
-#### `VitaminGuide.jsx` --- Справочник витаминов (~190 строк)
+#### `VitaminGuide.tsx` --- Справочник витаминов (~190 строк)
 
 - Аккордеон: раскрываемые карточки для каждого витамина
 - Поиск по названию, описанию, симптомам
@@ -795,12 +799,12 @@ Scroll-анимации через IntersectionObserver:
 
 ### 3.7. Утилиты
 
-#### `frontend/src/utils/vitaminIcons.js`
+#### `frontend/src/utils/vitaminIcons.ts`
 
-Маппинг витаминных кодов на визуальное оформление:
+Типизированный маппинг витаминных кодов на визуальное оформление (интерфейс `VitaminVisualConfig`):
 
-```javascript
-const vitaminMap = {
+```typescript
+const vitaminMap: Record<string, VitaminVisualConfig> = {
   VIT_A:      { emoji: '🥕', gradient: 'from-orange-400 to-amber-500', bg: '...' },
   VIT_B1:     { emoji: '🌾', gradient: 'from-yellow-500 to-amber-600', bg: '...' },
   // ... для всех 20 витаминов
@@ -810,7 +814,7 @@ const vitaminMap = {
 
 Используется во всех компонентах для отображения иконок и цветов витаминов.
 
-#### `frontend/src/utils/chartColors.js`
+#### `frontend/src/utils/chartColors.ts`
 
 Палитра цветов для графиков Recharts. Используется в AnalysisResults, Analytics, AnalysisHistory.
 
@@ -1161,8 +1165,9 @@ VitaBalance/
 └── frontend/
     ├── Dockerfile                     # Node build → Nginx serve
     ├── nginx.conf                     # SPA routing + API proxy
-    ├── package.json                   # React 19, Vite 8, Tailwind 4, Recharts
-    ├── vite.config.js                 # Vite конфигурация
+    ├── package.json                   # React 19, TypeScript 5, Vite 8, Tailwind 4
+    ├── tsconfig.json                  # TypeScript конфигурация
+    ├── vite.config.ts                 # Vite конфигурация (TypeScript)
     ├── index.html                     # Точка входа HTML + PWA мета-теги
     ├── public/
     │   ├── favicon.svg                # SVG-иконка (сердце на градиенте)
@@ -1172,48 +1177,58 @@ VitaBalance/
     │       ├── icon-192.png           # PWA иконка 192x192
     │       └── icon-512.png           # PWA иконка 512x512
     └── src/
-        ├── main.jsx                   # ReactDOM.render → App
-        ├── App.jsx                    # Провайдеры + маршруты
+        ├── main.tsx                   # ReactDOM.render → App
+        ├── App.tsx                    # Провайдеры + маршруты
         ├── index.css                  # Tailwind + кастомные анимации
+        ├── types/                     # TypeScript типы (доменные модели)
+        │   ├── index.ts               # Реэкспорт всех типов
+        │   ├── auth.ts                # TokenResponse, LoginPayload
+        │   ├── user.ts                # UserOut, UserProfile, ProfileUpdate
+        │   ├── vitamins.ts            # Vitamin, SymptomMapping
+        │   ├── analysis.ts            # VitaminStatus, AnalysisSnapshot
+        │   ├── recipes.ts             # RecipeShort, RecipeDetail
+        │   ├── products.ts            # ProductSearchResult
+        │   └── notifications.ts       # NotificationItem, UnreadCount
         ├── api/
-        │   └── client.js             # Axios + interceptors + auto-refresh
+        │   ├── client.ts              # Axios + interceptors + auto-refresh
+        │   └── cache.ts               # Типизированный TTL-кэш
         ├── context/
-        │   ├── AuthContext.jsx        # Авторизация (user, login, logout)
-        │   ├── ThemeContext.jsx        # Тёмная/светлая тема
-        │   └── ToastContext.jsx        # Toast-уведомления
+        │   ├── AuthContext.tsx         # Авторизация (AuthContextValue)
+        │   ├── ThemeContext.tsx        # Тёмная/светлая тема (ThemeContextValue)
+        │   └── ToastContext.tsx        # Toast-уведомления (ToastType, ToastItem)
         ├── hooks/
-        │   └── useAnimations.js       # useInView(), useCountUp()
+        │   └── useAnimations.ts       # useInView(), useCountUp() — типизированные
         ├── components/
-        │   ├── Layout.jsx             # Хедер + футер + навигация
-        │   ├── AnimateIn.jsx          # Scroll-анимации + StaggerChildren
-        │   ├── PrivateRoute.jsx       # Защита маршрутов
-        │   ├── ErrorBoundary.jsx      # Обработка ошибок
-        │   ├── PageTransition.jsx     # Анимация перехода
-        │   ├── Skeleton.jsx           # Loading-скелетоны
-        │   └── Input.jsx              # Стилизованный input
+        │   ├── Layout.tsx             # Хедер + футер + навигация
+        │   ├── AnimateIn.tsx          # Scroll-анимации + StaggerChildren
+        │   ├── PrivateRoute.tsx       # Защита маршрутов
+        │   ├── ErrorBoundary.tsx      # Обработка ошибок
+        │   ├── PageTransition.tsx     # Анимация перехода
+        │   ├── Skeleton.tsx           # Loading-скелетоны
+        │   └── Input.tsx              # Стилизованный input
         ├── pages/
-        │   ├── Home.jsx               # Главная (~430 строк)
-        │   ├── Login.jsx              # Вход (~110 строк)
-        │   ├── Register.jsx           # Регистрация (~155 строк)
-        │   ├── Dashboard.jsx          # Кабинет (~280 строк)
-        │   ├── DataEntry.jsx          # Ввод данных (~320 строк)
-        │   ├── AnalysisResults.jsx    # Результаты анализа (~370 строк)
-        │   ├── AnalysisHistory.jsx    # История (~230 строк)
-        │   ├── Analytics.jsx          # Аналитика (~490 строк)
-        │   ├── Recipes.jsx            # Рецепты (~350 строк)
-        │   ├── RecipeDetail.jsx       # Детали рецепта (~270 строк)
-        │   ├── ProductSearch.jsx      # Поиск продуктов (~140 строк)
-        │   ├── MealPlan.jsx           # План питания (~120 строк)
-        │   ├── Favorites.jsx          # Избранное (~200 строк)
-        │   ├── VitaminGuide.jsx       # Справочник (~190 строк)
-        │   └── NotFound.jsx           # 404 (~30 строк)
+        │   ├── Home.tsx               # Главная (~430 строк)
+        │   ├── Login.tsx              # Вход (~110 строк)
+        │   ├── Register.tsx           # Регистрация (~155 строк)
+        │   ├── Dashboard.tsx          # Кабинет (~280 строк)
+        │   ├── DataEntry.tsx          # Ввод данных (~320 строк)
+        │   ├── AnalysisResults.tsx    # Результаты анализа (~370 строк)
+        │   ├── AnalysisHistory.tsx    # История (~230 строк)
+        │   ├── Analytics.tsx          # Аналитика (~490 строк)
+        │   ├── Recipes.tsx            # Рецепты (~350 строк)
+        │   ├── RecipeDetail.tsx       # Детали рецепта (~270 строк)
+        │   ├── ProductSearch.tsx      # Поиск продуктов (~140 строк)
+        │   ├── MealPlan.tsx           # План питания (~120 строк)
+        │   ├── Favorites.tsx          # Избранное (~200 строк)
+        │   ├── VitaminGuide.tsx       # Справочник (~190 строк)
+        │   └── NotFound.tsx           # 404 (~30 строк)
         └── utils/
-            ├── vitaminIcons.js        # Emoji + цвета для 20 витаминов
-            └── chartColors.js         # Палитра графиков
+            ├── vitaminIcons.ts        # Emoji + цвета для 20 витаминов (VitaminVisualConfig)
+            └── chartColors.ts         # Палитра графиков (ChartColors)
 ```
 
 **Итого:**
 - Backend: ~1 600 строк Python + ~500 строк миграций
-- Frontend: ~4 300 строк JSX/JS + ~300 строк CSS
+- Frontend: ~4 800 строк TypeScript (TSX/TS) + ~300 строк CSS + ~200 строк типов
 - Конфигурация: ~200 строк (Docker, Nginx, манифест)
 - Seed-данные: ~3 000 строк JSON

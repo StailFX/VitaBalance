@@ -8,7 +8,7 @@
 
 | Слой | Технологии |
 |------|-----------|
-| **Frontend** | React 19, Vite 8, Tailwind CSS 4, Recharts |
+| **Frontend** | React 19, TypeScript 5, Vite 8, Tailwind CSS 4, Recharts |
 | **Backend** | Python, FastAPI, SQLAlchemy 2.0 (async), Alembic |
 | **БД** | PostgreSQL 16 |
 | **Инфра** | Docker, Docker Compose, Nginx, Let's Encrypt (HTTPS) |
@@ -28,7 +28,7 @@
 - **Поиск продуктов** — по названию и содержанию витаминов, импорт из USDA API
 - **Избранные рецепты** — сохранение, сортировка, управление
 - **История анализов** — тренды изменений, сравнение дат
-- **Уведомления** — toast-уведомления о критических дефицитах после анализа
+- **Уведомления** — toast-уведомления о критических дефицитах после анализа (дедупликация 24ч)
 - **Тёмная/светлая тема** — адаптивный дизайн, mobile-first
 - **PWA** — установка на устройство, офлайн-заглушка
 - **Анимации** — scroll-анимации, stagger-эффекты, анимированные счётчики
@@ -118,7 +118,7 @@ VitaBalance/
 │   ├── app/
 │   │   ├── main.py              # FastAPI приложение, CORS, middleware
 │   │   ├── config.py            # Настройки (pydantic-settings)
-│   │   ├── database.py          # SQLAlchemy async engine, session
+│   │   ├── database.py          # SQLAlchemy async engine, session.begin()
 │   │   ├── auth_utils.py        # JWT создание/верификация токенов
 │   │   ├── seed.py              # Первоначальное заполнение БД
 │   │   ├── reseed.py            # Обновление данных в существующей БД
@@ -137,27 +137,38 @@ VitaBalance/
 │   │   │   ├── usda.py          # Интеграция с USDA FoodData Central API
 │   │   │   ├── cache.py         # Кэширование справочных данных
 │   │   │   ├── history.py       # Работа с историей анализов
-│   │   │   └── notifications.py # Логика уведомлений
+│   │   │   └── notifications.py # Логика уведомлений (с дедупликацией 24ч)
 │   │   └── seed_data/           # JSON с начальными данными
 │   ├── alembic/                 # Миграции БД
 │   ├── Dockerfile
 │   └── requirements.txt
 ├── frontend/
 │   ├── src/
-│   │   ├── components/          # Переиспользуемые компоненты
-│   │   │   ├── Layout.jsx       # Навбар, футер, навигация
-│   │   │   ├── AnimateIn.jsx    # Scroll-анимации, stagger-эффекты
-│   │   │   └── PageTransition.jsx
-│   │   ├── pages/               # 15 страниц приложения
-│   │   │   ├── Home.jsx         # Главная с анимациями и статистикой
-│   │   │   ├── AnalysisResults.jsx # Результаты анализа (Recharts)
-│   │   │   ├── Analytics.jsx    # Аналитика: тепловая карта, сравнение
-│   │   │   ├── MealPlan.jsx     # План питания
+│   │   ├── types/               # TypeScript типы (доменные модели)
+│   │   │   ├── index.ts         # Реэкспорт всех типов
+│   │   │   ├── auth.ts          # TokenResponse, LoginPayload
+│   │   │   ├── user.ts          # UserOut, UserProfile, ProfileUpdate
+│   │   │   ├── vitamins.ts      # Vitamin, SymptomMapping, VitaminEntry
+│   │   │   ├── analysis.ts      # VitaminStatus, AnalysisSnapshot
+│   │   │   ├── recipes.ts       # RecipeShort, RecipeDetail, MealPlanItem
+│   │   │   ├── products.ts      # ProductSearchResult
+│   │   │   └── notifications.ts # NotificationItem, UnreadCount
+│   │   ├── components/          # Переиспользуемые компоненты (.tsx)
+│   │   │   ├── Layout.tsx       # Навбар, футер, навигация
+│   │   │   ├── AnimateIn.tsx    # Scroll-анимации, stagger-эффекты
+│   │   │   └── PageTransition.tsx
+│   │   ├── pages/               # 15 страниц приложения (.tsx)
+│   │   │   ├── Home.tsx         # Главная с анимациями и статистикой
+│   │   │   ├── AnalysisResults.tsx # Результаты анализа (Recharts)
+│   │   │   ├── Analytics.tsx    # Аналитика: тепловая карта, сравнение
+│   │   │   ├── MealPlan.tsx     # План питания
 │   │   │   └── ...
-│   │   ├── context/             # React Context (Auth, Theme, Toast)
-│   │   ├── hooks/               # Хуки (useInView, useCountUp)
-│   │   ├── api/                 # Axios клиент с интерцепторами
-│   │   └── utils/               # Утилиты (иконки, цвета графиков)
+│   │   ├── context/             # React Context (.tsx) — Auth, Theme, Toast
+│   │   ├── hooks/               # Хуки (.ts) — useInView, useCountUp
+│   │   ├── api/                 # Axios клиент (.ts) с типизацией
+│   │   └── utils/               # Утилиты (.ts) — иконки, цвета графиков
+│   ├── tsconfig.json            # TypeScript конфигурация
+│   ├── vite.config.ts           # Vite конфигурация
 │   ├── Dockerfile
 │   └── nginx.conf
 └── docker-compose.yml
@@ -168,56 +179,56 @@ VitaBalance/
 ### Аутентификация
 | Метод | Путь | Описание |
 |-------|------|----------|
-| POST | `/api/auth/register` | Регистрация |
-| POST | `/api/auth/login` | Авторизация |
-| POST | `/api/auth/refresh` | Обновление access токена |
-| PUT | `/api/auth/change-password` | Смена пароля |
-| POST | `/api/auth/password-reset/request` | Запрос сброса пароля |
-| POST | `/api/auth/password-reset/confirm` | Подтверждение сброса |
+| POST | `/api/v1/auth/register` | Регистрация |
+| POST | `/api/v1/auth/login` | Авторизация |
+| POST | `/api/v1/auth/refresh` | Обновление access токена |
+| PUT | `/api/v1/auth/change-password` | Смена пароля |
+| POST | `/api/v1/auth/password-reset/request` | Запрос сброса пароля |
+| POST | `/api/v1/auth/password-reset/confirm` | Подтверждение сброса |
 
 ### Профиль
 | Метод | Путь | Описание |
 |-------|------|----------|
-| GET | `/api/profile/me` | Получить профиль |
-| PUT | `/api/profile/me` | Обновить профиль |
+| GET | `/api/v1/profile/me` | Получить профиль |
+| PUT | `/api/v1/profile/me` | Обновить профиль |
 
 ### Витамины и анализы
 | Метод | Путь | Описание |
 |-------|------|----------|
-| GET | `/api/vitamins/` | Список витаминов |
-| GET | `/api/vitamins/symptoms` | Список симптомов |
-| GET | `/api/vitamins/stats` | Статистика (кол-во данных) |
-| POST | `/api/vitamins/entries` | Сохранить анализы |
-| POST | `/api/vitamins/entries/symptoms` | Отправить анкету симптомов |
-| DELETE | `/api/vitamins/entries/{id}` | Удалить запись |
-| GET | `/api/vitamins/analysis` | Результат анализа |
-| GET | `/api/vitamins/analysis/compare` | Сравнение двух дат |
-| GET | `/api/vitamins/history` | История анализов |
-| GET | `/api/vitamins/products` | Поиск продуктов |
-| GET | `/api/vitamins/products/usda-search` | Поиск в USDA |
-| POST | `/api/vitamins/products/usda-import` | Импорт из USDA |
-| POST | `/api/vitamins/products/usda-bulk-import` | Массовый импорт из USDA |
+| GET | `/api/v1/vitamins/` | Список витаминов |
+| GET | `/api/v1/vitamins/symptoms` | Список симптомов |
+| GET | `/api/v1/vitamins/stats` | Статистика (кол-во данных) |
+| POST | `/api/v1/vitamins/entries` | Сохранить анализы |
+| POST | `/api/v1/vitamins/entries/symptoms` | Отправить анкету симптомов |
+| DELETE | `/api/v1/vitamins/entries/{id}` | Удалить запись |
+| GET | `/api/v1/vitamins/analysis` | Результат анализа |
+| GET | `/api/v1/vitamins/analysis/compare` | Сравнение двух дат |
+| GET | `/api/v1/vitamins/history` | История анализов |
+| GET | `/api/v1/vitamins/products` | Поиск продуктов |
+| GET | `/api/v1/vitamins/products/usda-search` | Поиск в USDA |
+| POST | `/api/v1/vitamins/products/usda-import` | Импорт из USDA |
+| POST | `/api/v1/vitamins/products/usda-bulk-import` | Массовый импорт из USDA |
 
 ### Рецепты
 | Метод | Путь | Описание |
 |-------|------|----------|
-| GET | `/api/recipes/recommended` | Рекомендованные рецепты |
-| GET | `/api/recipes/meal-plan` | План питания на день |
-| GET | `/api/recipes/search` | Поиск рецептов |
-| GET | `/api/recipes/{id}` | Детали рецепта |
+| GET | `/api/v1/recipes/recommended` | Рекомендованные рецепты |
+| GET | `/api/v1/recipes/meal-plan` | План питания на день |
+| GET | `/api/v1/recipes/search` | Поиск рецептов |
+| GET | `/api/v1/recipes/{id}` | Детали рецепта |
 
 ### Избранное
 | Метод | Путь | Описание |
 |-------|------|----------|
-| GET | `/api/favorites/` | Список избранного |
-| POST | `/api/favorites/{recipe_id}` | Добавить в избранное |
-| DELETE | `/api/favorites/{recipe_id}` | Удалить из избранного |
+| GET | `/api/v1/favorites/` | Список избранного |
+| POST | `/api/v1/favorites/{recipe_id}` | Добавить в избранное |
+| DELETE | `/api/v1/favorites/{recipe_id}` | Удалить из избранного |
 
 ### Уведомления
 | Метод | Путь | Описание |
 |-------|------|----------|
-| GET | `/api/notifications/` | Список уведомлений |
-| GET | `/api/notifications/count` | Количество непрочитанных |
+| GET | `/api/v1/notifications/` | Список уведомлений |
+| GET | `/api/v1/notifications/count` | Количество непрочитанных |
 
 ## Алгоритм подбора рецептов
 
