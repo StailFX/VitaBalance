@@ -97,12 +97,12 @@ export default function MealPlan() {
               )
             })}
 
-            <div className="bg-gradient-to-r from-primary-50 to-accent-50 dark:from-primary-900/20 dark:to-accent-900/20 rounded-2xl p-5 border border-primary-100 dark:border-primary-800 flex items-center justify-between">
+            <div className="bg-white dark:bg-white/[0.03] rounded-2xl p-5 border border-gray-200 dark:border-white/[0.08] shadow-sm flex items-center justify-between">
               <div>
-                <div className="text-sm font-medium text-gray-600 dark:text-gray-300">Общее время приготовления</div>
+                <div className="text-sm font-medium text-gray-500 dark:text-gray-400">Общее время приготовления</div>
                 <div className="text-2xl font-bold text-gray-900 dark:text-white">{plan.reduce((sum, m) => sum + (m.cook_time_minutes || 0), 0)} мин</div>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-white/80 dark:bg-white/[0.05] flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-primary-50 dark:bg-primary-500/10 flex items-center justify-center">
                 <svg className="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
