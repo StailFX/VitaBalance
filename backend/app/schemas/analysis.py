@@ -46,4 +46,13 @@ class ProductVitaminContent(BaseModel):
     unit: str
 
 
+class ComparisonItem(BaseModel):
+    vitamin_name: str
+    date1_value: Optional[float] = None
+    date2_value: Optional[float] = None
+    change_percent: Optional[float] = None
+    status1: str
+    status2: str
+
+
 ProductSearchResult.model_rebuild()

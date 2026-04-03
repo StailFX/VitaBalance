@@ -62,7 +62,7 @@ async def search_recipes(
     )
 
     if q:
-        safe_q = q.replace("%", "\\%").replace("_", "\\_")
+        safe_q = q.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
         query = query.where(
             Recipe.title.ilike(f"%{safe_q}%") | Recipe.description.ilike(f"%{safe_q}%")
         )

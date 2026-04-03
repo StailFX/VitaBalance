@@ -12,6 +12,7 @@ class UserVitaminEntry(Base):
     __tablename__ = "user_vitamin_entries"
     __table_args__ = (
         Index('ix_user_vitamin_entry', 'user_id', 'vitamin_id'),
+        Index('ix_user_entry_date', 'user_id', 'entry_date'),
     )
 
     id: Mapped[int] = mapped_column(primary_key=True)

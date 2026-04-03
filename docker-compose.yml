@@ -3,11 +3,9 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: vitamin_user
-      POSTGRES_PASSWORD: vitamin_pass
-      POSTGRES_DB: vitamin_db
-    ports:
-      - "5432:5432"
+      POSTGRES_USER: ${POSTGRES_USER:-vitamin_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-vitamin_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-vitamin_db}
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
@@ -20,8 +18,8 @@ services:
       - db
     env_file: .env
     environment:
-      DATABASE_URL: "postgresql+asyncpg://vitamin_user:vitamin_pass@db:5432/vitamin_db"
-      DATABASE_URL_SYNC: "postgresql+psycopg2://vitamin_user:vitamin_pass@db:5432/vitamin_db"
+      DATABASE_URL: "postgresql+asyncpg://${POSTGRES_USER:-vitamin_user}:${POSTGRES_PASSWORD:-vitamin_pass}@db:5432/${POSTGRES_DB:-vitamin_db}"
+      DATABASE_URL_SYNC: "postgresql+psycopg2://${POSTGRES_USER:-vitamin_user}:${POSTGRES_PASSWORD:-vitamin_pass}@db:5432/${POSTGRES_DB:-vitamin_db}"
     ports:
       - "8000:8000"
     networks:
@@ -34,6 +32,9 @@ services:
       - backend
     ports:
       - "80:80"
+      - "443:443"
+    volumes:
+      - ./ssl:/etc/nginx/ssl:ro
     networks:
       - app-network
 
