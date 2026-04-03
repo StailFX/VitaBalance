@@ -25,7 +25,11 @@ jobs:
             git reset --hard origin/main
 
             # Rebuild and restart containers
+            docker compose down
             docker compose up -d --build
+
+            # Wait for backend to be ready
+            sleep 8
 
             # Run seed (adds new recipes if any)
             docker compose exec -T backend python -m app.seed
