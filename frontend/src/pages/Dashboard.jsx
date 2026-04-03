@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../api/client'
 import PageTransition from '../components/PageTransition'
-import AnimateIn, { StaggerChildren } from '../components/AnimateIn'
+// import AnimateIn, { StaggerChildren } from '../components/AnimateIn'
 import { useToast } from '../context/ToastContext'
 
 export default function Dashboard() {
@@ -224,7 +224,7 @@ export default function Dashboard() {
         </div>
 
         {/* Quick actions */}
-        <StaggerChildren variant="fade-up" stagger={100} className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-3 gap-4">
           {quickActions.map((action, i) => {
             // Compute status badge for each card
             let badge = null
@@ -256,8 +256,8 @@ export default function Dashboard() {
             }
 
             return (
-              <Link key={i} to={action.to} className="group bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-200 dark:border-white/[0.08] shadow-sm p-6 card-hover hover-lift overflow-hidden">
-                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${action.gradient} flex items-center justify-center text-white mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
+              <Link key={i} to={action.to} className="group block bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-200 dark:border-white/[0.08] p-6 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${action.gradient} flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform`}>
                   {action.icon}
                 </div>
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{action.title}</h3>
@@ -272,7 +272,7 @@ export default function Dashboard() {
               </Link>
             )
           })}
-        </StaggerChildren>
+        </div>
       </div>
     </PageTransition>
   )
