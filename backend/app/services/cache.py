@@ -1,8 +1,9 @@
 import time
 from typing import List, Optional
 
-from sqlalchemy import select
+from sqlalchemy import select, inspect
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import make_transient
 
 from app.models.vitamin import Vitamin, SymptomVitaminMap
 
@@ -26,6 +27,14 @@ def _set_cached(key: str, data: list) -> None:
     _cache[key] = (data, time.time())
 
 
+def _detach_all(db_session, objects):
+    """Detach ORM objects from session so they can be safely cached."""
+    for obj in objects:
+        db_session.expunge(obj)
+        make_transient(obj)
+    return objects
+
+
 async def cached_vitamins(db: AsyncSession) -> List:
     cached = _get_cached("vitamins")
     if cached is not None:
@@ -33,6 +42,7 @@ async def cached_vitamins(db: AsyncSession) -> List:
 
     result = await db.execute(select(Vitamin).order_by(Vitamin.id))
     vitamins = result.scalars().all()
+    _detach_all(db, vitamins)
     _set_cached("vitamins", vitamins)
     return vitamins
 
@@ -46,5 +56,6 @@ async def cached_symptoms(db: AsyncSession) -> List:
         select(SymptomVitaminMap).order_by(SymptomVitaminMap.symptom_text)
     )
     symptoms = result.scalars().all()
+    _detach_all(db, symptoms)
     _set_cached("symptoms", symptoms)
     return symptoms
