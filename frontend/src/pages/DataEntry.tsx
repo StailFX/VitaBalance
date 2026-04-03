@@ -108,10 +108,10 @@ export default function DataEntry() {
   const getNormRange = (v: Vitamin & { norm_min?: number; norm_max?: number }): string | null => {
     const gender = profile?.gender
     let min: number | undefined | null, max: number | undefined | null
-    if (gender === 'female' || gender === 'F') {
+    if (gender === 'female') {
       min = v.norm_female_min ?? v.norm_min
       max = v.norm_female_max ?? v.norm_max
-    } else if (gender === 'male' || gender === 'M') {
+    } else if (gender === 'male') {
       min = v.norm_male_min ?? v.norm_min
       max = v.norm_male_max ?? v.norm_max
     } else {

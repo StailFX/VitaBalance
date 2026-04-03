@@ -2,6 +2,7 @@ export type VitaminStatus = 'deficiency' | 'normal' | 'excess' | 'no_data'
 
 export interface VitaminAnalysisItem {
   vitamin_id: number
+  vitamin_code: string
   vitamin_name: string
   value: number | null
   unit: string
@@ -13,9 +14,12 @@ export interface VitaminAnalysisItem {
 
 export interface HistoryVitaminEntry {
   vitamin_id: number
+  vitamin_code: string
   vitamin_name: string
   value: number
   unit: string
+  norm_min: number
+  norm_max: number
   status: VitaminStatus
 }
 

@@ -63,9 +63,12 @@ async def get_vitamin_history(
 
         grouped[date_key].append(HistoryVitaminEntry(
             vitamin_id=vit.id,
+            vitamin_code=vit.code,
             vitamin_name=vit.name,
             value=entry.value,
             unit=vit.unit,
+            norm_min=norm_min,
+            norm_max=norm_max,
             status=status,
         ))
 

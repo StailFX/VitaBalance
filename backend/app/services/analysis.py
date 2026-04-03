@@ -59,6 +59,7 @@ async def get_user_analysis(user_id: int, db: AsyncSession) -> List[VitaminAnaly
 
         analysis.append(VitaminAnalysisItem(
             vitamin_id=vit.id,
+            vitamin_code=vit.code,
             vitamin_name=vit.name,
             value=value,
             unit=vit.unit,
