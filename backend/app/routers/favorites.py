@@ -74,7 +74,7 @@ async def add_favorite(
         return {"message": "Уже в избранном"}
 
     db.add(Favorite(user_id=current_user.id, recipe_id=recipe_id))
-    await db.commit()
+
     return {"message": "Добавлено в избранное"}
 
 
@@ -90,5 +90,5 @@ async def remove_favorite(
             Favorite.recipe_id == recipe_id,
         )
     )
-    await db.commit()
+
     return {"message": "Удалено из избранного"}

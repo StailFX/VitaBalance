@@ -37,7 +37,7 @@ async def register(request: Request, data: UserCreate, db: AsyncSession = Depend
 
     profile = UserProfile(user_id=user.id)
     db.add(profile)
-    await db.commit()
+
 
     return {"message": "Регистрация успешна"}
 
@@ -88,7 +88,7 @@ async def change_password(
         raise HTTPException(status_code=400, detail="Неверный текущий пароль")
 
     current_user.password_hash = hash_password(data.new_password)
-    await db.commit()
+
     return {"message": "Пароль успешно изменён"}
 
 
@@ -109,7 +109,7 @@ async def request_password_reset(
             token=token,
             expires_at=expires_at,
         ))
-        await db.commit()
+    
         # In production, send token via email.
         # For now, return it in the response (dev mode only).
         from app.config import settings
@@ -145,6 +145,6 @@ async def confirm_password_reset(
 
     user.password_hash = hash_password(data.new_password)
     reset.used = True
-    await db.commit()
+
 
     return {"message": "Пароль успешно сброшен"}
