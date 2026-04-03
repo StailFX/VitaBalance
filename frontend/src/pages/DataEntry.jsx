@@ -14,6 +14,7 @@ export default function DataEntry() {
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [profile, setProfile] = useState(null)
+  const [symptomSearch, setSymptomSearch] = useState('')
   const navigate = useNavigate()
   const { addToast } = useToast()
 
@@ -258,8 +259,36 @@ export default function DataEntry() {
               </div>
             </div>
             <div className="p-6">
+              {/* Symptom search */}
+              <div className="relative mb-4">
+                <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
+                <input
+                  type="text"
+                  value={symptomSearch}
+                  onChange={(e) => setSymptomSearch(e.target.value)}
+                  placeholder="Поиск симптомов..."
+                  className="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.1] rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white dark:focus:bg-white/[0.08] outline-none transition-all text-gray-900 dark:text-white placeholder-gray-400"
+                />
+                {symptomSearch && (
+                  <button
+                    type="button"
+                    onClick={() => setSymptomSearch('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-gray-200 dark:bg-white/[0.1] flex items-center justify-center text-gray-500 hover:bg-gray-300 dark:hover:bg-white/[0.15] transition-colors"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
               <div className="grid md:grid-cols-2 gap-3">
-                {symptoms.map((s) => {
+                {symptoms.filter((s) => {
+                  if (!symptomSearch.trim()) return true
+                  const q = symptomSearch.toLowerCase()
+                  return s.symptom_text.toLowerCase().includes(q)
+                }).map((s) => {
                   const linkedVits = getSymptomVitamins(s)
                   const tooltipText = linkedVits.length > 0
                     ? `Связанные витамины: ${linkedVits.join(', ')}`
