@@ -59,25 +59,23 @@ async def create_entries(
     if len(entries) == 0:
         raise HTTPException(status_code=400, detail="At least one entry required")
 
-    try:
-        await db.execute(
-            delete(UserVitaminEntry).where(
-                UserVitaminEntry.user_id == current_user.id,
-                UserVitaminEntry.source == "lab",
-            )
+    # Delete old lab entries and insert new ones atomically.
+    # Transaction is managed by get_db() via session.begin() — auto-commits
+    # on success, auto-rolls back on any exception. No data loss possible.
+    await db.execute(
+        delete(UserVitaminEntry).where(
+            UserVitaminEntry.user_id == current_user.id,
+            UserVitaminEntry.source == "lab",
         )
+    )
 
-        for entry in entries:
-            db.add(UserVitaminEntry(
-                user_id=current_user.id,
-                vitamin_id=entry.vitamin_id,
-                value=entry.value,
-                source=entry.source,
-            ))
-        await db.commit()
-    except Exception:
-        await db.rollback()
-        raise HTTPException(status_code=500, detail="Ошибка сохранения данных")
+    for entry in entries:
+        db.add(UserVitaminEntry(
+            user_id=current_user.id,
+            vitamin_id=entry.vitamin_id,
+            value=entry.value,
+            source=entry.source,
+        ))
     return {"message": f"Сохранено {len(entries)} записей"}
 
 
@@ -106,7 +104,6 @@ async def delete_entry(
         raise HTTPException(status_code=404, detail="Запись не найдена")
 
     await db.delete(entry)
-    await db.commit()
     return {"message": "Запись удалена"}
 
 

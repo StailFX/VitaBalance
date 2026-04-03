@@ -19,11 +19,13 @@ class Base(DeclarativeBase):
 
 
 async def get_db():
+    """Provide a transactional database session.
+
+    Uses begin() to wrap the session in an explicit transaction:
+    - Auto-commits on successful completion
+    - Auto-rolls back on any exception
+    This eliminates the need for manual commit() calls in routers/services.
+    """
     async with async_session() as session:
-        try:
+        async with session.begin():
             yield session
-        except Exception:
-            await session.rollback()
-            raise
-        finally:
-            await session.close()

@@ -91,35 +91,30 @@ async def process_symptoms(user_id: int, symptom_ids: List[int], db: AsyncSessio
     # Get vitamins for norm data (cached)
     all_vitamins = {v.id: v for v in await cached_vitamins(db)}
 
-    # Delete old symptom-based entries and create new ones atomically
-    try:
-        await db.execute(
-            delete(UserVitaminEntry).where(
-                UserVitaminEntry.user_id == user_id,
-                UserVitaminEntry.source == "symptom",
-            )
+    # Delete old symptom-based entries and create new ones atomically.
+    # Transaction managed by get_db() session.begin() — auto-commit/rollback.
+    await db.execute(
+        delete(UserVitaminEntry).where(
+            UserVitaminEntry.user_id == user_id,
+            UserVitaminEntry.source == "symptom",
         )
+    )
 
-        # Create entries: higher weight = more deficiency (value further below norm)
-        for vit_id, total_weight in vitamin_weights.items():
-            vit = all_vitamins.get(vit_id)
-            if not vit:
-                continue
-            norm_min, _ = get_norms_for_gender(vit, gender)
-            # Estimate value as a fraction below the minimum norm
-            # Clamp total_weight between 0 and 2
-            clamped = min(total_weight, 2.0)
-            reduction = clamped / 2.0  # 0 to 1.0
-            estimated_value = round(norm_min * (1 - reduction * 0.75), 2)
+    # Create entries: higher weight = more deficiency (value further below norm)
+    for vit_id, total_weight in vitamin_weights.items():
+        vit = all_vitamins.get(vit_id)
+        if not vit:
+            continue
+        norm_min, _ = get_norms_for_gender(vit, gender)
+        # Estimate value as a fraction below the minimum norm
+        # Clamp total_weight between 0 and 2
+        clamped = min(total_weight, 2.0)
+        reduction = clamped / 2.0  # 0 to 1.0
+        estimated_value = round(norm_min * (1 - reduction * 0.75), 2)
 
-            db.add(UserVitaminEntry(
-                user_id=user_id,
-                vitamin_id=vit_id,
-                value=estimated_value,
-                source="symptom",
-            ))
-
-        await db.commit()
-    except Exception:
-        await db.rollback()
-        raise
+        db.add(UserVitaminEntry(
+            user_id=user_id,
+            vitamin_id=vit_id,
+            value=estimated_value,
+            source="symptom",
+        ))

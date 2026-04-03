@@ -191,8 +191,6 @@ async def import_usda_food(
         ))
         added_vitamins[code] = amount
 
-    await db.commit()
-
     return {
         "id": product.id,
         "name": name,
@@ -253,5 +251,4 @@ async def search_and_import_usda(
             "id": product.id,
         })
 
-    await db.commit()
     return results

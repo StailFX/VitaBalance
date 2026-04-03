@@ -34,6 +34,6 @@ async def update_profile(
     if data.weight_kg is not None:
         profile.weight_kg = data.weight_kg
 
-    await db.commit()
+    await db.flush()
     await db.refresh(current_user)
     return current_user

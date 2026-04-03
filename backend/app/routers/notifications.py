@@ -65,7 +65,7 @@ async def mark_read(
         .where(Notification.id == notification_id, Notification.user_id == current_user.id)
         .values(read=True)
     )
-    await db.commit()
+
     return {"message": "Прочитано"}
 
 
@@ -79,5 +79,5 @@ async def mark_all_read(
         .where(Notification.user_id == current_user.id, Notification.read == False)
         .values(read=True)
     )
-    await db.commit()
+
     return {"message": "Все уведомления прочитаны"}
