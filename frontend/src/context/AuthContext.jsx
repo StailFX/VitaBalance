@@ -13,7 +13,10 @@ export function AuthProvider({ children }) {
     if (token) {
       api.get('/profile/me')
         .then((res) => setUser(res.data))
-        .catch(() => localStorage.removeItem('token'))
+        .catch(() => {
+          localStorage.removeItem('token')
+          localStorage.removeItem('refreshToken')
+        })
         .finally(() => setLoading(false))
     } else {
       setLoading(false)
@@ -28,6 +31,7 @@ export function AuthProvider({ children }) {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     })
     localStorage.setItem('token', res.data.access_token)
+    localStorage.setItem('refreshToken', res.data.refresh_token)
     const profile = await api.get('/profile/me')
     setUser(profile.data)
   }
@@ -39,6 +43,7 @@ export function AuthProvider({ children }) {
 
   const logout = useCallback(() => {
     localStorage.removeItem('token')
+    localStorage.removeItem('refreshToken')
     setUser(null)
   }, [])
 

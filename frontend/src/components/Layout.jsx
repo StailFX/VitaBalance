@@ -73,6 +73,7 @@ export default function Layout() {
               <>
                 <NavLink to="/data-entry">Ввод данных</NavLink>
                 <NavLink to="/analysis">Анализ</NavLink>
+                <NavLink to="/analytics">Аналитика</NavLink>
                 <NavLink to="/recipes">Рецепты</NavLink>
                 <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-2" />
                 <div className="relative" ref={dropdownRef}>
@@ -108,6 +109,16 @@ export default function Layout() {
                           <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                         </svg>
                         Избранное
+                      </Link>
+                      <Link
+                        to="/analytics"
+                        onClick={() => setDropdownOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors text-gray-700 dark:text-gray-200"
+                      >
+                        <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                        </svg>
+                        Аналитика
                       </Link>
                       <Link
                         to="/dashboard"
@@ -213,6 +224,7 @@ export default function Layout() {
                 </div>
                 <Link to="/data-entry" className="block py-2 text-gray-600 dark:text-gray-300" onClick={() => setMobileOpen(false)}>Ввод данных</Link>
                 <Link to="/analysis" className="block py-2 text-gray-600 dark:text-gray-300" onClick={() => setMobileOpen(false)}>Анализ</Link>
+                <Link to="/analytics" className="block py-2 text-gray-600 dark:text-gray-300" onClick={() => setMobileOpen(false)}>Аналитика</Link>
                 <Link to="/recipes" className="block py-2 text-gray-600 dark:text-gray-300" onClick={() => setMobileOpen(false)}>Рецепты</Link>
                 <Link to="/meal-plan" className="block py-2 text-gray-600 dark:text-gray-300" onClick={() => setMobileOpen(false)}>План питания</Link>
                 <Link to="/favorites" className="block py-2 text-gray-600 dark:text-gray-300" onClick={() => setMobileOpen(false)}>Избранное</Link>

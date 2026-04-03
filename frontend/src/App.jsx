@@ -17,6 +17,7 @@ import Favorites from './pages/Favorites'
 import VitaminGuide from './pages/VitaminGuide'
 import ProductSearch from './pages/ProductSearch'
 import MealPlan from './pages/MealPlan'
+import Analytics from './pages/Analytics'
 import NotFound from './pages/NotFound'
 import PrivateRoute from './components/PrivateRoute'
 
@@ -42,6 +43,7 @@ function App() {
                 <Route path="recipes/:id" element={<PrivateRoute><RecipeDetail /></PrivateRoute>} />
                 <Route path="favorites" element={<PrivateRoute><Favorites /></PrivateRoute>} />
                 <Route path="meal-plan" element={<PrivateRoute><MealPlan /></PrivateRoute>} />
+                <Route path="analytics" element={<PrivateRoute><Analytics /></PrivateRoute>} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>

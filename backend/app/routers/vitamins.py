@@ -23,6 +23,7 @@ from app.auth_utils import get_current_user
 from app.services.analysis import get_user_analysis, process_symptoms
 from app.services.history import get_vitamin_history, compare_vitamin_analysis
 from app.services.cache import cached_vitamins, cached_symptoms
+from app.services.notifications import check_and_notify
 
 router = APIRouter()
 
@@ -104,7 +105,9 @@ async def get_analysis(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    return await get_user_analysis(current_user.id, db)
+    analysis = await get_user_analysis(current_user.id, db)
+    await check_and_notify(current_user.id, analysis, db)
+    return analysis
 
 
 @router.get("/analysis/compare", response_model=List[ComparisonItem])
@@ -175,3 +178,71 @@ async def search_products(
             vitamin_content=vitamin_content,
         ))
     return items
+
+
+@router.get("/products/usda-search")
+async def usda_search(
+    query: str = Query(..., min_length=2, description="Search query for USDA database"),
+    limit: int = Query(default=10, ge=1, le=25),
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Search USDA FoodData Central for foods with vitamin data."""
+    from app.config import settings
+    from app.services.usda import search_usda_foods, extract_vitamins_from_usda
+
+    foods = await search_usda_foods(query, settings.USDA_API_KEY, page_size=limit)
+
+    results = []
+    for food in foods:
+        vitamins = extract_vitamins_from_usda(food)
+        if not vitamins:
+            continue
+        results.append({
+            "fdc_id": food.get("fdcId"),
+            "name": food.get("description", ""),
+            "category": food.get("foodCategory", ""),
+            "data_type": food.get("dataType", ""),
+            "vitamins": vitamins,
+        })
+    return results
+
+
+@router.post("/products/usda-import")
+async def usda_import(
+    fdc_id: int = Query(..., description="USDA FDC ID to import"),
+    name: Optional[str] = Query(None, description="Custom product name (Russian)"),
+    category: Optional[str] = Query(None, description="Custom category name (Russian)"),
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Import a single food from USDA FoodData Central into the database."""
+    from app.config import settings
+    from app.services.usda import import_usda_food
+
+    result = await import_usda_food(
+        fdc_id, settings.USDA_API_KEY, db,
+        custom_name=name, custom_category=category,
+    )
+    if result is None:
+        raise HTTPException(status_code=404, detail="Продукт не найден в USDA или не содержит витаминных данных")
+    return result
+
+
+@router.post("/products/usda-bulk-import")
+async def usda_bulk_import(
+    query: str = Query(..., min_length=2, description="Search query"),
+    limit: int = Query(default=10, ge=1, le=25),
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Search USDA and bulk import matching foods into the database."""
+    from app.config import settings
+    from app.services.usda import search_and_import_usda
+
+    results = await search_and_import_usda(query, settings.USDA_API_KEY, db, limit=limit)
+    imported = sum(1 for r in results if r["status"] == "imported")
+    return {
+        "message": f"Импортировано {imported} из {len(results)} продуктов",
+        "results": results,
+    }
