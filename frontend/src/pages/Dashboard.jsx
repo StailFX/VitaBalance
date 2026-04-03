@@ -256,7 +256,7 @@ export default function Dashboard() {
             }
 
             return (
-              <Link key={i} to={action.to} className="group bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-100 dark:border-white/[0.06] p-6 card-hover hover-lift">
+              <Link key={i} to={action.to} className="group bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-200 dark:border-white/[0.08] shadow-sm p-6 card-hover hover-lift overflow-hidden">
                 <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${action.gradient} flex items-center justify-center text-white mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
                   {action.icon}
                 </div>
