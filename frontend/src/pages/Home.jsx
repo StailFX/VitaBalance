@@ -8,15 +8,25 @@ import api from '../api/client'
 
 const vitamins = [
   { name: 'Витамин A', icon: '🥕', color: 'from-orange-400 to-amber-500' },
+  { name: 'B1 Тиамин', icon: '🌾', color: 'from-yellow-500 to-amber-600' },
+  { name: 'B2 Рибофлав.', icon: '🥛', color: 'from-amber-400 to-orange-400' },
+  { name: 'B3 Ниацин', icon: '🔥', color: 'from-red-400 to-orange-500' },
+  { name: 'B5 Пантотен.', icon: '⚡', color: 'from-cyan-400 to-teal-500' },
+  { name: 'B6 Пиридокс.', icon: '🧬', color: 'from-indigo-400 to-blue-500' },
+  { name: 'B9 Фолиевая', icon: '🥬', color: 'from-emerald-400 to-green-500' },
+  { name: 'B12 Кобалам.', icon: '🔴', color: 'from-pink-400 to-rose-500' },
   { name: 'Витамин C', icon: '🍊', color: 'from-yellow-400 to-orange-400' },
   { name: 'Витамин D', icon: '☀️', color: 'from-amber-300 to-yellow-400' },
-  { name: 'B12', icon: '🧬', color: 'from-pink-400 to-rose-500' },
-  { name: 'B6', icon: '💊', color: 'from-indigo-400 to-blue-500' },
+  { name: 'Витамин E', icon: '✨', color: 'from-green-400 to-emerald-500' },
+  { name: 'Витамин K', icon: '🩸', color: 'from-lime-400 to-green-500' },
   { name: 'Железо', icon: '💪', color: 'from-red-400 to-red-500' },
   { name: 'Кальций', icon: '🦴', color: 'from-sky-400 to-blue-500' },
   { name: 'Магний', icon: '🧠', color: 'from-purple-400 to-violet-500' },
-  { name: 'Витамин E', icon: '✨', color: 'from-emerald-400 to-green-500' },
-  { name: 'Фолиевая к.', icon: '🌿', color: 'from-teal-400 to-emerald-500' },
+  { name: 'Цинк', icon: '🛡️', color: 'from-slate-400 to-zinc-500' },
+  { name: 'Селен', icon: '🌿', color: 'from-teal-400 to-emerald-500' },
+  { name: 'Фосфор', icon: '🧪', color: 'from-blue-400 to-indigo-500' },
+  { name: 'Калий', icon: '🍌', color: 'from-yellow-400 to-lime-500' },
+  { name: 'Омега-3', icon: '🐟', color: 'from-sky-400 to-cyan-500' },
 ]
 
 const features = [
@@ -203,7 +213,7 @@ export default function Home() {
                         </div>
                         <div>
                           <h3 className="text-sm font-bold text-gray-900 dark:text-white leading-tight">Витаминный профиль</h3>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">10 показателей</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">{counts.vitamins} {plural(counts.vitamins, 'показатель', 'показателя', 'показателей')}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent-50 dark:bg-accent-500/10 border border-accent-200 dark:border-accent-500/20">
@@ -213,17 +223,17 @@ export default function Home() {
                     </div>
 
                     {/* Vitamin grid */}
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-4 gap-1.5">
                       {vitamins.map((v, i) => (
                         <div
                           key={v.name}
-                          className="group animate-fade-in flex items-center gap-2.5 p-2.5 rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-gray-200/80 dark:border-white/[0.05] hover:border-primary-300 dark:hover:border-primary-500/20 hover:bg-gray-100 dark:hover:bg-white/[0.06] transition-all duration-200 cursor-default"
-                          style={{ animationDelay: `${i * 0.06}s`, animationFillMode: 'both' }}
+                          className="group animate-fade-in flex flex-col items-center gap-1 p-2 rounded-lg bg-gray-50 dark:bg-white/[0.03] border border-gray-200/80 dark:border-white/[0.05] hover:border-primary-300 dark:hover:border-primary-500/20 hover:bg-gray-100 dark:hover:bg-white/[0.06] transition-all duration-200 cursor-default"
+                          style={{ animationDelay: `${i * 0.04}s`, animationFillMode: 'both' }}
                         >
-                          <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${v.color} flex items-center justify-center text-sm shadow-sm flex-shrink-0 group-hover:scale-110 transition-transform duration-200`}>
+                          <div className={`w-7 h-7 rounded-lg bg-gradient-to-br ${v.color} flex items-center justify-center text-xs shadow-sm flex-shrink-0 group-hover:scale-110 transition-transform duration-200`}>
                             {v.icon}
                           </div>
-                          <span className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">{v.name}</span>
+                          <span className="text-[10px] font-medium text-gray-700 dark:text-gray-300 text-center leading-tight truncate w-full">{v.name}</span>
                         </div>
                       ))}
                     </div>
