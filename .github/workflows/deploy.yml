@@ -24,14 +24,22 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
 
-            # Rebuild and restart containers
-            docker compose down
-            docker compose up -d --build
+            # Rebuild and restart WITHOUT killing the DB
+            # docker compose up recreates only changed containers
+            # The DB stays running thanks to healthcheck + depends_on
+            docker compose up -d --build --remove-orphans
 
-            # Wait for backend to be ready
-            sleep 8
+            # Wait for DB healthcheck + backend startup (up to 30s)
+            echo "Waiting for services to be ready..."
+            for i in $(seq 1 30); do
+              if docker compose exec -T backend python -c "print('ok')" 2>/dev/null; then
+                echo "Backend ready after ${i}s"
+                break
+              fi
+              sleep 1
+            done
 
-            # Run seed (adds new recipes if any)
+            # Run seed (adds new data if any)
             docker compose exec -T backend python -m app.seed
 
             echo "Deploy completed at $(date)"

@@ -1,4 +1,5 @@
 import time
+import asyncio
 import logging
 
 from fastapi import FastAPI, Request
@@ -6,8 +7,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
+from sqlalchemy import text
 
 from app.config import settings
+from app.database import engine
 from app.routers import auth, profile, vitamins, recipes, favorites, notifications
 
 logging.basicConfig(level=logging.INFO)
@@ -64,6 +67,22 @@ app.include_router(vitamins.router, prefix="/api/vitamins", tags=["vitamins"], i
 app.include_router(recipes.router, prefix="/api/recipes", tags=["recipes"], include_in_schema=False)
 app.include_router(favorites.router, prefix="/api/favorites", tags=["favorites"], include_in_schema=False)
 app.include_router(notifications.router, prefix="/api/notifications", tags=["notifications"], include_in_schema=False)
+
+
+@app.on_event("startup")
+async def startup_check_db():
+    """Verify database is reachable on startup with retry."""
+    for attempt in range(1, 16):
+        try:
+            async with engine.begin() as conn:
+                await conn.execute(text("SELECT 1"))
+            logger.info("Database connection OK")
+            return
+        except Exception as e:
+            logger.warning("DB connection attempt %d/15 failed: %s", attempt, e)
+            if attempt < 15:
+                await asyncio.sleep(2)
+    logger.error("Could not connect to database after 15 attempts")
 
 
 @app.get("/")
