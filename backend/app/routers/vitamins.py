@@ -2,7 +2,7 @@ from typing import List, Optional
 from datetime import date
 
 from fastapi import APIRouter, Depends, Query, HTTPException
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -11,6 +11,7 @@ from app.models.user import User
 from app.models.vitamin import Vitamin, SymptomVitaminMap
 from app.models.user_data import UserVitaminEntry
 from app.models.product import Product, ProductVitamin
+from app.models.recipe import Recipe
 from app.schemas.vitamin import VitaminOut, SymptomOut, VitaminEntryCreate, SymptomSubmit
 from app.schemas.analysis import (
     VitaminAnalysisItem,
@@ -36,6 +37,15 @@ async def list_vitamins(db: AsyncSession = Depends(get_db)):
 @router.get("/symptoms", response_model=List[SymptomOut])
 async def list_symptoms(db: AsyncSession = Depends(get_db)):
     return await cached_symptoms(db)
+
+
+@router.get("/stats")
+async def get_stats(db: AsyncSession = Depends(get_db)):
+    """Public stats: vitamin, product, and recipe counts."""
+    vitamins = await db.scalar(select(func.count()).select_from(Vitamin))
+    products = await db.scalar(select(func.count()).select_from(Product))
+    recipes = await db.scalar(select(func.count()).select_from(Recipe))
+    return {"vitamins": vitamins, "products": products, "recipes": recipes}
 
 
 @router.post("/entries")
