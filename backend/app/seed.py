@@ -22,10 +22,55 @@ def seed_db():
     Base.metadata.create_all(engine)
 
     with Session(engine) as db:
-        # Check if already seeded
-        if db.query(Vitamin).count() > 0:
-            print("Database already seeded, skipping.")
+        # Check if base data (vitamins, products) already seeded
+        already_seeded = db.query(Vitamin).count() > 0
+
+        if already_seeded:
+            print("Base data already seeded. Checking for new recipes...")
+
+            # Build lookup maps from existing DB data
+            vitamin_map = {v.code: v for v in db.query(Vitamin).all()}
+            product_map = {p.name: p for p in db.query(Product).all()}
+
+            # Check for new recipes to add
+            with open(SEED_DIR / "recipes.json", encoding="utf-8") as f:
+                recipes_data = json.load(f)
+
+            existing_titles = {r.title for r in db.query(Recipe.title).all()}
+            new_recipes = [r for r in recipes_data if r["title"] not in existing_titles]
+
+            if not new_recipes:
+                print("No new recipes to add. Skipping.")
+                return
+
+            for r in new_recipes:
+                recipe = Recipe(
+                    title=r["title"],
+                    description=r["description"],
+                    image_url=r.get("image_url"),
+                    cook_time_minutes=r["cook_time_minutes"],
+                    instructions=r["instructions"],
+                )
+                db.add(recipe)
+                db.flush()
+
+                for ing in r.get("ingredients", []):
+                    prod = product_map.get(ing["product_name"])
+                    if prod:
+                        db.add(RecipeIngredient(
+                            recipe_id=recipe.id,
+                            product_id=prod.id,
+                            amount=ing["amount"],
+                            unit=ing["unit"],
+                        ))
+                    else:
+                        print(f"  Warning: product '{ing['product_name']}' not found, skipping ingredient")
+
+            db.commit()
+            print(f"Added {len(new_recipes)} new recipes!")
             return
+
+        # ---- Full initial seed ----
 
         # 1. Vitamins
         with open(SEED_DIR / "vitamins.json", encoding="utf-8") as f:

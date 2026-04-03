@@ -8,6 +8,7 @@ from app.models.recipe import Recipe, RecipeIngredient
 from app.models.product import ProductVitamin
 from app.models.vitamin import Vitamin
 from app.services.analysis import get_user_analysis
+from app.services.cache import cached_vitamins
 
 
 async def get_recommended_recipes(user_id: int, db: AsyncSession, limit: int = 20) -> List[Dict]:
@@ -121,12 +122,11 @@ async def get_recipe_vitamin_content(recipe_id: int, db: AsyncSession) -> List[D
         for pv in pv_map.get(ing.product_id, []):
             totals[pv.vitamin_id] = totals.get(pv.vitamin_id, 0) + pv.amount_per_100g * factor
 
-    # Get vitamin names
+    # Get vitamin names (cached)
     vit_ids = list(totals.keys())
     if not vit_ids:
         return []
-    vit_result = await db.execute(select(Vitamin).where(Vitamin.id.in_(vit_ids)))
-    vitamins = {v.id: v for v in vit_result.scalars().all()}
+    vitamins = {v.id: v for v in await cached_vitamins(db) if v.id in vit_ids}
 
     return [
         {
