@@ -3,6 +3,9 @@ import logging
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 
 from app.config import settings
 from app.routers import auth, profile, vitamins, recipes, favorites
@@ -10,15 +13,23 @@ from app.routers import auth, profile, vitamins, recipes, favorites
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("vitabalance")
 
+limiter = Limiter(key_func=get_remote_address)
+
 app = FastAPI(
     title="VitaBalance API",
     description="Веб-сервис персонализированного подбора рациона питания",
     version="1.0.0",
+    docs_url=None if settings.is_production else "/docs",
+    redoc_url=None if settings.is_production else "/redoc",
+    openapi_url=None if settings.is_production else "/openapi.json",
 )
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS.split(","),
+    allow_origins=settings.cors_origins_list,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["Authorization", "Content-Type"],
@@ -39,11 +50,18 @@ async def log_requests(request: Request, call_next):
     )
     return response
 
-app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
-app.include_router(profile.router, prefix="/api/profile", tags=["profile"])
-app.include_router(vitamins.router, prefix="/api/vitamins", tags=["vitamins"])
-app.include_router(recipes.router, prefix="/api/recipes", tags=["recipes"])
-app.include_router(favorites.router, prefix="/api/favorites", tags=["favorites"])
+app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
+app.include_router(profile.router, prefix="/api/v1/profile", tags=["profile"])
+app.include_router(vitamins.router, prefix="/api/v1/vitamins", tags=["vitamins"])
+app.include_router(recipes.router, prefix="/api/v1/recipes", tags=["recipes"])
+app.include_router(favorites.router, prefix="/api/v1/favorites", tags=["favorites"])
+
+# Backward compatibility: keep old /api/ routes
+app.include_router(auth.router, prefix="/api/auth", tags=["auth"], include_in_schema=False)
+app.include_router(profile.router, prefix="/api/profile", tags=["profile"], include_in_schema=False)
+app.include_router(vitamins.router, prefix="/api/vitamins", tags=["vitamins"], include_in_schema=False)
+app.include_router(recipes.router, prefix="/api/recipes", tags=["recipes"], include_in_schema=False)
+app.include_router(favorites.router, prefix="/api/favorites", tags=["favorites"], include_in_schema=False)
 
 
 @app.get("/")
