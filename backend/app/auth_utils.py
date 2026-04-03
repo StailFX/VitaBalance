@@ -34,8 +34,36 @@ def create_access_token(data: dict) -> str:
         "exp": expire,
         "iat": now,
         "jti": str(uuid.uuid4()),
+        "type": "access",
     })
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+
+
+def create_refresh_token(data: dict) -> str:
+    to_encode = data.copy()
+    now = datetime.now(timezone.utc)
+    expire = now + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
+    to_encode.update({
+        "exp": expire,
+        "iat": now,
+        "jti": str(uuid.uuid4()),
+        "type": "refresh",
+    })
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+
+
+def decode_refresh_token(token: str) -> int:
+    """Decode refresh token and return user_id. Raises HTTPException on failure."""
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        if payload.get("type") != "refresh":
+            raise HTTPException(status_code=401, detail="Неверный тип токена")
+        user_id_str = payload.get("sub")
+        if user_id_str is None:
+            raise HTTPException(status_code=401, detail="Неверный токен")
+        return int(user_id_str)
+    except (PyJWTError, ValueError):
+        raise HTTPException(status_code=401, detail="Неверный или истёкший refresh токен")
 
 
 async def get_current_user(
@@ -49,6 +77,8 @@ async def get_current_user(
     )
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        if payload.get("type") != "access":
+            raise credentials_exception
         user_id_str = payload.get("sub")
         if user_id_str is None:
             raise credentials_exception

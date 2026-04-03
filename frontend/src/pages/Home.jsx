@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import PageTransition from '../components/PageTransition'
+import AnimateIn, { StaggerChildren } from '../components/AnimateIn'
+import { useInView, useCountUp } from '../hooks/useAnimations'
 
 const vitamins = [
   { name: 'Витамин A', icon: '🥕', color: 'from-orange-400 to-amber-500' },
@@ -61,6 +63,32 @@ const features = [
     bg: 'bg-rose-50 dark:bg-rose-500/[0.08]',
   },
 ]
+
+function AnimatedStat({ value, suffix = '', label, color, enabled }) {
+  const count = useCountUp(parseInt(value) || 0, { enabled })
+  return (
+    <div>
+      <div className={`text-2xl sm:text-3xl font-bold ${color}`}>{count}{suffix}</div>
+      <div className="text-xs sm:text-sm text-gray-400 mt-0.5">{label}</div>
+    </div>
+  )
+}
+
+function StatsRow() {
+  const [ref, visible] = useInView()
+  const stats = [
+    { value: '10', suffix: '', label: 'Витаминов', color: 'text-primary-600 dark:text-primary-400' },
+    { value: '35', suffix: '+', label: 'Рецептов', color: 'text-cyan-600 dark:text-cyan-400' },
+    { value: '46', suffix: '', label: 'Продуктов', color: 'text-accent-600 dark:text-accent-400' },
+  ]
+  return (
+    <div ref={ref} className="flex items-center gap-8 sm:gap-10 pt-6 border-t border-gray-200/60 dark:border-white/[0.06]">
+      {stats.map((s, i) => (
+        <AnimatedStat key={i} {...s} enabled={visible} />
+      ))}
+    </div>
+  )
+}
 
 export default function Home() {
   const { user } = useAuth()
@@ -137,18 +165,7 @@ export default function Home() {
                 </div>
 
                 {/* Stats row */}
-                <div className="flex items-center gap-8 sm:gap-10 pt-6 border-t border-gray-200/60 dark:border-white/[0.06]">
-                  {[
-                    { value: '10', label: 'Витаминов', color: 'text-primary-600 dark:text-primary-400' },
-                    { value: '35+', label: 'Рецептов', color: 'text-cyan-600 dark:text-cyan-400' },
-                    { value: '46', label: 'Продуктов', color: 'text-accent-600 dark:text-accent-400' },
-                  ].map((s, i) => (
-                    <div key={i}>
-                      <div className={`text-2xl sm:text-3xl font-bold ${s.color}`}>{s.value}</div>
-                      <div className="text-xs sm:text-sm text-gray-400 mt-0.5">{s.label}</div>
-                    </div>
-                  ))}
-                </div>
+                <StatsRow />
               </div>
 
               {/* Right column — Vitamin card grid */}
@@ -231,7 +248,7 @@ export default function Home() {
         <section className="py-16 sm:py-24 relative">
           <div className="max-w-5xl mx-auto px-5 sm:px-8">
             {/* Section header */}
-            <div className="text-center mb-12 sm:mb-16">
+            <AnimateIn variant="fade-up" className="text-center mb-12 sm:mb-16">
               <span className="inline-block px-4 py-1.5 rounded-full bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 text-xs font-semibold uppercase tracking-wider mb-4 border border-primary-100 dark:border-primary-500/20">
                 Как это работает
               </span>
@@ -239,10 +256,10 @@ export default function Home() {
                 Три простых шага к{' '}
                 <span className="gradient-text">здоровому рациону</span>
               </h2>
-            </div>
+            </AnimateIn>
 
             {/* Steps */}
-            <div className="grid sm:grid-cols-3 gap-5 sm:gap-6">
+            <StaggerChildren variant="fade-up" stagger={120} className="grid sm:grid-cols-3 gap-5 sm:gap-6">
               {[
                 {
                   step: '01',
@@ -286,8 +303,8 @@ export default function Home() {
                   {i < 2 && (
                     <div className="hidden sm:block absolute top-14 -right-3 sm:-right-3.5 w-6 sm:w-7 border-t-2 border-dashed border-gray-200 dark:border-white/[0.08] z-0" />
                   )}
-                  <div className="relative bg-white/80 dark:bg-white/[0.03] backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-7 border border-gray-100 dark:border-white/[0.06] card-hover h-full">
-                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center text-white mb-5 shadow-lg`}>
+                  <div className="relative bg-white/80 dark:bg-white/[0.03] backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-7 border border-gray-100 dark:border-white/[0.06] card-hover hover-lift h-full">
+                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center text-white mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                       {item.icon}
                     </div>
                     <span className="text-xs font-bold text-gray-300 dark:text-gray-600 uppercase tracking-wider">Шаг {item.step}</span>
@@ -296,7 +313,7 @@ export default function Home() {
                   </div>
                 </div>
               ))}
-            </div>
+            </StaggerChildren>
           </div>
         </section>
 
@@ -304,7 +321,7 @@ export default function Home() {
         <section className="py-16 sm:py-24 relative">
           <div className="max-w-5xl mx-auto px-5 sm:px-8">
             {/* Section header */}
-            <div className="text-center mb-12 sm:mb-16">
+            <AnimateIn variant="fade-up" className="text-center mb-12 sm:mb-16">
               <span className="inline-block px-4 py-1.5 rounded-full bg-accent-50 dark:bg-accent-500/10 text-accent-600 dark:text-accent-400 text-xs font-semibold uppercase tracking-wider mb-4 border border-accent-100 dark:border-accent-500/20">
                 Возможности
               </span>
@@ -312,12 +329,12 @@ export default function Home() {
                 Всё для вашего{' '}
                 <span className="gradient-text">витаминного здоровья</span>
               </h2>
-            </div>
+            </AnimateIn>
 
             {/* Feature grid */}
-            <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
+            <StaggerChildren variant="scale" stagger={100} className="grid sm:grid-cols-2 gap-4 sm:gap-5">
               {features.map((f, i) => (
-                <div key={i} className={`group ${f.bg} rounded-2xl sm:rounded-3xl p-6 sm:p-7 card-hover border border-transparent dark:border-white/[0.04] relative overflow-hidden`}>
+                <div key={i} className={`group ${f.bg} rounded-2xl sm:rounded-3xl p-6 sm:p-7 card-hover hover-lift border border-transparent dark:border-white/[0.04] relative overflow-hidden`}>
                   <div className="relative z-10">
                     <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${f.gradient} flex items-center justify-center text-white mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                       {f.icon}
@@ -327,7 +344,7 @@ export default function Home() {
                   </div>
                 </div>
               ))}
-            </div>
+            </StaggerChildren>
           </div>
         </section>
 
@@ -355,7 +372,7 @@ export default function Home() {
 
         {/* ===== CTA ===== */}
         <section className="py-16 sm:py-24">
-          <div className="max-w-4xl mx-auto px-5 sm:px-8">
+          <AnimateIn variant="blur" className="max-w-4xl mx-auto px-5 sm:px-8">
             <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-primary-600 via-primary-700 to-indigo-900 p-8 sm:p-12 lg:p-16 text-center">
               {/* Decorative elements */}
               <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-white/[0.05] blur-2xl" />
@@ -380,7 +397,7 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-          </div>
+          </AnimateIn>
         </section>
 
       </div>

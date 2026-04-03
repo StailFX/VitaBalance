@@ -4,6 +4,7 @@ import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Responsi
 import api from '../api/client'
 import PageTransition from '../components/PageTransition'
 import { TableSkeleton } from '../components/Skeleton'
+import AnimateIn, { StaggerChildren } from '../components/AnimateIn'
 import { useToast } from '../context/ToastContext'
 import { useTheme } from '../context/ThemeContext'
 import { getVitaminIcon } from '../utils/vitaminIcons'
@@ -26,6 +27,18 @@ export default function AnalysisResults() {
     api.get('/vitamins/analysis').then((res) => {
       setAnalysis(res.data)
       setLoading(false)
+
+      const criticalDef = res.data.filter(a => a.status === 'deficiency' && a.severity >= 30)
+      const excess = res.data.filter(a => a.status === 'excess' && a.severity >= 20)
+      if (criticalDef.length > 0) {
+        const names = criticalDef.slice(0, 3).map(a => a.vitamin_name).join(', ')
+        addToast(`Критический дефицит: ${names}. Рекомендуем скорректировать рацион.`, 'error')
+      } else if (excess.length > 0) {
+        const names = excess.slice(0, 3).map(a => a.vitamin_name).join(', ')
+        addToast(`Повышенный уровень: ${names}. Проконсультируйтесь с врачом.`, 'info')
+      } else if (res.data.every(a => a.status === 'normal' || a.status === 'no_data') && res.data.some(a => a.status === 'normal')) {
+        addToast('Все витамины в норме!', 'success')
+      }
     }).catch(() => {
       setError(true)
       setLoading(false)
@@ -157,7 +170,7 @@ export default function AnalysisResults() {
 
         <div ref={reportRef}>
           {/* Summary cards */}
-          <div className="grid grid-cols-4 gap-4 mb-8">
+          <StaggerChildren variant="fade-up" stagger={80} className="grid grid-cols-4 gap-4 mb-8">
             <div className="bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-900/20 dark:to-rose-900/20 rounded-2xl p-5 border border-red-100 dark:border-red-800/50">
               <div className="text-3xl font-bold text-red-600 dark:text-red-400">{defCount}</div>
               <div className="text-sm text-red-400 mt-1">Дефицитов</div>
@@ -174,7 +187,7 @@ export default function AnalysisResults() {
               <div className="text-3xl font-bold text-gray-600 dark:text-gray-300">{analysis.filter(a => a.status === 'no_data').length}</div>
               <div className="text-sm text-gray-400 mt-1">Нет данных</div>
             </div>
-          </div>
+          </StaggerChildren>
 
           {/* Priority Deficiencies */}
           {(() => {
@@ -221,7 +234,7 @@ export default function AnalysisResults() {
           })()}
 
           {/* Charts */}
-          <div className="bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-100 dark:border-white/[0.06] shadow-sm p-6 mb-8">
+          <AnimateIn variant="blur" className="bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-100 dark:border-white/[0.06] shadow-sm p-6 mb-8">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Визуализация</h2>
               <div className="bg-gray-100 dark:bg-white/[0.06] rounded-xl p-1 inline-flex gap-1">
@@ -279,17 +292,17 @@ export default function AnalysisResults() {
                 </ResponsiveContainer>
               )}
             </div>
-          </div>
+          </AnimateIn>
 
           {/* Vitamin cards */}
           <div className="space-y-3 mb-8">
-            {analysis.map((item) => {
+            {analysis.map((item, idx) => {
               const config = getStatusConfig(item.status)
               const percentage = item.value !== null && item.norm_max > 0
                 ? Math.min((item.value / item.norm_max) * 100, RADAR_CHART_MAX)
                 : 0
               return (
-                <div key={item.vitamin_id} className="bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-100 dark:border-white/[0.06] p-5 card-hover">
+                <div key={item.vitamin_id} className="bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-100 dark:border-white/[0.06] p-5 card-hover stagger-item" style={{ animationDelay: `${idx * 60}ms` }}>
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <div className={`w-3 h-3 rounded-full ${config.dot}`}></div>
@@ -303,12 +316,12 @@ export default function AnalysisResults() {
                     <div className="flex-1">
                       <div className="h-2 bg-gray-100 dark:bg-white/[0.06] rounded-full overflow-hidden">
                         <div
-                          className={`h-full rounded-full transition-all duration-700 ${
+                          className={`h-full rounded-full animate-bar-fill ${
                             item.status === 'deficiency' ? 'bg-red-400' :
                             item.status === 'excess' ? 'bg-amber-400' :
                             item.status === 'normal' ? 'bg-emerald-400' : 'bg-gray-200 dark:bg-gray-600'
                           }`}
-                          style={{ width: `${Math.max(percentage, MIN_BAR_WIDTH_PERCENT)}%` }}
+                          style={{ width: `${Math.max(percentage, MIN_BAR_WIDTH_PERCENT)}%`, animationDelay: `${idx * 60 + 300}ms`, animationFillMode: 'both' }}
                         />
                       </div>
                     </div>
