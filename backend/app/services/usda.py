@@ -21,15 +21,24 @@ USDA_BASE_URL = "https://api.nal.usda.gov/fdc/v1"
 NUTRIENT_MAP = {
     1104: "VIT_A",       # Vitamin A, IU -> convert to mcg RAE
     1175: "VIT_A",       # Vitamin A, RAE (mcg) — preferred
+    1165: "VIT_B1",      # Thiamin (mg)
+    1166: "VIT_B2",      # Riboflavin (mg)
+    1167: "VIT_B3",      # Niacin (mg)
     1170: "VIT_B6",      # Vitamin B-6 (mg)
+    1174: "VIT_B5",      # Pantothenic acid (mg)
     1177: "VIT_B9",      # Folate, total (mcg)
     1178: "VIT_B12",     # Vitamin B-12 (mcg)
     1162: "VIT_C",       # Vitamin C (mg)
     1114: "VIT_D",       # Vitamin D (D2 + D3) (mcg)
     1109: "VIT_E",       # Vitamin E (mg)
+    1185: "VIT_K",       # Vitamin K (phylloquinone) (mcg)
     1089: "IRON",        # Iron, Fe (mg)
     1087: "CALCIUM",     # Calcium, Ca (mg)
     1090: "MAGNESIUM",   # Magnesium, Mg (mg)
+    1095: "ZINC",        # Zinc, Zn (mg)
+    1103: "SELENIUM",    # Selenium, Se (mcg)
+    1091: "PHOSPHORUS",  # Phosphorus, P (mg)
+    1092: "POTASSIUM",   # Potassium, K (mg)
 }
 
 # Nutrient IDs to prefer (RAE over IU for Vitamin A)

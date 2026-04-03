@@ -20,7 +20,7 @@ const vitamins = [
 const features = [
   {
     title: 'Анализ витаминов',
-    desc: 'Определение дефицитов и профицитов 10 ключевых витаминов и минералов по вашим данным',
+    desc: 'Определение дефицитов и профицитов 20 ключевых витаминов и минералов по вашим данным',
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605" />
@@ -77,9 +77,9 @@ function AnimatedStat({ value, suffix = '', label, color, enabled }) {
 function StatsRow() {
   const [ref, visible] = useInView()
   const stats = [
-    { value: '10', suffix: '', label: 'Витаминов', color: 'text-primary-600 dark:text-primary-400' },
+    { value: '20', suffix: '', label: 'Витаминов', color: 'text-primary-600 dark:text-primary-400' },
     { value: '35', suffix: '+', label: 'Рецептов', color: 'text-cyan-600 dark:text-cyan-400' },
-    { value: '46', suffix: '', label: 'Продуктов', color: 'text-accent-600 dark:text-accent-400' },
+    { value: '91', suffix: '', label: 'Продуктов', color: 'text-accent-600 dark:text-accent-400' },
   ]
   return (
     <div ref={ref} className="flex items-center gap-8 sm:gap-10 pt-6 border-t border-gray-200/60 dark:border-white/[0.06]">
@@ -353,7 +353,7 @@ export default function Home() {
           <div className="max-w-5xl mx-auto px-5 sm:px-8">
             <div className="text-center mb-8">
               <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-                Отслеживаем <span className="gradient-text">10 витаминов</span>
+                Отслеживаем <span className="gradient-text">20 витаминов</span>
               </h2>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
