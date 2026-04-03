@@ -147,17 +147,22 @@ export default function Analytics() {
 
         {/* Summary cards */}
         <StaggerChildren variant="fade-up" stagger={80} className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {[
-            { value: defCount, color: 'text-red-500', label: 'Дефицитов' },
-            { value: normalCount, color: 'text-emerald-500', label: 'В норме' },
-            { value: excessCount, color: 'text-amber-500', label: 'Избыток' },
-            { value: history.length, color: 'text-primary-500', label: 'Записей' },
-          ].map((s, i) => (
-            <div key={i} className="card p-5 hover-lift">
-              <div className={`text-3xl font-bold ${s.color}`}>{s.value}</div>
-              <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{s.label}</div>
-            </div>
-          ))}
+          <div className="bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-900/20 dark:to-rose-900/20 rounded-2xl p-5 border border-red-100 dark:border-red-800/50">
+            <div className="text-3xl font-bold text-red-600 dark:text-red-400">{defCount}</div>
+            <div className="text-sm text-red-400 mt-1">Дефицитов</div>
+          </div>
+          <div className="bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20 rounded-2xl p-5 border border-emerald-100 dark:border-emerald-800/50">
+            <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">{normalCount}</div>
+            <div className="text-sm text-emerald-400 mt-1">В норме</div>
+          </div>
+          <div className="bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 rounded-2xl p-5 border border-amber-100 dark:border-amber-800/50">
+            <div className="text-3xl font-bold text-amber-600 dark:text-amber-400">{excessCount}</div>
+            <div className="text-sm text-amber-400 mt-1">Избыток</div>
+          </div>
+          <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-2xl p-5 border border-indigo-100 dark:border-indigo-800/50">
+            <div className="text-3xl font-bold text-primary-600 dark:text-primary-400">{history.length}</div>
+            <div className="text-sm text-primary-400 mt-1">Записей</div>
+          </div>
         </StaggerChildren>
 
         {/* Tab switcher */}
