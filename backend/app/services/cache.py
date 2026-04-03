@@ -8,7 +8,7 @@ from app.models.vitamin import Vitamin, SymptomVitaminMap
 
 # Simple in-memory cache with TTL for static seed data
 _cache: dict = {}
-CACHE_TTL_SECONDS = 300  # 5 minutes
+CACHE_TTL_SECONDS = 3600  # 1 hour (vitamins & symptoms are static seed data)
 
 
 def _get_cached(key: str) -> Optional[list]:

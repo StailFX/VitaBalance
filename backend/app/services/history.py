@@ -13,6 +13,7 @@ from app.schemas.analysis import (
     ComparisonItem,
 )
 from app.services.utils import classify_vitamin_status, get_norms_for_gender, get_user_gender
+from app.services.cache import cached_vitamins
 
 
 async def get_vitamin_history(
@@ -24,8 +25,7 @@ async def get_vitamin_history(
     """Get paginated vitamin entry history grouped by date."""
     gender = await get_user_gender(user_id, db)
 
-    vit_result = await db.execute(select(Vitamin))
-    vitamins = {v.id: v for v in vit_result.scalars().all()}
+    vitamins = {v.id: v for v in await cached_vitamins(db)}
 
     # Get distinct dates first for proper date-based pagination
     date_subq = (
@@ -84,8 +84,7 @@ async def compare_vitamin_analysis(
     """Compare vitamin levels between two dates."""
     gender = await get_user_gender(user_id, db)
 
-    vit_result = await db.execute(select(Vitamin))
-    vitamins = {v.id: v for v in vit_result.scalars().all()}
+    vitamins = {v.id: v for v in await cached_vitamins(db)}
 
     async def get_closest_entries(target_date: date) -> Dict[int, float]:
         """Find vitamin entries closest to the target date."""

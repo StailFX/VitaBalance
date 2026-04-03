@@ -25,5 +25,5 @@ class SymptomVitaminMap(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     symptom_text: Mapped[str] = mapped_column(String(255))
-    vitamin_id: Mapped[int] = mapped_column(ForeignKey("vitamins.id"))
+    vitamin_id: Mapped[int] = mapped_column(ForeignKey("vitamins.id"), index=True)
     weight: Mapped[float] = mapped_column(Float, default=1.0)

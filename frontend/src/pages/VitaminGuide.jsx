@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../api/client'
+import { cachedGet } from '../api/cache'
 import PageTransition from '../components/PageTransition'
 import { ListSkeleton } from '../components/Skeleton'
 import { getVitaminIcon } from '../utils/vitaminIcons'
@@ -28,7 +29,7 @@ export default function VitaminGuide() {
   const { addToast } = useToast()
 
   useEffect(() => {
-    api.get('/vitamins/').then((res) => {
+    cachedGet(api, '/vitamins/', { ttl: 10 * 60 * 1000 }).then((res) => {
       setVitamins(res.data)
       setLoading(false)
     }).catch(() => {
@@ -115,8 +116,8 @@ export default function VitaminGuide() {
                   onClick={() => toggleExpanded(v.id)}
                   className="w-full flex items-center gap-4 px-6 py-5 text-left hover:bg-gray-50/50 dark:hover:bg-white/[0.04] transition-colors"
                 >
-                  <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${icon.gradient} flex items-center justify-center flex-shrink-0 shadow-md ring-1 ring-black/5 dark:ring-white/10`}>
-                    <span className="text-xl drop-shadow-sm">{icon.emoji}</span>
+                  <div className={`w-12 h-12 rounded-2xl ${icon.bg} flex items-center justify-center flex-shrink-0 shadow-sm border border-gray-100 dark:border-white/[0.08]`}>
+                    <span className="text-2xl">{icon.emoji}</span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-gray-900 dark:text-white text-lg">{v.name}</h3>

@@ -7,15 +7,15 @@ from app.models.vitamin import Vitamin, SymptomVitaminMap
 from app.models.user_data import UserVitaminEntry
 from app.schemas.analysis import VitaminAnalysisItem
 from app.services.utils import classify_vitamin_status, get_norms_for_gender, get_user_gender
+from app.services.cache import cached_vitamins
 
 
 async def get_user_analysis(user_id: int, db: AsyncSession) -> List[VitaminAnalysisItem]:
     """Analyze user's vitamin levels and return status for each vitamin."""
     gender = await get_user_gender(user_id, db)
 
-    # Get all vitamins
-    result = await db.execute(select(Vitamin))
-    vitamins = result.scalars().all()
+    # Get all vitamins (cached — static seed data)
+    vitamins = await cached_vitamins(db)
 
     # Get latest user entries (most recent per vitamin) using a subquery
     # Use max(id) as tiebreaker for same-day entries, preferring the latest insert
@@ -88,9 +88,8 @@ async def process_symptoms(user_id: int, symptom_ids: List[int], db: AsyncSessio
             vitamin_weights[s.vitamin_id] = 0
         vitamin_weights[s.vitamin_id] += s.weight
 
-    # Get vitamins for norm data
-    vit_result = await db.execute(select(Vitamin))
-    all_vitamins = {v.id: v for v in vit_result.scalars().all()}
+    # Get vitamins for norm data (cached)
+    all_vitamins = {v.id: v for v in await cached_vitamins(db)}
 
     # Delete old symptom-based entries and create new ones atomically
     try:

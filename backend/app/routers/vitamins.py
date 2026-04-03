@@ -166,8 +166,7 @@ async def search_products(
     result = await db.execute(query.order_by(Product.name).limit(50))
     products = result.scalars().unique().all()
 
-    vit_result = await db.execute(select(Vitamin))
-    vitamins = {v.id: v for v in vit_result.scalars().all()}
+    vitamins = {v.id: v for v in await cached_vitamins(db)}
 
     items = []
     for product in products:

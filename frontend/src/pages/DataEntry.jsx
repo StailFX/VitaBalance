@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../api/client'
 import PageTransition from '../components/PageTransition'
@@ -10,7 +10,7 @@ export default function DataEntry() {
   const [vitamins, setVitamins] = useState([])
   const [labValues, setLabValues] = useState({})
   const [symptoms, setSymptoms] = useState([])
-  const [selectedSymptoms, setSelectedSymptoms] = useState([])
+  const [selectedSymptoms, setSelectedSymptoms] = useState(new Set())
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [profile, setProfile] = useState(null)
@@ -56,7 +56,7 @@ export default function DataEntry() {
     e.preventDefault()
     setSubmitting(true)
     try {
-      await api.post('/vitamins/entries/symptoms', { symptom_ids: selectedSymptoms })
+      await api.post('/vitamins/entries/symptoms', { symptom_ids: Array.from(selectedSymptoms) })
       addToast('Данные успешно сохранены', 'success')
       navigate('/analysis')
     } catch {
@@ -66,10 +66,31 @@ export default function DataEntry() {
     }
   }
 
-  const toggleSymptom = (id) => {
-    setSelectedSymptoms((prev) =>
-      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
-    )
+  // Group symptoms by symptom_text to avoid duplicates in UI
+  const groupedSymptoms = useMemo(() => {
+    const map = new Map()
+    for (const s of symptoms) {
+      const existing = map.get(s.symptom_text)
+      if (existing) {
+        existing.ids.push(s.id)
+      } else {
+        map.set(s.symptom_text, { text: s.symptom_text, ids: [s.id] })
+      }
+    }
+    return Array.from(map.values())
+  }, [symptoms])
+
+  const toggleSymptom = (ids) => {
+    setSelectedSymptoms((prev) => {
+      const next = new Set(prev)
+      const isSelected = ids.every((id) => next.has(id))
+      if (isSelected) {
+        ids.forEach((id) => next.delete(id))
+      } else {
+        ids.forEach((id) => next.add(id))
+      }
+      return next
+    })
   }
 
   // Progress calculation for lab mode
@@ -100,24 +121,6 @@ export default function DataEntry() {
     return null
   }
 
-  // Helper to get linked vitamin names for a symptom
-  const getSymptomVitamins = (symptom) => {
-    const names = []
-    if (symptom.vitamins && symptom.vitamins.length > 0) {
-      symptom.vitamins.forEach((sv) => {
-        names.push(sv.vitamin_name || sv.name || sv.code)
-      })
-    }
-    if (symptom.linked_vitamins && symptom.linked_vitamins.length > 0) {
-      symptom.linked_vitamins.forEach((sv) => {
-        names.push(sv.vitamin_name || sv.name || sv.code)
-      })
-    }
-    if (symptom.vitamin_names && symptom.vitamin_names.length > 0) {
-      return symptom.vitamin_names
-    }
-    return names
-  }
 
   if (loading) {
     return (
@@ -284,55 +287,41 @@ export default function DataEntry() {
                 )}
               </div>
               <div className="grid md:grid-cols-2 gap-3">
-                {symptoms.filter((s) => {
+                {groupedSymptoms.filter((g) => {
                   if (!symptomSearch.trim()) return true
                   const q = symptomSearch.toLowerCase()
-                  return s.symptom_text.toLowerCase().includes(q)
-                }).map((s) => {
-                  const linkedVits = getSymptomVitamins(s)
-                  const tooltipText = linkedVits.length > 0
-                    ? `Связанные витамины: ${linkedVits.join(', ')}`
-                    : (s.description || null)
+                  return g.text.toLowerCase().includes(q)
+                }).map((g) => {
+                  const isSelected = g.ids.every((id) => selectedSymptoms.has(id))
                   return (
                   <label
-                    key={s.id}
+                    key={g.text}
                     className={`flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition-all ${
-                      selectedSymptoms.includes(s.id)
+                      isSelected
                         ? 'border-primary-400 dark:border-primary-500 bg-primary-50 dark:bg-primary-900/20 shadow-sm'
                         : 'border-gray-100 dark:border-white/[0.06] hover:border-gray-200 dark:hover:border-white/[0.1] hover:bg-gray-50 dark:hover:bg-white/[0.04]'
                     }`}
                   >
                     <div className={`w-5 h-5 rounded-lg border-2 flex items-center justify-center flex-shrink-0 transition-all ${
-                      selectedSymptoms.includes(s.id)
+                      isSelected
                         ? 'border-primary-500 bg-primary-500'
                         : 'border-gray-300 dark:border-white/[0.1]'
                     }`}>
-                      {selectedSymptoms.includes(s.id) && (
+                      {isSelected && (
                         <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                         </svg>
                       )}
                     </div>
-                    <input type="checkbox" checked={selectedSymptoms.includes(s.id)} onChange={() => toggleSymptom(s.id)} className="hidden" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300 flex-1">{s.symptom_text}</span>
-                    {tooltipText && (
-                      <div className="relative group/tip flex-shrink-0">
-                        <svg className="w-4 h-4 text-gray-400 dark:text-gray-500 hover:text-primary-500 dark:hover:text-primary-400 transition-colors cursor-help" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-                        </svg>
-                        <div className="absolute bottom-full right-0 mb-2 w-56 px-3 py-2 bg-gray-800 dark:bg-gray-700 text-white text-xs rounded-xl shadow-lg opacity-0 invisible group-hover/tip:opacity-100 group-hover/tip:visible transition-all z-10 pointer-events-none">
-                          {tooltipText}
-                          <div className="absolute top-full right-3 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-gray-800 dark:border-t-gray-700"></div>
-                        </div>
-                      </div>
-                    )}
+                    <input type="checkbox" checked={isSelected} onChange={() => toggleSymptom(g.ids)} className="hidden" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300 flex-1">{g.text}</span>
                   </label>
                   )
                 })}
               </div>
-              {selectedSymptoms.length > 0 && (
+              {selectedSymptoms.size > 0 && (
                 <div className="mt-4 text-sm text-primary-600 dark:text-primary-400 font-medium">
-                  Выбрано симптомов: {selectedSymptoms.length}
+                  Выбрано симптомов: {groupedSymptoms.filter((g) => g.ids.every((id) => selectedSymptoms.has(id))).length}
                 </div>
               )}
               <div className="mt-6 pt-6 border-t border-gray-100 dark:border-white/[0.06]">
