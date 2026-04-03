@@ -154,16 +154,24 @@ export default function VitaminGuide() {
 
                     {/* Symptoms */}
                     <div className="grid grid-cols-2 gap-3 mb-4">
-                      <div className="bg-red-50 dark:bg-red-900/20 rounded-2xl p-4 border border-red-100 dark:border-red-800/50">
-                        <h4 className="flex items-center gap-2 text-xs font-semibold text-red-600 dark:text-red-400 uppercase tracking-wider mb-2">
-                          <span className="w-2 h-2 rounded-full bg-red-400"></span>
+                      <div className="bg-red-50 dark:bg-red-900/20 rounded-2xl p-5 border-2 border-red-200 dark:border-red-700/50">
+                        <h4 className="flex items-center gap-2 text-sm font-bold text-red-600 dark:text-red-400 mb-3">
+                          <div className="w-7 h-7 rounded-lg bg-red-100 dark:bg-red-800/40 flex items-center justify-center flex-shrink-0">
+                            <svg className="w-4 h-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                            </svg>
+                          </div>
                           Симптомы дефицита
                         </h4>
                         <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{v.deficiency_symptoms}</p>
                       </div>
-                      <div className="bg-amber-50 dark:bg-amber-900/20 rounded-2xl p-4 border border-amber-100 dark:border-amber-800/50">
-                        <h4 className="flex items-center gap-2 text-xs font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-2">
-                          <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                      <div className="bg-amber-50 dark:bg-amber-900/20 rounded-2xl p-5 border-2 border-amber-200 dark:border-amber-700/50">
+                        <h4 className="flex items-center gap-2 text-sm font-bold text-amber-600 dark:text-amber-400 mb-3">
+                          <div className="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-800/40 flex items-center justify-center flex-shrink-0">
+                            <svg className="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                            </svg>
+                          </div>
                           Симптомы избытка
                         </h4>
                         <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{v.excess_symptoms}</p>

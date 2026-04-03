@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import api from '../api/client'
 import PageTransition from '../components/PageTransition'
 import { ListSkeleton } from '../components/Skeleton'
@@ -18,10 +19,11 @@ const categoryEmoji = {
 }
 
 export default function ProductSearch() {
+  const [searchParams] = useSearchParams()
   const [products, setProducts] = useState([])
   const [vitamins, setVitamins] = useState([])
   const [search, setSearch] = useState('')
-  const [vitaminFilter, setVitaminFilter] = useState('')
+  const [vitaminFilter, setVitaminFilter] = useState(searchParams.get('vitamin_id') || '')
   const [loading, setLoading] = useState(true)
   const { addToast } = useToast()
   const debounceRef = useRef(null)
