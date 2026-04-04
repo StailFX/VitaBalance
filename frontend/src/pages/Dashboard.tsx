@@ -237,7 +237,7 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <StaggerChildren variant="fade-up" stagger={70} className="grid grid-cols-2 gap-3 self-start">
+            <StaggerChildren variant="fade-up" stagger={70} className="grid gap-3 self-start sm:grid-cols-2">
               <div className="rounded-[1.5rem] border border-primary-100 dark:border-primary-500/20 bg-gradient-to-br from-primary-50 via-white to-white dark:from-primary-500/12 dark:via-white/[0.04] dark:to-white/[0.02] p-4 sm:p-5">
                 <div className="text-xs uppercase tracking-[0.18em] text-primary-500 dark:text-primary-300 mb-2">Профиль</div>
                 <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{profileCompletion}%</div>

@@ -270,7 +270,7 @@ export default function Analytics() {
               </div>
             </div>
 
-            <StaggerChildren variant="fade-up" stagger={70} className="grid grid-cols-2 gap-3 self-start">
+            <StaggerChildren variant="fade-up" stagger={70} className="grid gap-3 self-start sm:grid-cols-2">
               {summaryCards.map((card) => (
                 <div
                   key={card.label}
@@ -289,24 +289,26 @@ export default function Analytics() {
           variant="blur"
           className="bg-white dark:bg-white/[0.03] rounded-[1.75rem] border border-gray-200 dark:border-white/[0.08] shadow-sm p-4"
         >
-          <div className="bg-gray-100 dark:bg-white/[0.06] rounded-2xl p-1.5 inline-flex gap-1">
-            {([
-              { key: 'heatmap' as const, label: 'Heatmap' },
-              { key: 'compare' as const, label: 'Сравнение' },
-              { key: 'overview' as const, label: 'Обзор' },
-            ]).map((t) => (
-              <button
-                key={t.key}
-                onClick={() => setTab(t.key)}
-                className={`px-5 py-2 rounded-xl text-sm font-medium transition-all ${
-                  tab === t.key
-                    ? 'bg-white dark:bg-white/[0.08] text-primary-600 dark:text-primary-400 shadow-sm'
-                    : 'text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200'
-                }`}
-              >
-                {t.label}
-              </button>
-            ))}
+          <div className="overflow-x-auto">
+            <div className="bg-gray-100 dark:bg-white/[0.06] rounded-2xl p-1.5 inline-flex min-w-max gap-1">
+              {([
+                { key: 'heatmap' as const, label: 'Heatmap' },
+                { key: 'compare' as const, label: 'Сравнение' },
+                { key: 'overview' as const, label: 'Обзор' },
+              ]).map((t) => (
+                <button
+                  key={t.key}
+                  onClick={() => setTab(t.key)}
+                  className={`px-5 py-2 rounded-xl text-sm font-medium transition-all ${
+                    tab === t.key
+                      ? 'bg-white dark:bg-white/[0.08] text-primary-600 dark:text-primary-400 shadow-sm'
+                      : 'text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200'
+                  }`}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
           </div>
         </AnimateIn>
 
@@ -443,7 +445,7 @@ export default function Analytics() {
                             </span>
                           )}
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid gap-4 sm:grid-cols-2">
                           <div>
                             <div className="text-[10px] text-gray-400 uppercase tracking-wider mb-1">{formatDate(compDate1)}</div>
                             <div className="flex items-center gap-2">

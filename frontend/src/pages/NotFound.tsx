@@ -76,7 +76,7 @@ export default function NotFound() {
               </div>
 
               <AnimateIn variant="blur" className="self-start">
-                <StaggerChildren variant="fade-up" stagger={70} className="grid sm:grid-cols-2 gap-4">
+                <StaggerChildren variant="fade-up" stagger={70} className="grid gap-4 sm:grid-cols-2">
                   <Link
                     to="/analysis"
                     className="rounded-[1.6rem] border border-primary-100 dark:border-primary-500/20 bg-gradient-to-br from-primary-50 via-white to-white dark:from-primary-500/12 dark:via-white/[0.03] dark:to-white/[0.02] p-5 hover:border-primary-200 dark:hover:border-primary-500/30 transition-colors"

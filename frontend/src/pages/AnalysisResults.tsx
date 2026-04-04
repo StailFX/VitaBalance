@@ -317,7 +317,7 @@ export default function AnalysisResults() {
                   </div>
                 </div>
 
-                <StaggerChildren variant="fade-up" stagger={70} className="grid grid-cols-2 gap-3 mb-4">
+                <StaggerChildren variant="fade-up" stagger={70} className="grid gap-3 mb-4 sm:grid-cols-2">
                   <div className="rounded-[1.35rem] border border-rose-100 dark:border-rose-500/20 bg-rose-50/80 dark:bg-rose-500/10 p-4">
                     <div className="text-xs uppercase tracking-[0.18em] text-rose-600 dark:text-rose-300 mb-2">Дефициты</div>
                     <div className="text-2xl font-bold text-gray-900 dark:text-white">{defCount}</div>
@@ -421,19 +421,21 @@ export default function AnalysisResults() {
                   Радар лучше показывает общую картину, а столбцы помогают точнее сравнивать значения с нормой.
                 </p>
               </div>
-              <div className="bg-gray-100 dark:bg-white/[0.06] rounded-2xl p-1 inline-flex gap-1">
-                <button
-                  onClick={() => setChartType('radar')}
-                  className={`px-4 py-2 rounded-xl text-xs font-medium transition-all ${chartType === 'radar' ? 'bg-white dark:bg-white/[0.08] text-primary-600 dark:text-primary-300 shadow-sm' : 'text-gray-500 dark:text-gray-300'}`}
-                >
-                  Радар
-                </button>
-                <button
-                  onClick={() => setChartType('bar')}
-                  className={`px-4 py-2 rounded-xl text-xs font-medium transition-all ${chartType === 'bar' ? 'bg-white dark:bg-white/[0.08] text-primary-600 dark:text-primary-300 shadow-sm' : 'text-gray-500 dark:text-gray-300'}`}
-                >
-                  Столбцы
-                </button>
+              <div className="w-full sm:w-auto overflow-x-auto">
+                <div className="bg-gray-100 dark:bg-white/[0.06] rounded-2xl p-1 inline-flex min-w-max gap-1">
+                  <button
+                    onClick={() => setChartType('radar')}
+                    className={`px-4 py-2 rounded-xl text-xs font-medium transition-all ${chartType === 'radar' ? 'bg-white dark:bg-white/[0.08] text-primary-600 dark:text-primary-300 shadow-sm' : 'text-gray-500 dark:text-gray-300'}`}
+                  >
+                    Радар
+                  </button>
+                  <button
+                    onClick={() => setChartType('bar')}
+                    className={`px-4 py-2 rounded-xl text-xs font-medium transition-all ${chartType === 'bar' ? 'bg-white dark:bg-white/[0.08] text-primary-600 dark:text-primary-300 shadow-sm' : 'text-gray-500 dark:text-gray-300'}`}
+                  >
+                    Столбцы
+                  </button>
+                </div>
               </div>
             </div>
 
