@@ -189,7 +189,7 @@ export default function RecipeDetail() {
               <Skeleton className="h-9 w-2/3" />
               <Skeleton className="h-5 w-full" />
               <Skeleton className="h-5 w-3/4" />
-              <div className="grid grid-cols-2 gap-3 pt-4">
+              <div className="grid gap-3 pt-4 sm:grid-cols-2">
                 {Array.from({ length: 4 }).map((_, index) => (
                   <Skeleton key={index} className="h-24 w-full rounded-3xl" />
                 ))}
@@ -283,7 +283,7 @@ export default function RecipeDetail() {
               </div>
             </div>
 
-            <StaggerChildren variant="fade-up" stagger={70} className="grid grid-cols-2 gap-3 self-start">
+            <StaggerChildren variant="fade-up" stagger={70} className="grid gap-3 self-start sm:grid-cols-2">
               {summaryCards.map((card) => (
                 <div
                   key={card.label}

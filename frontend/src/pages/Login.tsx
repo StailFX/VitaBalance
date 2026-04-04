@@ -144,7 +144,7 @@ export default function Login() {
                   </span>
                 </div>
 
-                <StaggerChildren variant="fade-up" stagger={70} className="grid grid-cols-2 gap-3 self-start mt-8">
+                <StaggerChildren variant="fade-up" stagger={70} className="grid gap-3 self-start mt-8 sm:grid-cols-2">
                   {summaryCards.map((card) => (
                     <div
                       key={card.label}

@@ -271,7 +271,7 @@ export default function VitaminGuide() {
               </div>
             </div>
 
-            <StaggerChildren variant="fade-up" stagger={70} className="grid grid-cols-2 gap-3 self-start">
+            <StaggerChildren variant="fade-up" stagger={70} className="grid gap-3 self-start sm:grid-cols-2">
               {summaryCards.map((card) => (
                 <div
                   key={card.label}
