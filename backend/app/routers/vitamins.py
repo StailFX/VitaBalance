@@ -12,7 +12,7 @@ from app.models.vitamin import Vitamin, SymptomVitaminMap
 from app.models.user_data import UserVitaminEntry
 from app.models.product import Product, ProductVitamin
 from app.models.recipe import Recipe
-from app.schemas.vitamin import VitaminOut, SymptomOut, VitaminEntryCreate, SymptomSubmit
+from app.schemas.vitamin import VitaminOut, SymptomOut, VitaminEntryCreate, VitaminEntryOut, SymptomSubmit
 from app.schemas.analysis import (
     VitaminAnalysisItem,
     AnalysisSnapshot,
@@ -77,6 +77,34 @@ async def create_entries(
             source=entry.source,
         ))
     return {"message": f"Сохранено {len(entries)} записей"}
+
+
+@router.get("/entries/latest", response_model=List[VitaminEntryOut])
+async def get_latest_entries(
+    source: Optional[str] = Query(default="lab", description="Entry source filter"),
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    latest_subq = (
+        select(
+            UserVitaminEntry.vitamin_id,
+            func.max(UserVitaminEntry.id).label("max_id"),
+        )
+        .where(UserVitaminEntry.user_id == current_user.id)
+    )
+
+    if source:
+        latest_subq = latest_subq.where(UserVitaminEntry.source == source)
+
+    latest_subq = latest_subq.group_by(UserVitaminEntry.vitamin_id).subquery()
+
+    result = await db.execute(
+        select(UserVitaminEntry)
+        .join(latest_subq, UserVitaminEntry.id == latest_subq.c.max_id)
+        .where(UserVitaminEntry.user_id == current_user.id)
+        .order_by(UserVitaminEntry.vitamin_id)
+    )
+    return result.scalars().all()
 
 
 @router.post("/entries/symptoms")

@@ -8,7 +8,6 @@ import api from '../api/client'
 import PageTransition from '../components/PageTransition'
 import { TableSkeleton } from '../components/Skeleton'
 import AnimateIn, { StaggerChildren } from '../components/AnimateIn'
-import { useInView, useCountUp } from '../hooks/useAnimations'
 import { useTheme } from '../context/ThemeContext'
 import { getChartColors } from '../utils/chartColors'
 import type { VitaminAnalysisItem, AnalysisSnapshot, ComparisonItem, VitaminStatus } from '../types'
@@ -37,6 +36,15 @@ interface HeatmapCell {
 interface HeatmapRow {
   vitamin: string
   cells: HeatmapCell[]
+}
+
+interface SummaryCard {
+  label: string
+  value: string
+  description: string
+  accent: string
+  surface: string
+  border: string
 }
 
 export default function Analytics() {
@@ -153,58 +161,154 @@ export default function Analytics() {
 
   const formatDate = (d: string) => new Date(d).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' })
   const formatDateFull = (d: string) => new Date(d).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' })
+  const latestHistoryDate = history[0]?.date ?? null
+  const heroTitle = history.length > 1
+    ? 'Аналитика показывает, как меняется витаминный баланс со временем'
+    : 'Аналитика уже собирает первую контрольную точку'
+  const heroText = availableDates.length >= 2
+    ? 'Здесь можно смотреть динамику по датам, сравнивать две точки между собой и держать под рукой текущий обзор без постоянного переключения между разделами.'
+    : 'Пока записей немного, но страница уже полезна как первая сводка. После следующего ввода данных сравнение и тепловая карта станут намного информативнее.'
+  const summaryCards: SummaryCard[] = [
+    {
+      label: 'Дефициты',
+      value: `${defCount}`,
+      description: 'Столько показателей сейчас находятся ниже комфортного диапазона.',
+      accent: 'text-red-600 dark:text-red-300',
+      surface: 'from-red-50 via-white to-white dark:from-red-500/12 dark:via-white/[0.04] dark:to-white/[0.02]',
+      border: 'border-red-100 dark:border-red-500/20',
+    },
+    {
+      label: 'В норме',
+      value: `${normalCount}`,
+      description: 'Эти показатели сейчас выглядят устойчиво и не требуют немедленного внимания.',
+      accent: 'text-emerald-600 dark:text-emerald-300',
+      surface: 'from-emerald-50 via-white to-white dark:from-emerald-500/12 dark:via-white/[0.04] dark:to-white/[0.02]',
+      border: 'border-emerald-100 dark:border-emerald-500/20',
+    },
+    {
+      label: 'История',
+      value: `${history.length}`,
+      description: 'Столько снимков уже накоплено для динамики и сравнений.',
+      accent: 'text-cyan-600 dark:text-cyan-300',
+      surface: 'from-cyan-50 via-white to-white dark:from-cyan-500/12 dark:via-white/[0.04] dark:to-white/[0.02]',
+      border: 'border-cyan-100 dark:border-cyan-500/20',
+    },
+    {
+      label: 'Средняя тяжесть',
+      value: `${avgSeverity}%`,
+      description: excessCount > 0 ? 'Показатель учитывает и дефициты, и избытки в общей картине.' : 'Условная средняя интенсивность текущих отклонений.',
+      accent: 'text-primary-600 dark:text-primary-300',
+      surface: 'from-primary-50 via-white to-white dark:from-primary-500/12 dark:via-white/[0.04] dark:to-white/[0.02]',
+      border: 'border-primary-100 dark:border-primary-500/20',
+    },
+  ]
 
   return (
     <PageTransition>
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="mb-8">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 text-xs font-semibold uppercase tracking-wider mb-4">
-            Аналитика
-          </span>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Витаминная аналитика</h1>
-          <p className="text-gray-500 dark:text-gray-300 mt-1">Heatmap, сравнение и обзор вашего баланса</p>
-        </div>
+      <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
+        <section className="relative overflow-hidden rounded-[2rem] border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-white/[0.03] shadow-xl shadow-gray-200/40 dark:shadow-primary-500/[0.05]">
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute -top-10 left-0 h-44 w-44 rounded-full bg-primary-500/[0.08] dark:bg-primary-500/[0.14] blur-3xl" />
+            <div className="absolute top-1/3 right-0 h-56 w-56 rounded-full bg-cyan-500/[0.08] dark:bg-cyan-500/[0.12] blur-3xl" />
+            <div
+              className="absolute inset-0 opacity-[0.04] dark:opacity-[0.06]"
+              style={{
+                backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
+                backgroundSize: '30px 30px',
+              }}
+            />
+          </div>
 
-        {/* Summary cards */}
-        <StaggerChildren variant="fade-up" stagger={80} className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-900/20 dark:to-rose-900/20 rounded-2xl p-5 border border-red-100 dark:border-red-800/50">
-            <div className="text-3xl font-bold text-red-600 dark:text-red-400">{defCount}</div>
-            <div className="text-sm text-red-400 mt-1">Дефицитов</div>
-          </div>
-          <div className="bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20 rounded-2xl p-5 border border-emerald-100 dark:border-emerald-800/50">
-            <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">{normalCount}</div>
-            <div className="text-sm text-emerald-400 mt-1">В норме</div>
-          </div>
-          <div className="bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 rounded-2xl p-5 border border-amber-100 dark:border-amber-800/50">
-            <div className="text-3xl font-bold text-amber-600 dark:text-amber-400">{excessCount}</div>
-            <div className="text-sm text-amber-400 mt-1">Избыток</div>
-          </div>
-          <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-2xl p-5 border border-indigo-100 dark:border-indigo-800/50">
-            <div className="text-3xl font-bold text-primary-600 dark:text-primary-400">{history.length}</div>
-            <div className="text-sm text-primary-400 mt-1">Записей</div>
-          </div>
-        </StaggerChildren>
+          <div className="relative grid xl:grid-cols-[1.15fr_0.85fr] gap-6 p-6 sm:p-8">
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/70 dark:bg-white/[0.06] border border-primary-200/60 dark:border-primary-500/20 backdrop-blur-sm mb-5">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-500" />
+                </span>
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Витаминная аналитика</span>
+              </div>
 
-        {/* Tab switcher */}
-        <div className="bg-gray-100 dark:bg-white/[0.06] rounded-2xl p-1.5 inline-flex gap-1 mb-8">
-          {([
-            { key: 'heatmap' as const, label: 'Heatmap' },
-            { key: 'compare' as const, label: 'Сравнение' },
-            { key: 'overview' as const, label: 'Обзор' },
-          ]).map(t => (
-            <button
-              key={t.key}
-              onClick={() => setTab(t.key)}
-              className={`px-5 py-2 rounded-xl text-sm font-medium transition-all ${
-                tab === t.key
-                  ? 'bg-white dark:bg-white/[0.08] text-primary-600 dark:text-primary-400 shadow-sm'
-                  : 'text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200'
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
+              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white leading-tight mb-4">
+                {heroTitle}
+              </h1>
+              <p className="text-base sm:text-lg text-gray-500 dark:text-gray-300 leading-relaxed max-w-xl mb-6">
+                {heroText}
+              </p>
+
+              <div className="flex flex-wrap gap-3 mb-6">
+                <Link
+                  to="/analysis"
+                  className="btn-primary text-white px-6 py-3 rounded-2xl font-semibold inline-flex items-center gap-2"
+                >
+                  Вернуться к анализу
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </Link>
+                <Link
+                  to="/analysis/history"
+                  className="px-6 py-3 rounded-2xl bg-gray-100/90 dark:bg-white/[0.05] text-gray-700 dark:text-gray-200 font-semibold border border-gray-200 dark:border-white/[0.08] hover:bg-white dark:hover:bg-white/[0.08] transition-colors inline-flex items-center gap-2"
+                >
+                  История изменений
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </Link>
+              </div>
+
+              <div className="flex flex-wrap gap-2.5">
+                <span className="px-3 py-1.5 rounded-full bg-white/75 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] text-sm text-gray-600 dark:text-gray-300">
+                  {latestHistoryDate ? `Последняя запись: ${formatDateFull(latestHistoryDate)}` : 'История еще не сформирована'}
+                </span>
+                <span className="px-3 py-1.5 rounded-full bg-white/75 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] text-sm text-gray-600 dark:text-gray-300">
+                  {availableDates.length >= 2 ? 'Сравнение между датами доступно' : 'Для сравнения нужна еще хотя бы одна запись'}
+                </span>
+                <span className="px-3 py-1.5 rounded-full bg-white/75 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] text-sm text-gray-600 dark:text-gray-300">
+                  Активная вкладка: {tab === 'heatmap' ? 'Heatmap' : tab === 'compare' ? 'Сравнение' : 'Обзор'}
+                </span>
+              </div>
+            </div>
+
+            <StaggerChildren variant="fade-up" stagger={70} className="grid grid-cols-2 gap-3 self-start">
+              {summaryCards.map((card) => (
+                <div
+                  key={card.label}
+                  className={`rounded-[1.5rem] border ${card.border} bg-gradient-to-br ${card.surface} p-4 sm:p-5`}
+                >
+                  <div className={`text-xs uppercase tracking-[0.18em] ${card.accent} mb-2`}>{card.label}</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{card.value}</div>
+                  <p className="text-sm text-gray-500 dark:text-gray-300 mt-2">{card.description}</p>
+                </div>
+              ))}
+            </StaggerChildren>
+          </div>
+        </section>
+
+        <AnimateIn
+          variant="blur"
+          className="bg-white dark:bg-white/[0.03] rounded-[1.75rem] border border-gray-200 dark:border-white/[0.08] shadow-sm p-4"
+        >
+          <div className="bg-gray-100 dark:bg-white/[0.06] rounded-2xl p-1.5 inline-flex gap-1">
+            {([
+              { key: 'heatmap' as const, label: 'Heatmap' },
+              { key: 'compare' as const, label: 'Сравнение' },
+              { key: 'overview' as const, label: 'Обзор' },
+            ]).map((t) => (
+              <button
+                key={t.key}
+                onClick={() => setTab(t.key)}
+                className={`px-5 py-2 rounded-xl text-sm font-medium transition-all ${
+                  tab === t.key
+                    ? 'bg-white dark:bg-white/[0.08] text-primary-600 dark:text-primary-400 shadow-sm'
+                    : 'text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200'
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+        </AnimateIn>
 
         {/* Heatmap Tab */}
         {tab === 'heatmap' && (

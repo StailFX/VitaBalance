@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 from pydantic import BaseModel, Field
 
@@ -33,6 +34,17 @@ class VitaminEntryCreate(BaseModel):
     vitamin_id: int
     value: float = Field(gt=0)
     source: str = "lab"
+
+
+class VitaminEntryOut(BaseModel):
+    id: int
+    vitamin_id: int
+    value: float
+    source: str
+    entry_date: datetime
+
+    class Config:
+        from_attributes = True
 
 
 class SymptomSubmit(BaseModel):
