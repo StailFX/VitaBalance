@@ -11,7 +11,7 @@ from app.services.analysis import get_user_analysis
 from app.services.cache import cached_vitamins
 
 
-async def get_recommended_recipes(user_id: int, db: AsyncSession, limit: int = 20) -> List[Dict]:
+async def get_recommended_recipes(user_id: int, db: AsyncSession, limit: int = 20, offset: int = 0) -> List[Dict]:
     """Get recipes ranked by how well they address user's vitamin deficiencies."""
     # 1. Get user's analysis to find deficiencies
     analysis = await get_user_analysis(user_id, db)
@@ -23,7 +23,7 @@ async def get_recommended_recipes(user_id: int, db: AsyncSession, limit: int = 2
 
     if not deficiencies:
         # No deficiencies, return all recipes without scoring
-        result = await db.execute(select(Recipe).limit(limit))
+        result = await db.execute(select(Recipe).order_by(Recipe.id.desc()).offset(offset).limit(limit))
         recipes = result.scalars().all()
         return [
             {
@@ -38,7 +38,7 @@ async def get_recommended_recipes(user_id: int, db: AsyncSession, limit: int = 2
         ]
 
     # 2. Get all recipes with their ingredients
-    # Note: loads all recipes at once, which is acceptable for a small dataset (~35 recipes)
+    # Note: loads all recipes at once, which is acceptable for a small dataset (~60 recipes)
     result = await db.execute(
         select(Recipe).options(selectinload(Recipe.ingredients))
     )
@@ -90,7 +90,7 @@ async def get_recommended_recipes(user_id: int, db: AsyncSession, limit: int = 2
             "cook_time_minutes": r.cook_time_minutes,
             "relevance_score": round((s / max_score) * 100, 1) if s > 0 else 0,
         }
-        for r, s in scored[:limit]
+        for r, s in scored[offset: offset + limit]
     ]
 
 

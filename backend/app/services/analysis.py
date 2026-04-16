@@ -17,28 +17,49 @@ async def get_user_analysis(user_id: int, db: AsyncSession) -> List[VitaminAnaly
     # Get all vitamins (cached — static seed data)
     vitamins = await cached_vitamins(db)
 
-    # Get latest user entries (most recent per vitamin) using a subquery
-    # Use max(id) as tiebreaker for same-day entries, preferring the latest insert
-    latest_subq = (
+    # Prefer real lab values. Symptom-based estimates are only used as a fallback
+    # when no laboratory result exists for a vitamin yet.
+    latest_lab_subq = (
         select(
             UserVitaminEntry.vitamin_id,
             func.max(UserVitaminEntry.id).label("max_id")
         )
         .where(UserVitaminEntry.user_id == user_id)
+        .where(UserVitaminEntry.source == "lab")
         .group_by(UserVitaminEntry.vitamin_id)
         .subquery()
     )
 
-    entries_result = await db.execute(
+    latest_other_subq = (
+        select(
+            UserVitaminEntry.vitamin_id,
+            func.max(UserVitaminEntry.id).label("max_id")
+        )
+        .where(UserVitaminEntry.user_id == user_id)
+        .where(UserVitaminEntry.source != "lab")
+        .group_by(UserVitaminEntry.vitamin_id)
+        .subquery()
+    )
+
+    lab_entries_result = await db.execute(
         select(UserVitaminEntry)
-        .join(latest_subq,
-            (UserVitaminEntry.id == latest_subq.c.max_id))
+        .join(latest_lab_subq, UserVitaminEntry.id == latest_lab_subq.c.max_id)
         .where(UserVitaminEntry.user_id == user_id)
     )
-    entries = entries_result.scalars().all()
+    fallback_entries_result = await db.execute(
+        select(UserVitaminEntry)
+        .join(latest_other_subq, UserVitaminEntry.id == latest_other_subq.c.max_id)
+        .where(UserVitaminEntry.user_id == user_id)
+    )
 
-    # Build map: vitamin_id -> latest value
-    latest_values = {entry.vitamin_id: entry.value for entry in entries}
+    latest_values = {
+        entry.vitamin_id: entry.value
+        for entry in fallback_entries_result.scalars().all()
+    }
+    latest_values.update({
+        entry.vitamin_id: entry.value
+        for entry in lab_entries_result.scalars().all()
+    })
 
     analysis = []
     for vit in vitamins:

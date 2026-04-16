@@ -13,9 +13,17 @@ interface UseInViewOptions {
 export function useInView(options: UseInViewOptions = {}): [RefObject<HTMLDivElement | null>, boolean] {
   const { threshold = 0.15, once = true, rootMargin = '0px 0px -40px 0px' } = options
   const ref = useRef<HTMLDivElement | null>(null)
-  const [isVisible, setIsVisible] = useState(false)
+  const prefersStaticAnimation =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const [isVisible, setIsVisible] = useState(prefersStaticAnimation)
 
   useEffect(() => {
+    if (prefersStaticAnimation) {
+      setIsVisible(true)
+      return
+    }
+
     const el = ref.current
     if (!el) return
 
@@ -33,7 +41,7 @@ export function useInView(options: UseInViewOptions = {}): [RefObject<HTMLDivEle
 
     observer.observe(el)
     return () => observer.disconnect()
-  }, [threshold, once, rootMargin])
+  }, [threshold, once, rootMargin, prefersStaticAnimation])
 
   return [ref, isVisible]
 }
@@ -50,9 +58,12 @@ export function useCountUp(target: number, options: UseCountUpOptions = {}): num
   const { duration = 1500, enabled = true } = options
   const [value, setValue] = useState(0)
   const frameRef = useRef<number>(0)
+  const prefersStaticAnimation =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   useEffect(() => {
-    if (!enabled || target === 0) {
+    if (prefersStaticAnimation || !enabled || target === 0) {
       setValue(target)
       return
     }
@@ -67,7 +78,7 @@ export function useCountUp(target: number, options: UseCountUpOptions = {}): num
     }
     frameRef.current = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(frameRef.current)
-  }, [target, duration, enabled])
+  }, [target, duration, enabled, prefersStaticAnimation])
 
   return value
 }

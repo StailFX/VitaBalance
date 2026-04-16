@@ -1,5 +1,4 @@
 import { Component, type ReactNode, type ErrorInfo } from 'react'
-import { Link } from 'react-router-dom'
 
 interface ErrorBoundaryProps {
   children: ReactNode
@@ -22,7 +21,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#0d1117] px-4">
+        <main className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#0d1117] px-4">
           <div className="text-center">
             <div className="w-20 h-20 rounded-3xl bg-red-100 dark:bg-red-500/10 flex items-center justify-center mx-auto mb-6">
               <svg className="w-10 h-10 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -31,11 +30,11 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
             </div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Что-то пошло не так</h1>
             <p className="text-gray-500 dark:text-gray-400 mb-6">Произошла непредвиденная ошибка</p>
-            <Link to="/" onClick={() => this.setState({ hasError: false })} className="btn-primary text-white px-6 py-3 rounded-2xl font-semibold inline-block">
+            <a href="/" onClick={() => this.setState({ hasError: false })} className="btn-primary text-white px-6 py-3 rounded-2xl font-semibold inline-block">
               На главную
-            </Link>
+            </a>
           </div>
-        </div>
+        </main>
       )
     }
     return this.props.children

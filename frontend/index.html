@@ -5,9 +5,35 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="VitaBalance помогает анализировать показатели витаминов, находить дефициты и подбирать продукты и рецепты для более сбалансированного рациона."
+    />
+    <meta
+      name="keywords"
+      content="витамины, анализ витаминов, дефицит витаминов, питание, рецепты, продукты, рацион, VitaBalance"
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://vita-balance.ru/" />
     <meta name="theme-color" content="#6366f1" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="VitaBalance" />
+    <meta property="og:title" content="VitaBalance — Витаминный баланс" />
+    <meta
+      property="og:description"
+      content="Анализируйте показатели витаминов, отслеживайте дефициты и подбирайте рецепты и продукты под свой рацион."
+    />
+    <meta property="og:url" content="https://vita-balance.ru/" />
+    <meta property="og:image" content="https://vita-balance.ru/icons/icon-512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="VitaBalance — Витаминный баланс" />
+    <meta
+      name="twitter:description"
+      content="Сервис для анализа витаминного баланса и подбора питания на основе введённых данных."
+    />
+    <meta name="twitter:image" content="https://vita-balance.ru/icons/icon-512.png" />
     <link rel="apple-touch-icon" href="/icons/icon-192.png" />
     <title>VitaBalance — Витаминный баланс</title>
   </head>
@@ -17,7 +43,38 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
+          let isRefreshing = false
+
+          navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (isRefreshing) return
+            isRefreshing = true
+            window.location.reload()
+          })
+
+          const registerServiceWorker = () => {
+            navigator.serviceWorker.register('/sw.js').then((registration) => {
+              if (registration.waiting) {
+                registration.waiting.postMessage({ type: 'SKIP_WAITING' })
+              }
+
+              registration.addEventListener('updatefound', () => {
+                const newWorker = registration.installing
+                if (!newWorker) return
+
+                newWorker.addEventListener('statechange', () => {
+                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    newWorker.postMessage({ type: 'SKIP_WAITING' })
+                  }
+                })
+              })
+            }).catch(() => {})
+          }
+
+          if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(registerServiceWorker, { timeout: 2000 })
+          } else {
+            window.setTimeout(registerServiceWorker, 1200)
+          }
         })
       }
     </script>

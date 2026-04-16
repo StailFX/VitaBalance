@@ -34,9 +34,9 @@ const icons: Record<ToastType, React.ReactElement> = {
 }
 
 const typeStyles: Record<ToastType, string> = {
-  success: 'border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300',
-  error: 'border-red-200 dark:border-red-800 text-red-700 dark:text-red-300',
-  info: 'border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300',
+  success: 'bg-white border-emerald-200 text-emerald-900 dark:bg-emerald-950 dark:border-emerald-800 dark:text-emerald-50',
+  error: 'bg-white border-red-200 text-red-900 dark:bg-red-950 dark:border-red-800 dark:text-red-50',
+  info: 'bg-white border-primary-200 text-slate-900 dark:bg-slate-900 dark:border-primary-800 dark:text-slate-50',
 }
 
 const iconBgStyles: Record<ToastType, string> = {
@@ -92,7 +92,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`${toast.exiting ? 'toast-exit' : 'toast-enter'} pointer-events-auto glass-subtle rounded-2xl shadow-lg border px-4 py-3 flex items-center gap-3 min-w-[280px] max-w-[400px] ${typeStyles[toast.type]}`}
+            className={`${toast.exiting ? 'toast-exit' : 'toast-enter'} pointer-events-auto rounded-2xl shadow-xl border px-4 py-3 flex items-center gap-3 min-w-[280px] max-w-[400px] ${typeStyles[toast.type]}`}
           >
             <div
               className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 ${iconBgStyles[toast.type]}`}

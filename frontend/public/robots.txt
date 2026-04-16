@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /data-entry
+Disallow: /analysis
+Disallow: /analysis/history
+Disallow: /recipes
+Disallow: /recipes/
+Disallow: /favorites
+Disallow: /meal-plan
+Disallow: /analytics
+Disallow: /login
+Disallow: /register
+
+Sitemap: https://vita-balance.ru/sitemap.xml
+Host: vita-balance.ru

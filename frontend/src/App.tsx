@@ -1,56 +1,42 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { AuthProvider } from './context/AuthContext'
+import { Suspense, lazy } from 'react'
 import { ThemeProvider } from './context/ThemeContext'
-import { ToastProvider } from './context/ToastContext'
 import ErrorBoundary from './components/ErrorBoundary'
-import Layout from './components/Layout'
+import PublicLayout from './components/PublicLayout'
 import Home from './pages/Home'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import Dashboard from './pages/Dashboard'
-import DataEntry from './pages/DataEntry'
-import AnalysisResults from './pages/AnalysisResults'
-import AnalysisHistory from './pages/AnalysisHistory'
-import Recipes from './pages/Recipes'
-import RecipeDetail from './pages/RecipeDetail'
-import Favorites from './pages/Favorites'
-import VitaminGuide from './pages/VitaminGuide'
-import ProductSearch from './pages/ProductSearch'
-import MealPlan from './pages/MealPlan'
-import Analytics from './pages/Analytics'
-import NotFound from './pages/NotFound'
-import PrivateRoute from './components/PrivateRoute'
+
+const RoutedApp = lazy(() => import('./components/RoutedApp'))
+
+function RouteFallback() {
+  return (
+    <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-10 sm:py-14">
+      <div className="space-y-4">
+        <div className="skeleton h-6 w-40" />
+        <div className="skeleton h-28 w-full rounded-3xl" />
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="skeleton h-36 w-full rounded-3xl" />
+          <div className="skeleton h-36 w-full rounded-3xl" />
+        </div>
+      </div>
+    </div>
+  )
+}
 
 function App() {
+  const isHomeEntry = typeof window === 'undefined' || window.location.pathname === '/'
+
   return (
     <ThemeProvider>
-      <ToastProvider>
-        <AuthProvider>
-          <Router>
-            <ErrorBoundary>
-            <Routes>
-              <Route path="/" element={<Layout />}>
-                <Route index element={<Home />} />
-                <Route path="login" element={<Login />} />
-                <Route path="register" element={<Register />} />
-                <Route path="vitamins" element={<VitaminGuide />} />
-                <Route path="products" element={<ProductSearch />} />
-                <Route path="dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-                <Route path="data-entry" element={<PrivateRoute><DataEntry /></PrivateRoute>} />
-                <Route path="analysis" element={<PrivateRoute><AnalysisResults /></PrivateRoute>} />
-                <Route path="analysis/history" element={<PrivateRoute><AnalysisHistory /></PrivateRoute>} />
-                <Route path="recipes" element={<PrivateRoute><Recipes /></PrivateRoute>} />
-                <Route path="recipes/:id" element={<PrivateRoute><RecipeDetail /></PrivateRoute>} />
-                <Route path="favorites" element={<PrivateRoute><Favorites /></PrivateRoute>} />
-                <Route path="meal-plan" element={<PrivateRoute><MealPlan /></PrivateRoute>} />
-                <Route path="analytics" element={<PrivateRoute><Analytics /></PrivateRoute>} />
-                <Route path="*" element={<NotFound />} />
-              </Route>
-            </Routes>
-            </ErrorBoundary>
-          </Router>
-        </AuthProvider>
-      </ToastProvider>
+      <ErrorBoundary>
+        {isHomeEntry ? (
+          <PublicLayout>
+            <Home />
+          </PublicLayout>
+        ) : (
+          <Suspense fallback={<RouteFallback />}>
+            <RoutedApp />
+          </Suspense>
+        )}
+      </ErrorBoundary>
     </ThemeProvider>
   )
 }

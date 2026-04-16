@@ -1,7 +1,9 @@
+import logging
 from typing import List, Optional
 from datetime import date
 
 from fastapi import APIRouter, Depends, Query, HTTPException
+from fastapi.responses import Response
 from sqlalchemy import select, delete, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -25,8 +27,10 @@ from app.services.analysis import get_user_analysis, process_symptoms
 from app.services.history import get_vitamin_history, compare_vitamin_analysis
 from app.services.cache import cached_vitamins, cached_symptoms
 from app.services.notifications import check_and_notify
+from app.services.pdf_export import build_analysis_pdf
 
 router = APIRouter()
+logger = logging.getLogger("vitabalance")
 
 
 @router.get("/", response_model=List[VitaminOut])
@@ -141,8 +145,25 @@ async def get_analysis(
     db: AsyncSession = Depends(get_db),
 ):
     analysis = await get_user_analysis(current_user.id, db)
-    await check_and_notify(current_user.id, analysis, db)
+    try:
+        await check_and_notify(current_user.id, analysis, db)
+    except Exception as exc:
+        logger.warning("Notification check failed for user %s: %s", current_user.id, exc)
     return analysis
+
+
+@router.get("/analysis/export-pdf")
+async def export_analysis_pdf(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    analysis = await get_user_analysis(current_user.id, db)
+    pdf_bytes = build_analysis_pdf(analysis)
+    headers = {
+        "Content-Disposition": 'attachment; filename="vitamin-analysis.pdf"',
+        "Cache-Control": "no-store",
+    }
+    return Response(content=pdf_bytes, media_type="application/pdf", headers=headers)
 
 
 @router.get("/analysis/compare", response_model=List[ComparisonItem])
@@ -175,6 +196,8 @@ async def get_history(
 async def search_products(
     search: Optional[str] = Query(None, description="Search products by name"),
     vitamin_id: Optional[int] = Query(None, description="Filter by vitamin ID"),
+    limit: int = Query(default=24, ge=1, le=100, description="Maximum products to return"),
+    offset: int = Query(default=0, ge=0, description="Products to skip"),
     db: AsyncSession = Depends(get_db),
 ):
     query = select(Product).options(selectinload(Product.vitamins))
@@ -188,7 +211,7 @@ async def search_products(
             ProductVitamin.vitamin_id == vitamin_id
         )
 
-    result = await db.execute(query.order_by(Product.name).limit(50))
+    result = await db.execute(query.order_by(Product.name).offset(offset).limit(limit))
     products = result.scalars().unique().all()
 
     vitamins = {v.id: v for v in await cached_vitamins(db)}

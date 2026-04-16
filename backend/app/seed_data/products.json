@@ -3,678 +3,1326 @@
     "name": "Куриная печень",
     "category": "Мясо и птица",
     "vitamins": {
-      "VIT_A": 3296.0, "VIT_B1": 0.3, "VIT_B2": 1.78, "VIT_B3": 11.9, "VIT_B5": 6.23,
-      "VIT_B6": 0.85, "VIT_B9": 588.0, "VIT_B12": 16.6, "VIT_C": 17.9, "VIT_E": 0.7,
-      "VIT_K": 0.0, "IRON": 8.99, "CALCIUM": 11.0, "MAGNESIUM": 19.0,
-      "ZINC": 2.67, "SELENIUM": 54.6, "PHOSPHORUS": 297.0, "POTASSIUM": 230.0
+      "VIT_A": 3296,
+      "VIT_B1": 0.3,
+      "VIT_B2": 1.78,
+      "VIT_B3": 11.9,
+      "VIT_B5": 6.23,
+      "VIT_B6": 0.85,
+      "VIT_B9": 588,
+      "VIT_B12": 16.6,
+      "VIT_C": 17.9,
+      "VIT_E": 0.7,
+      "VIT_K": 0,
+      "IRON": 8.99,
+      "CALCIUM": 11,
+      "MAGNESIUM": 19,
+      "ZINC": 2.67,
+      "SELENIUM": 54.6,
+      "PHOSPHORUS": 297,
+      "POTASSIUM": 230
     }
   },
   {
     "name": "Говядина",
     "category": "Мясо и птица",
     "vitamins": {
-      "VIT_B1": 0.05, "VIT_B2": 0.18, "VIT_B3": 5.4, "VIT_B5": 0.33,
-      "VIT_B6": 0.37, "VIT_B12": 2.6, "IRON": 2.6, "MAGNESIUM": 21.0,
-      "ZINC": 4.8, "SELENIUM": 18.5, "PHOSPHORUS": 198.0, "POTASSIUM": 318.0
+      "VIT_B1": 0.05,
+      "VIT_B2": 0.18,
+      "VIT_B3": 5.4,
+      "VIT_B5": 0.33,
+      "VIT_B6": 0.37,
+      "VIT_B12": 2.6,
+      "IRON": 2.6,
+      "MAGNESIUM": 21,
+      "ZINC": 4.8,
+      "SELENIUM": 18.5,
+      "PHOSPHORUS": 198,
+      "POTASSIUM": 318
     }
   },
   {
     "name": "Куриное филе",
     "category": "Мясо и птица",
     "vitamins": {
-      "VIT_B1": 0.07, "VIT_B2": 0.11, "VIT_B3": 12.4, "VIT_B5": 1.06,
-      "VIT_B6": 0.6, "VIT_B12": 0.34, "MAGNESIUM": 29.0,
-      "ZINC": 1.0, "SELENIUM": 27.6, "PHOSPHORUS": 228.0, "POTASSIUM": 256.0
+      "VIT_B1": 0.07,
+      "VIT_B2": 0.11,
+      "VIT_B3": 12.4,
+      "VIT_B5": 1.06,
+      "VIT_B6": 0.6,
+      "VIT_B12": 0.34,
+      "MAGNESIUM": 29,
+      "ZINC": 1,
+      "SELENIUM": 27.6,
+      "PHOSPHORUS": 228,
+      "POTASSIUM": 256
     }
   },
   {
     "name": "Индейка",
     "category": "Мясо и птица",
     "vitamins": {
-      "VIT_B1": 0.06, "VIT_B2": 0.18, "VIT_B3": 7.6, "VIT_B5": 0.66,
-      "VIT_B6": 0.46, "VIT_B12": 1.5, "IRON": 1.4, "MAGNESIUM": 27.0,
-      "ZINC": 2.1, "SELENIUM": 22.8, "PHOSPHORUS": 213.0, "POTASSIUM": 293.0
+      "VIT_B1": 0.06,
+      "VIT_B2": 0.18,
+      "VIT_B3": 7.6,
+      "VIT_B5": 0.66,
+      "VIT_B6": 0.46,
+      "VIT_B12": 1.5,
+      "IRON": 1.4,
+      "MAGNESIUM": 27,
+      "ZINC": 2.1,
+      "SELENIUM": 22.8,
+      "PHOSPHORUS": 213,
+      "POTASSIUM": 293
     }
   },
   {
     "name": "Свинина",
     "category": "Мясо и птица",
     "vitamins": {
-      "VIT_B1": 0.88, "VIT_B2": 0.21, "VIT_B3": 4.4, "VIT_B5": 0.58,
-      "VIT_B6": 0.4, "VIT_B12": 0.7, "IRON": 0.9, "MAGNESIUM": 22.0,
-      "ZINC": 1.9, "SELENIUM": 32.4, "PHOSPHORUS": 200.0, "POTASSIUM": 356.0
+      "VIT_B1": 0.88,
+      "VIT_B2": 0.21,
+      "VIT_B3": 4.4,
+      "VIT_B5": 0.58,
+      "VIT_B6": 0.4,
+      "VIT_B12": 0.7,
+      "IRON": 0.9,
+      "MAGNESIUM": 22,
+      "ZINC": 1.9,
+      "SELENIUM": 32.4,
+      "PHOSPHORUS": 200,
+      "POTASSIUM": 356
     }
   },
   {
     "name": "Печень говяжья",
     "category": "Мясо и птица",
     "vitamins": {
-      "VIT_A": 9442.0, "VIT_B1": 0.19, "VIT_B2": 2.76, "VIT_B3": 13.2, "VIT_B5": 7.17,
-      "VIT_B6": 1.08, "VIT_B9": 290.0, "VIT_B12": 59.3, "VIT_C": 1.3, "VIT_E": 0.38,
-      "VIT_K": 3.1, "IRON": 6.5, "CALCIUM": 5.0, "MAGNESIUM": 18.0,
-      "ZINC": 4.0, "SELENIUM": 39.7, "PHOSPHORUS": 497.0, "POTASSIUM": 313.0
+      "VIT_A": 9442,
+      "VIT_B1": 0.19,
+      "VIT_B2": 2.76,
+      "VIT_B3": 13.2,
+      "VIT_B5": 7.17,
+      "VIT_B6": 1.08,
+      "VIT_B9": 290,
+      "VIT_B12": 59.3,
+      "VIT_C": 1.3,
+      "VIT_E": 0.38,
+      "VIT_K": 3.1,
+      "IRON": 6.5,
+      "CALCIUM": 5,
+      "MAGNESIUM": 18,
+      "ZINC": 4,
+      "SELENIUM": 39.7,
+      "PHOSPHORUS": 497,
+      "POTASSIUM": 313
     }
   },
   {
     "name": "Баранина",
     "category": "Мясо и птица",
     "vitamins": {
-      "VIT_B1": 0.1, "VIT_B2": 0.21, "VIT_B3": 5.3, "VIT_B5": 0.6,
-      "VIT_B6": 0.13, "VIT_B12": 2.39, "IRON": 1.6, "MAGNESIUM": 22.0,
-      "ZINC": 3.4, "SELENIUM": 18.0, "PHOSPHORUS": 188.0, "POTASSIUM": 310.0
+      "VIT_B1": 0.1,
+      "VIT_B2": 0.21,
+      "VIT_B3": 5.3,
+      "VIT_B5": 0.6,
+      "VIT_B6": 0.13,
+      "VIT_B12": 2.39,
+      "IRON": 1.6,
+      "MAGNESIUM": 22,
+      "ZINC": 3.4,
+      "SELENIUM": 18,
+      "PHOSPHORUS": 188,
+      "POTASSIUM": 310
     }
   },
   {
     "name": "Утиное филе",
     "category": "Мясо и птица",
     "vitamins": {
-      "VIT_B1": 0.36, "VIT_B2": 0.47, "VIT_B3": 5.3, "VIT_B5": 1.5,
-      "VIT_B6": 0.26, "VIT_B12": 0.4, "VIT_E": 0.7, "IRON": 2.7, "MAGNESIUM": 19.0,
-      "ZINC": 1.9, "SELENIUM": 14.0, "PHOSPHORUS": 203.0, "POTASSIUM": 271.0
+      "VIT_B1": 0.36,
+      "VIT_B2": 0.47,
+      "VIT_B3": 5.3,
+      "VIT_B5": 1.5,
+      "VIT_B6": 0.26,
+      "VIT_B12": 0.4,
+      "VIT_E": 0.7,
+      "IRON": 2.7,
+      "MAGNESIUM": 19,
+      "ZINC": 1.9,
+      "SELENIUM": 14,
+      "PHOSPHORUS": 203,
+      "POTASSIUM": 271
     }
   },
   {
     "name": "Лосось",
     "category": "Рыба и морепродукты",
     "vitamins": {
-      "VIT_B1": 0.23, "VIT_B2": 0.38, "VIT_B3": 7.9, "VIT_B5": 1.66,
-      "VIT_B6": 0.8, "VIT_B12": 3.2, "VIT_D": 11.0, "VIT_E": 1.8,
-      "IRON": 0.8, "CALCIUM": 12.0, "MAGNESIUM": 27.0,
-      "ZINC": 0.64, "SELENIUM": 36.5, "PHOSPHORUS": 252.0, "POTASSIUM": 490.0, "OMEGA3": 2.26
+      "VIT_B1": 0.23,
+      "VIT_B2": 0.38,
+      "VIT_B3": 7.9,
+      "VIT_B5": 1.66,
+      "VIT_B6": 0.8,
+      "VIT_B12": 3.2,
+      "VIT_D": 11,
+      "VIT_E": 1.8,
+      "IRON": 0.8,
+      "CALCIUM": 12,
+      "MAGNESIUM": 27,
+      "ZINC": 0.64,
+      "SELENIUM": 36.5,
+      "PHOSPHORUS": 252,
+      "POTASSIUM": 490,
+      "OMEGA3": 2.26
     }
   },
   {
     "name": "Тунец",
     "category": "Рыба и морепродукты",
     "vitamins": {
-      "VIT_B1": 0.24, "VIT_B2": 0.25, "VIT_B3": 8.7,
-      "VIT_B6": 0.46, "VIT_B12": 9.4, "VIT_D": 7.2,
-      "IRON": 1.3, "MAGNESIUM": 50.0,
-      "ZINC": 0.6, "SELENIUM": 36.5, "PHOSPHORUS": 254.0, "POTASSIUM": 252.0, "OMEGA3": 1.3
+      "VIT_B1": 0.24,
+      "VIT_B2": 0.25,
+      "VIT_B3": 8.7,
+      "VIT_B6": 0.46,
+      "VIT_B12": 9.4,
+      "VIT_D": 7.2,
+      "IRON": 1.3,
+      "MAGNESIUM": 50,
+      "ZINC": 0.6,
+      "SELENIUM": 36.5,
+      "PHOSPHORUS": 254,
+      "POTASSIUM": 252,
+      "OMEGA3": 1.3
     }
   },
   {
     "name": "Скумбрия",
     "category": "Рыба и морепродукты",
     "vitamins": {
-      "VIT_B1": 0.18, "VIT_B2": 0.31, "VIT_B3": 9.1, "VIT_B5": 0.86,
-      "VIT_B6": 0.4, "VIT_B12": 8.7, "VIT_D": 16.1, "VIT_E": 1.5,
-      "IRON": 1.6, "CALCIUM": 12.0, "MAGNESIUM": 76.0,
-      "ZINC": 0.63, "SELENIUM": 44.1, "PHOSPHORUS": 217.0, "POTASSIUM": 314.0, "OMEGA3": 2.67
+      "VIT_B1": 0.18,
+      "VIT_B2": 0.31,
+      "VIT_B3": 9.1,
+      "VIT_B5": 0.86,
+      "VIT_B6": 0.4,
+      "VIT_B12": 8.7,
+      "VIT_D": 16.1,
+      "VIT_E": 1.5,
+      "IRON": 1.6,
+      "CALCIUM": 12,
+      "MAGNESIUM": 76,
+      "ZINC": 0.63,
+      "SELENIUM": 44.1,
+      "PHOSPHORUS": 217,
+      "POTASSIUM": 314,
+      "OMEGA3": 2.67
     }
   },
   {
     "name": "Креветки",
     "category": "Рыба и морепродукты",
     "vitamins": {
-      "VIT_B1": 0.02, "VIT_B2": 0.03, "VIT_B3": 2.4,
-      "VIT_B12": 1.1, "VIT_E": 1.3,
-      "IRON": 2.4, "CALCIUM": 52.0, "MAGNESIUM": 37.0,
-      "ZINC": 1.11, "SELENIUM": 38.0, "PHOSPHORUS": 205.0, "POTASSIUM": 259.0, "OMEGA3": 0.54
+      "VIT_B1": 0.02,
+      "VIT_B2": 0.03,
+      "VIT_B3": 2.4,
+      "VIT_B12": 1.1,
+      "VIT_E": 1.3,
+      "IRON": 2.4,
+      "CALCIUM": 52,
+      "MAGNESIUM": 37,
+      "ZINC": 1.11,
+      "SELENIUM": 38,
+      "PHOSPHORUS": 205,
+      "POTASSIUM": 259,
+      "OMEGA3": 0.54
     }
   },
   {
     "name": "Сельдь",
     "category": "Рыба и морепродукты",
     "vitamins": {
-      "VIT_B1": 0.09, "VIT_B2": 0.23, "VIT_B3": 3.2,
-      "VIT_B6": 0.3, "VIT_B12": 13.7, "VIT_D": 4.2,
-      "IRON": 1.1, "CALCIUM": 57.0, "MAGNESIUM": 32.0,
-      "ZINC": 0.99, "SELENIUM": 36.5, "PHOSPHORUS": 236.0, "POTASSIUM": 327.0, "OMEGA3": 1.73
+      "VIT_B1": 0.09,
+      "VIT_B2": 0.23,
+      "VIT_B3": 3.2,
+      "VIT_B6": 0.3,
+      "VIT_B12": 13.7,
+      "VIT_D": 4.2,
+      "IRON": 1.1,
+      "CALCIUM": 57,
+      "MAGNESIUM": 32,
+      "ZINC": 0.99,
+      "SELENIUM": 36.5,
+      "PHOSPHORUS": 236,
+      "POTASSIUM": 327,
+      "OMEGA3": 1.73
     }
   },
   {
     "name": "Печень трески",
     "category": "Рыба и морепродукты",
     "vitamins": {
-      "VIT_A": 4400.0, "VIT_D": 100.0, "VIT_E": 8.8,
-      "VIT_B12": 15.0, "VIT_B9": 110.0, "VIT_B3": 2.7,
-      "IRON": 1.9, "CALCIUM": 35.0, "MAGNESIUM": 50.0,
-      "ZINC": 0.6, "SELENIUM": 21.0, "PHOSPHORUS": 430.0, "POTASSIUM": 110.0, "OMEGA3": 19.7
+      "VIT_A": 4400,
+      "VIT_D": 100,
+      "VIT_E": 8.8,
+      "VIT_B12": 15,
+      "VIT_B9": 110,
+      "VIT_B3": 2.7,
+      "IRON": 1.9,
+      "CALCIUM": 35,
+      "MAGNESIUM": 50,
+      "ZINC": 0.6,
+      "SELENIUM": 21,
+      "PHOSPHORUS": 430,
+      "POTASSIUM": 110,
+      "OMEGA3": 19.7
     }
   },
   {
     "name": "Сардины",
     "category": "Рыба и морепродукты",
     "vitamins": {
-      "VIT_B2": 0.23, "VIT_B3": 5.2,
-      "VIT_B12": 8.9, "VIT_D": 4.8, "VIT_B6": 0.17, "VIT_E": 2.0,
-      "IRON": 2.9, "CALCIUM": 382.0, "MAGNESIUM": 39.0,
-      "ZINC": 1.31, "SELENIUM": 52.7, "PHOSPHORUS": 490.0, "POTASSIUM": 397.0, "OMEGA3": 1.48
+      "VIT_B2": 0.23,
+      "VIT_B3": 5.2,
+      "VIT_B12": 8.9,
+      "VIT_D": 4.8,
+      "VIT_B6": 0.17,
+      "VIT_E": 2,
+      "IRON": 2.9,
+      "CALCIUM": 382,
+      "MAGNESIUM": 39,
+      "ZINC": 1.31,
+      "SELENIUM": 52.7,
+      "PHOSPHORUS": 490,
+      "POTASSIUM": 397,
+      "OMEGA3": 1.48
     }
   },
   {
     "name": "Треска",
     "category": "Рыба и морепродукты",
     "vitamins": {
-      "VIT_B1": 0.08, "VIT_B2": 0.07, "VIT_B3": 2.1,
-      "VIT_B6": 0.25, "VIT_B12": 0.91, "VIT_D": 0.9,
-      "IRON": 0.38, "CALCIUM": 16.0, "MAGNESIUM": 32.0,
-      "ZINC": 0.45, "SELENIUM": 33.1, "PHOSPHORUS": 203.0, "POTASSIUM": 413.0, "OMEGA3": 0.2
+      "VIT_B1": 0.08,
+      "VIT_B2": 0.07,
+      "VIT_B3": 2.1,
+      "VIT_B6": 0.25,
+      "VIT_B12": 0.91,
+      "VIT_D": 0.9,
+      "IRON": 0.38,
+      "CALCIUM": 16,
+      "MAGNESIUM": 32,
+      "ZINC": 0.45,
+      "SELENIUM": 33.1,
+      "PHOSPHORUS": 203,
+      "POTASSIUM": 413,
+      "OMEGA3": 0.2
     }
   },
   {
     "name": "Форель",
     "category": "Рыба и морепродукты",
     "vitamins": {
-      "VIT_B1": 0.35, "VIT_B2": 0.33, "VIT_B3": 5.4, "VIT_B5": 1.94,
-      "VIT_B6": 0.41, "VIT_B12": 4.45, "VIT_D": 15.9, "VIT_E": 2.3,
-      "IRON": 0.7, "CALCIUM": 67.0, "MAGNESIUM": 31.0,
-      "ZINC": 1.08, "SELENIUM": 12.6, "PHOSPHORUS": 271.0, "POTASSIUM": 481.0, "OMEGA3": 1.07
+      "VIT_B1": 0.35,
+      "VIT_B2": 0.33,
+      "VIT_B3": 5.4,
+      "VIT_B5": 1.94,
+      "VIT_B6": 0.41,
+      "VIT_B12": 4.45,
+      "VIT_D": 15.9,
+      "VIT_E": 2.3,
+      "IRON": 0.7,
+      "CALCIUM": 67,
+      "MAGNESIUM": 31,
+      "ZINC": 1.08,
+      "SELENIUM": 12.6,
+      "PHOSPHORUS": 271,
+      "POTASSIUM": 481,
+      "OMEGA3": 1.07
     }
   },
   {
     "name": "Мидии",
     "category": "Рыба и морепродукты",
     "vitamins": {
-      "VIT_B1": 0.16, "VIT_B2": 0.21, "VIT_B3": 1.6,
-      "VIT_B12": 12.0, "VIT_C": 8.0, "VIT_E": 0.55,
-      "IRON": 3.95, "CALCIUM": 26.0, "MAGNESIUM": 34.0,
-      "ZINC": 1.6, "SELENIUM": 44.8, "PHOSPHORUS": 197.0, "POTASSIUM": 320.0, "OMEGA3": 0.78
+      "VIT_B1": 0.16,
+      "VIT_B2": 0.21,
+      "VIT_B3": 1.6,
+      "VIT_B12": 12,
+      "VIT_C": 8,
+      "VIT_E": 0.55,
+      "IRON": 3.95,
+      "CALCIUM": 26,
+      "MAGNESIUM": 34,
+      "ZINC": 1.6,
+      "SELENIUM": 44.8,
+      "PHOSPHORUS": 197,
+      "POTASSIUM": 320,
+      "OMEGA3": 0.78
     }
   },
   {
     "name": "Кальмар",
     "category": "Рыба и морепродукты",
     "vitamins": {
-      "VIT_B2": 0.41, "VIT_B3": 2.2, "VIT_B6": 0.05,
-      "VIT_B12": 1.3, "VIT_E": 1.2,
-      "IRON": 0.68, "CALCIUM": 32.0, "MAGNESIUM": 33.0,
-      "ZINC": 1.53, "SELENIUM": 44.8, "PHOSPHORUS": 221.0, "POTASSIUM": 246.0
+      "VIT_B2": 0.41,
+      "VIT_B3": 2.2,
+      "VIT_B6": 0.05,
+      "VIT_B12": 1.3,
+      "VIT_E": 1.2,
+      "IRON": 0.68,
+      "CALCIUM": 32,
+      "MAGNESIUM": 33,
+      "ZINC": 1.53,
+      "SELENIUM": 44.8,
+      "PHOSPHORUS": 221,
+      "POTASSIUM": 246
     }
   },
   {
     "name": "Яйца куриные",
     "category": "Яйца",
     "vitamins": {
-      "VIT_A": 160.0, "VIT_B1": 0.04, "VIT_B2": 0.46, "VIT_B3": 0.08, "VIT_B5": 1.53,
-      "VIT_B6": 0.17, "VIT_B9": 47.0, "VIT_B12": 0.89, "VIT_D": 2.0, "VIT_E": 1.05,
-      "VIT_K": 0.3, "IRON": 1.75, "CALCIUM": 56.0, "MAGNESIUM": 12.0,
-      "ZINC": 1.29, "SELENIUM": 30.7, "PHOSPHORUS": 198.0, "POTASSIUM": 138.0
+      "VIT_A": 160,
+      "VIT_B1": 0.04,
+      "VIT_B2": 0.46,
+      "VIT_B3": 0.08,
+      "VIT_B5": 1.53,
+      "VIT_B6": 0.17,
+      "VIT_B9": 47,
+      "VIT_B12": 0.89,
+      "VIT_D": 2,
+      "VIT_E": 1.05,
+      "VIT_K": 0.3,
+      "IRON": 1.75,
+      "CALCIUM": 56,
+      "MAGNESIUM": 12,
+      "ZINC": 1.29,
+      "SELENIUM": 30.7,
+      "PHOSPHORUS": 198,
+      "POTASSIUM": 138
     }
   },
   {
     "name": "Яйца перепелиные",
     "category": "Яйца",
     "vitamins": {
-      "VIT_A": 156.0, "VIT_B1": 0.13, "VIT_B2": 0.79, "VIT_B3": 0.15, "VIT_B5": 1.76,
-      "VIT_B6": 0.15, "VIT_B9": 66.0, "VIT_B12": 1.58, "VIT_D": 1.4, "VIT_E": 1.08,
-      "IRON": 3.65, "CALCIUM": 64.0, "MAGNESIUM": 13.0,
-      "ZINC": 1.47, "SELENIUM": 32.0, "PHOSPHORUS": 226.0, "POTASSIUM": 132.0
+      "VIT_A": 156,
+      "VIT_B1": 0.13,
+      "VIT_B2": 0.79,
+      "VIT_B3": 0.15,
+      "VIT_B5": 1.76,
+      "VIT_B6": 0.15,
+      "VIT_B9": 66,
+      "VIT_B12": 1.58,
+      "VIT_D": 1.4,
+      "VIT_E": 1.08,
+      "IRON": 3.65,
+      "CALCIUM": 64,
+      "MAGNESIUM": 13,
+      "ZINC": 1.47,
+      "SELENIUM": 32,
+      "PHOSPHORUS": 226,
+      "POTASSIUM": 132
     }
   },
   {
     "name": "Молоко",
     "category": "Молочные продукты",
     "vitamins": {
-      "VIT_A": 28.0, "VIT_B1": 0.04, "VIT_B2": 0.18, "VIT_B3": 0.09, "VIT_B5": 0.37,
-      "VIT_B12": 0.44, "VIT_D": 1.3,
-      "CALCIUM": 113.0, "MAGNESIUM": 10.0,
-      "ZINC": 0.37, "SELENIUM": 2.0, "PHOSPHORUS": 84.0, "POTASSIUM": 132.0
+      "VIT_A": 28,
+      "VIT_B1": 0.04,
+      "VIT_B2": 0.18,
+      "VIT_B3": 0.09,
+      "VIT_B5": 0.37,
+      "VIT_B12": 0.44,
+      "VIT_D": 1.3,
+      "CALCIUM": 113,
+      "MAGNESIUM": 10,
+      "ZINC": 0.37,
+      "SELENIUM": 2,
+      "PHOSPHORUS": 84,
+      "POTASSIUM": 132
     }
   },
   {
     "name": "Сыр твёрдый",
     "category": "Молочные продукты",
     "vitamins": {
-      "VIT_A": 265.0, "VIT_B1": 0.03, "VIT_B2": 0.38, "VIT_B3": 0.08, "VIT_B5": 0.41,
-      "VIT_B12": 1.5, "VIT_D": 0.6, "VIT_E": 0.5, "VIT_K": 2.4,
-      "CALCIUM": 721.0, "MAGNESIUM": 28.0,
-      "ZINC": 3.1, "SELENIUM": 14.5, "PHOSPHORUS": 505.0, "POTASSIUM": 77.0
+      "VIT_A": 265,
+      "VIT_B1": 0.03,
+      "VIT_B2": 0.38,
+      "VIT_B3": 0.08,
+      "VIT_B5": 0.41,
+      "VIT_B12": 1.5,
+      "VIT_D": 0.6,
+      "VIT_E": 0.5,
+      "VIT_K": 2.4,
+      "CALCIUM": 721,
+      "MAGNESIUM": 28,
+      "ZINC": 3.1,
+      "SELENIUM": 14.5,
+      "PHOSPHORUS": 505,
+      "POTASSIUM": 77
     }
   },
   {
     "name": "Творог",
     "category": "Молочные продукты",
     "vitamins": {
-      "VIT_A": 50.0, "VIT_B1": 0.04, "VIT_B2": 0.17, "VIT_B5": 0.21,
-      "VIT_B12": 1.0, "CALCIUM": 164.0, "MAGNESIUM": 23.0,
-      "ZINC": 0.4, "SELENIUM": 9.7, "PHOSPHORUS": 159.0, "POTASSIUM": 104.0
+      "VIT_A": 50,
+      "VIT_B1": 0.04,
+      "VIT_B2": 0.17,
+      "VIT_B5": 0.21,
+      "VIT_B12": 1,
+      "CALCIUM": 164,
+      "MAGNESIUM": 23,
+      "ZINC": 0.4,
+      "SELENIUM": 9.7,
+      "PHOSPHORUS": 159,
+      "POTASSIUM": 104
     }
   },
   {
     "name": "Кефир 2.5%",
     "category": "Молочные продукты",
     "vitamins": {
-      "VIT_B1": 0.03, "VIT_B2": 0.17, "VIT_B5": 0.31,
-      "VIT_B12": 0.4, "CALCIUM": 120.0, "MAGNESIUM": 14.0,
-      "ZINC": 0.3, "PHOSPHORUS": 95.0, "POTASSIUM": 146.0
+      "VIT_B1": 0.03,
+      "VIT_B2": 0.17,
+      "VIT_B5": 0.31,
+      "VIT_B12": 0.4,
+      "CALCIUM": 120,
+      "MAGNESIUM": 14,
+      "ZINC": 0.3,
+      "PHOSPHORUS": 95,
+      "POTASSIUM": 146
     }
   },
   {
     "name": "Йогурт натуральный",
     "category": "Молочные продукты",
     "vitamins": {
-      "VIT_B1": 0.03, "VIT_B2": 0.14, "VIT_B5": 0.39,
-      "VIT_B12": 0.37, "CALCIUM": 110.0, "MAGNESIUM": 11.0,
-      "ZINC": 0.52, "PHOSPHORUS": 95.0, "POTASSIUM": 155.0
+      "VIT_B1": 0.03,
+      "VIT_B2": 0.14,
+      "VIT_B5": 0.39,
+      "VIT_B12": 0.37,
+      "CALCIUM": 110,
+      "MAGNESIUM": 11,
+      "ZINC": 0.52,
+      "PHOSPHORUS": 95,
+      "POTASSIUM": 155
     }
   },
   {
     "name": "Сметана 20%",
     "category": "Молочные продукты",
     "vitamins": {
-      "VIT_A": 117.0, "VIT_B2": 0.11, "VIT_B5": 0.34,
-      "VIT_B12": 0.3, "VIT_E": 0.5,
-      "CALCIUM": 86.0, "MAGNESIUM": 7.0,
-      "ZINC": 0.27, "PHOSPHORUS": 62.0, "POTASSIUM": 95.0
+      "VIT_A": 117,
+      "VIT_B2": 0.11,
+      "VIT_B5": 0.34,
+      "VIT_B12": 0.3,
+      "VIT_E": 0.5,
+      "CALCIUM": 86,
+      "MAGNESIUM": 7,
+      "ZINC": 0.27,
+      "PHOSPHORUS": 62,
+      "POTASSIUM": 95
     }
   },
   {
     "name": "Шпинат",
     "category": "Овощи",
     "vitamins": {
-      "VIT_A": 469.0, "VIT_B1": 0.08, "VIT_B2": 0.19, "VIT_B3": 0.72, "VIT_B5": 0.07,
-      "VIT_B6": 0.2, "VIT_B9": 194.0, "VIT_C": 28.1, "VIT_E": 2.0, "VIT_K": 482.9,
-      "IRON": 2.71, "CALCIUM": 99.0, "MAGNESIUM": 79.0,
-      "ZINC": 0.53, "SELENIUM": 1.0, "PHOSPHORUS": 49.0, "POTASSIUM": 558.0
+      "VIT_A": 469,
+      "VIT_B1": 0.08,
+      "VIT_B2": 0.19,
+      "VIT_B3": 0.72,
+      "VIT_B5": 0.07,
+      "VIT_B6": 0.2,
+      "VIT_B9": 194,
+      "VIT_C": 28.1,
+      "VIT_E": 2,
+      "VIT_K": 482.9,
+      "IRON": 2.71,
+      "CALCIUM": 99,
+      "MAGNESIUM": 79,
+      "ZINC": 0.53,
+      "SELENIUM": 1,
+      "PHOSPHORUS": 49,
+      "POTASSIUM": 558
     }
   },
   {
     "name": "Брокколи",
     "category": "Овощи",
     "vitamins": {
-      "VIT_A": 31.0, "VIT_B1": 0.07, "VIT_B2": 0.12, "VIT_B3": 0.64, "VIT_B5": 0.57,
-      "VIT_B6": 0.18, "VIT_B9": 63.0, "VIT_C": 89.2, "VIT_E": 0.78, "VIT_K": 101.6,
-      "IRON": 0.73, "CALCIUM": 47.0, "MAGNESIUM": 21.0,
-      "ZINC": 0.41, "SELENIUM": 2.5, "PHOSPHORUS": 66.0, "POTASSIUM": 316.0
+      "VIT_A": 31,
+      "VIT_B1": 0.07,
+      "VIT_B2": 0.12,
+      "VIT_B3": 0.64,
+      "VIT_B5": 0.57,
+      "VIT_B6": 0.18,
+      "VIT_B9": 63,
+      "VIT_C": 89.2,
+      "VIT_E": 0.78,
+      "VIT_K": 101.6,
+      "IRON": 0.73,
+      "CALCIUM": 47,
+      "MAGNESIUM": 21,
+      "ZINC": 0.41,
+      "SELENIUM": 2.5,
+      "PHOSPHORUS": 66,
+      "POTASSIUM": 316
     }
   },
   {
     "name": "Морковь",
     "category": "Овощи",
     "vitamins": {
-      "VIT_A": 835.0, "VIT_B1": 0.07, "VIT_B2": 0.06, "VIT_B3": 0.98,
-      "VIT_B6": 0.14, "VIT_C": 5.9, "VIT_E": 0.66, "VIT_K": 13.2,
-      "CALCIUM": 33.0, "MAGNESIUM": 12.0,
-      "ZINC": 0.24, "PHOSPHORUS": 35.0, "POTASSIUM": 320.0
+      "VIT_A": 835,
+      "VIT_B1": 0.07,
+      "VIT_B2": 0.06,
+      "VIT_B3": 0.98,
+      "VIT_B6": 0.14,
+      "VIT_C": 5.9,
+      "VIT_E": 0.66,
+      "VIT_K": 13.2,
+      "CALCIUM": 33,
+      "MAGNESIUM": 12,
+      "ZINC": 0.24,
+      "PHOSPHORUS": 35,
+      "POTASSIUM": 320
     }
   },
   {
     "name": "Батат",
     "category": "Овощи",
     "vitamins": {
-      "VIT_A": 709.0, "VIT_B1": 0.08, "VIT_B2": 0.06, "VIT_B3": 0.56, "VIT_B5": 0.8,
-      "VIT_B6": 0.21, "VIT_C": 2.4, "VIT_E": 0.26,
-      "CALCIUM": 30.0, "MAGNESIUM": 25.0,
-      "ZINC": 0.3, "PHOSPHORUS": 47.0, "POTASSIUM": 337.0
+      "VIT_A": 709,
+      "VIT_B1": 0.08,
+      "VIT_B2": 0.06,
+      "VIT_B3": 0.56,
+      "VIT_B5": 0.8,
+      "VIT_B6": 0.21,
+      "VIT_C": 2.4,
+      "VIT_E": 0.26,
+      "CALCIUM": 30,
+      "MAGNESIUM": 25,
+      "ZINC": 0.3,
+      "PHOSPHORUS": 47,
+      "POTASSIUM": 337
     }
   },
   {
     "name": "Перец болгарский",
     "category": "Овощи",
     "vitamins": {
-      "VIT_A": 157.0, "VIT_B1": 0.05, "VIT_B2": 0.08, "VIT_B3": 0.98,
-      "VIT_B6": 0.29, "VIT_B9": 46.0, "VIT_C": 127.7, "VIT_E": 1.58, "VIT_K": 4.9,
-      "CALCIUM": 7.0, "MAGNESIUM": 12.0,
-      "ZINC": 0.25, "PHOSPHORUS": 26.0, "POTASSIUM": 211.0
+      "VIT_A": 157,
+      "VIT_B1": 0.05,
+      "VIT_B2": 0.08,
+      "VIT_B3": 0.98,
+      "VIT_B6": 0.29,
+      "VIT_B9": 46,
+      "VIT_C": 127.7,
+      "VIT_E": 1.58,
+      "VIT_K": 4.9,
+      "CALCIUM": 7,
+      "MAGNESIUM": 12,
+      "ZINC": 0.25,
+      "PHOSPHORUS": 26,
+      "POTASSIUM": 211
     }
   },
   {
     "name": "Томаты",
     "category": "Овощи",
     "vitamins": {
-      "VIT_A": 42.0, "VIT_B1": 0.04, "VIT_B2": 0.02, "VIT_B3": 0.59,
-      "VIT_C": 13.7, "VIT_E": 0.54, "VIT_K": 7.9,
-      "MAGNESIUM": 11.0,
-      "ZINC": 0.17, "PHOSPHORUS": 24.0, "POTASSIUM": 237.0
+      "VIT_A": 42,
+      "VIT_B1": 0.04,
+      "VIT_B2": 0.02,
+      "VIT_B3": 0.59,
+      "VIT_C": 13.7,
+      "VIT_E": 0.54,
+      "VIT_K": 7.9,
+      "MAGNESIUM": 11,
+      "ZINC": 0.17,
+      "PHOSPHORUS": 24,
+      "POTASSIUM": 237
     }
   },
   {
     "name": "Капуста белокочанная",
     "category": "Овощи",
     "vitamins": {
-      "VIT_B1": 0.06, "VIT_B2": 0.04, "VIT_B3": 0.23,
-      "VIT_B6": 0.12, "VIT_B9": 43.0, "VIT_C": 36.6, "VIT_K": 76.0,
-      "CALCIUM": 40.0, "MAGNESIUM": 12.0,
-      "ZINC": 0.18, "PHOSPHORUS": 26.0, "POTASSIUM": 170.0
+      "VIT_B1": 0.06,
+      "VIT_B2": 0.04,
+      "VIT_B3": 0.23,
+      "VIT_B6": 0.12,
+      "VIT_B9": 43,
+      "VIT_C": 36.6,
+      "VIT_K": 76,
+      "CALCIUM": 40,
+      "MAGNESIUM": 12,
+      "ZINC": 0.18,
+      "PHOSPHORUS": 26,
+      "POTASSIUM": 170
     }
   },
   {
     "name": "Тыква",
     "category": "Овощи",
     "vitamins": {
-      "VIT_A": 426.0, "VIT_B1": 0.05, "VIT_B2": 0.11, "VIT_B3": 0.6, "VIT_B5": 0.3,
-      "VIT_C": 9.0, "VIT_E": 1.06, "VIT_K": 1.1,
-      "CALCIUM": 21.0, "MAGNESIUM": 12.0,
-      "ZINC": 0.32, "PHOSPHORUS": 44.0, "POTASSIUM": 340.0
+      "VIT_A": 426,
+      "VIT_B1": 0.05,
+      "VIT_B2": 0.11,
+      "VIT_B3": 0.6,
+      "VIT_B5": 0.3,
+      "VIT_C": 9,
+      "VIT_E": 1.06,
+      "VIT_K": 1.1,
+      "CALCIUM": 21,
+      "MAGNESIUM": 12,
+      "ZINC": 0.32,
+      "PHOSPHORUS": 44,
+      "POTASSIUM": 340
     }
   },
   {
     "name": "Свёкла",
     "category": "Овощи",
     "vitamins": {
-      "VIT_B1": 0.03, "VIT_B2": 0.04, "VIT_B3": 0.33, "VIT_B5": 0.16,
-      "VIT_B6": 0.07, "VIT_B9": 109.0, "VIT_C": 4.9,
-      "IRON": 0.8, "CALCIUM": 16.0, "MAGNESIUM": 23.0,
-      "ZINC": 0.35, "PHOSPHORUS": 40.0, "POTASSIUM": 325.0
+      "VIT_B1": 0.03,
+      "VIT_B2": 0.04,
+      "VIT_B3": 0.33,
+      "VIT_B5": 0.16,
+      "VIT_B6": 0.07,
+      "VIT_B9": 109,
+      "VIT_C": 4.9,
+      "IRON": 0.8,
+      "CALCIUM": 16,
+      "MAGNESIUM": 23,
+      "ZINC": 0.35,
+      "PHOSPHORUS": 40,
+      "POTASSIUM": 325
     }
   },
   {
     "name": "Цветная капуста",
     "category": "Овощи",
     "vitamins": {
-      "VIT_B1": 0.05, "VIT_B2": 0.06, "VIT_B3": 0.51, "VIT_B5": 0.67,
-      "VIT_B6": 0.18, "VIT_B9": 57.0, "VIT_C": 48.2, "VIT_K": 15.5,
-      "CALCIUM": 22.0, "MAGNESIUM": 15.0,
-      "ZINC": 0.27, "PHOSPHORUS": 44.0, "POTASSIUM": 299.0
+      "VIT_B1": 0.05,
+      "VIT_B2": 0.06,
+      "VIT_B3": 0.51,
+      "VIT_B5": 0.67,
+      "VIT_B6": 0.18,
+      "VIT_B9": 57,
+      "VIT_C": 48.2,
+      "VIT_K": 15.5,
+      "CALCIUM": 22,
+      "MAGNESIUM": 15,
+      "ZINC": 0.27,
+      "PHOSPHORUS": 44,
+      "POTASSIUM": 299
     }
   },
   {
     "name": "Спаржа",
     "category": "Овощи",
     "vitamins": {
-      "VIT_A": 38.0, "VIT_B1": 0.14, "VIT_B2": 0.14, "VIT_B3": 0.98,
-      "VIT_B6": 0.09, "VIT_B9": 52.0, "VIT_C": 5.6, "VIT_E": 1.13, "VIT_K": 41.6,
-      "IRON": 2.14, "CALCIUM": 24.0, "MAGNESIUM": 14.0,
-      "ZINC": 0.54, "SELENIUM": 2.3, "PHOSPHORUS": 52.0, "POTASSIUM": 202.0
+      "VIT_A": 38,
+      "VIT_B1": 0.14,
+      "VIT_B2": 0.14,
+      "VIT_B3": 0.98,
+      "VIT_B6": 0.09,
+      "VIT_B9": 52,
+      "VIT_C": 5.6,
+      "VIT_E": 1.13,
+      "VIT_K": 41.6,
+      "IRON": 2.14,
+      "CALCIUM": 24,
+      "MAGNESIUM": 14,
+      "ZINC": 0.54,
+      "SELENIUM": 2.3,
+      "PHOSPHORUS": 52,
+      "POTASSIUM": 202
     }
   },
   {
     "name": "Чеснок",
     "category": "Овощи",
     "vitamins": {
-      "VIT_B1": 0.2, "VIT_B2": 0.11, "VIT_B3": 0.7, "VIT_B5": 0.6,
-      "VIT_B6": 1.24, "VIT_C": 31.2,
-      "IRON": 1.7, "CALCIUM": 181.0, "MAGNESIUM": 25.0,
-      "ZINC": 1.16, "SELENIUM": 14.2, "PHOSPHORUS": 153.0, "POTASSIUM": 401.0
+      "VIT_B1": 0.2,
+      "VIT_B2": 0.11,
+      "VIT_B3": 0.7,
+      "VIT_B5": 0.6,
+      "VIT_B6": 1.24,
+      "VIT_C": 31.2,
+      "IRON": 1.7,
+      "CALCIUM": 181,
+      "MAGNESIUM": 25,
+      "ZINC": 1.16,
+      "SELENIUM": 14.2,
+      "PHOSPHORUS": 153,
+      "POTASSIUM": 401
     }
   },
   {
     "name": "Апельсин",
     "category": "Фрукты и ягоды",
     "vitamins": {
-      "VIT_B1": 0.09, "VIT_B2": 0.04, "VIT_B3": 0.28, "VIT_B5": 0.25,
-      "VIT_B9": 30.0, "VIT_C": 53.2,
-      "CALCIUM": 40.0, "MAGNESIUM": 10.0,
-      "ZINC": 0.07, "PHOSPHORUS": 14.0, "POTASSIUM": 181.0
+      "VIT_B1": 0.09,
+      "VIT_B2": 0.04,
+      "VIT_B3": 0.28,
+      "VIT_B5": 0.25,
+      "VIT_B9": 30,
+      "VIT_C": 53.2,
+      "CALCIUM": 40,
+      "MAGNESIUM": 10,
+      "ZINC": 0.07,
+      "PHOSPHORUS": 14,
+      "POTASSIUM": 181
     }
   },
   {
     "name": "Лимон",
     "category": "Фрукты и ягоды",
     "vitamins": {
-      "VIT_B1": 0.04, "VIT_B2": 0.02, "VIT_B3": 0.1, "VIT_B5": 0.19,
-      "VIT_C": 53.0,
-      "CALCIUM": 26.0, "MAGNESIUM": 8.0,
-      "PHOSPHORUS": 16.0, "POTASSIUM": 138.0
+      "VIT_B1": 0.04,
+      "VIT_B2": 0.02,
+      "VIT_B3": 0.1,
+      "VIT_B5": 0.19,
+      "VIT_C": 53,
+      "CALCIUM": 26,
+      "MAGNESIUM": 8,
+      "PHOSPHORUS": 16,
+      "POTASSIUM": 138
     }
   },
   {
     "name": "Киви",
     "category": "Фрукты и ягоды",
     "vitamins": {
-      "VIT_B1": 0.03, "VIT_B2": 0.03, "VIT_B3": 0.34, "VIT_B5": 0.18,
-      "VIT_B6": 0.13, "VIT_B9": 25.0, "VIT_C": 92.7, "VIT_E": 1.46, "VIT_K": 40.3,
-      "CALCIUM": 34.0, "MAGNESIUM": 17.0,
-      "ZINC": 0.14, "PHOSPHORUS": 34.0, "POTASSIUM": 312.0
+      "VIT_B1": 0.03,
+      "VIT_B2": 0.03,
+      "VIT_B3": 0.34,
+      "VIT_B5": 0.18,
+      "VIT_B6": 0.13,
+      "VIT_B9": 25,
+      "VIT_C": 92.7,
+      "VIT_E": 1.46,
+      "VIT_K": 40.3,
+      "CALCIUM": 34,
+      "MAGNESIUM": 17,
+      "ZINC": 0.14,
+      "PHOSPHORUS": 34,
+      "POTASSIUM": 312
     }
   },
   {
     "name": "Банан",
     "category": "Фрукты и ягоды",
     "vitamins": {
-      "VIT_B1": 0.03, "VIT_B2": 0.07, "VIT_B3": 0.67, "VIT_B5": 0.33,
-      "VIT_B6": 0.37, "VIT_C": 8.7,
-      "MAGNESIUM": 27.0,
-      "ZINC": 0.15, "PHOSPHORUS": 22.0, "POTASSIUM": 358.0
+      "VIT_B1": 0.03,
+      "VIT_B2": 0.07,
+      "VIT_B3": 0.67,
+      "VIT_B5": 0.33,
+      "VIT_B6": 0.37,
+      "VIT_C": 8.7,
+      "MAGNESIUM": 27,
+      "ZINC": 0.15,
+      "PHOSPHORUS": 22,
+      "POTASSIUM": 358
     }
   },
   {
     "name": "Авокадо",
     "category": "Фрукты и ягоды",
     "vitamins": {
-      "VIT_B1": 0.07, "VIT_B2": 0.13, "VIT_B3": 1.74, "VIT_B5": 1.39,
-      "VIT_B6": 0.26, "VIT_B9": 81.0, "VIT_C": 10.0, "VIT_E": 2.07, "VIT_K": 21.0,
-      "IRON": 0.55, "CALCIUM": 12.0, "MAGNESIUM": 29.0,
-      "ZINC": 0.64, "PHOSPHORUS": 52.0, "POTASSIUM": 485.0, "OMEGA3": 0.11
+      "VIT_B1": 0.07,
+      "VIT_B2": 0.13,
+      "VIT_B3": 1.74,
+      "VIT_B5": 1.39,
+      "VIT_B6": 0.26,
+      "VIT_B9": 81,
+      "VIT_C": 10,
+      "VIT_E": 2.07,
+      "VIT_K": 21,
+      "IRON": 0.55,
+      "CALCIUM": 12,
+      "MAGNESIUM": 29,
+      "ZINC": 0.64,
+      "PHOSPHORUS": 52,
+      "POTASSIUM": 485,
+      "OMEGA3": 0.11
     }
   },
   {
     "name": "Клубника",
     "category": "Фрукты и ягоды",
     "vitamins": {
-      "VIT_B1": 0.02, "VIT_B2": 0.02, "VIT_B3": 0.39, "VIT_B5": 0.13,
-      "VIT_B9": 24.0, "VIT_C": 58.8, "VIT_E": 0.29, "VIT_K": 2.2,
-      "CALCIUM": 16.0, "MAGNESIUM": 13.0,
-      "ZINC": 0.14, "PHOSPHORUS": 24.0, "POTASSIUM": 153.0
+      "VIT_B1": 0.02,
+      "VIT_B2": 0.02,
+      "VIT_B3": 0.39,
+      "VIT_B5": 0.13,
+      "VIT_B9": 24,
+      "VIT_C": 58.8,
+      "VIT_E": 0.29,
+      "VIT_K": 2.2,
+      "CALCIUM": 16,
+      "MAGNESIUM": 13,
+      "ZINC": 0.14,
+      "PHOSPHORUS": 24,
+      "POTASSIUM": 153
     }
   },
   {
     "name": "Черника",
     "category": "Фрукты и ягоды",
     "vitamins": {
-      "VIT_B1": 0.04, "VIT_B2": 0.04, "VIT_B3": 0.42,
-      "VIT_C": 9.7, "VIT_E": 0.57, "VIT_K": 19.3,
-      "MAGNESIUM": 6.0,
-      "ZINC": 0.16, "PHOSPHORUS": 12.0, "POTASSIUM": 77.0
+      "VIT_B1": 0.04,
+      "VIT_B2": 0.04,
+      "VIT_B3": 0.42,
+      "VIT_C": 9.7,
+      "VIT_E": 0.57,
+      "VIT_K": 19.3,
+      "MAGNESIUM": 6,
+      "ZINC": 0.16,
+      "PHOSPHORUS": 12,
+      "POTASSIUM": 77
     }
   },
   {
     "name": "Манго",
     "category": "Фрукты и ягоды",
     "vitamins": {
-      "VIT_A": 54.0, "VIT_B1": 0.03, "VIT_B2": 0.04, "VIT_B3": 0.67, "VIT_B5": 0.2,
-      "VIT_B6": 0.12, "VIT_B9": 43.0, "VIT_C": 36.4, "VIT_E": 0.9,
-      "CALCIUM": 11.0, "MAGNESIUM": 10.0,
-      "ZINC": 0.09, "PHOSPHORUS": 14.0, "POTASSIUM": 168.0
+      "VIT_A": 54,
+      "VIT_B1": 0.03,
+      "VIT_B2": 0.04,
+      "VIT_B3": 0.67,
+      "VIT_B5": 0.2,
+      "VIT_B6": 0.12,
+      "VIT_B9": 43,
+      "VIT_C": 36.4,
+      "VIT_E": 0.9,
+      "CALCIUM": 11,
+      "MAGNESIUM": 10,
+      "ZINC": 0.09,
+      "PHOSPHORUS": 14,
+      "POTASSIUM": 168
     }
   },
   {
     "name": "Гранат",
     "category": "Фрукты и ягоды",
     "vitamins": {
-      "VIT_B1": 0.07, "VIT_B2": 0.05, "VIT_B3": 0.29, "VIT_B5": 0.38,
-      "VIT_B6": 0.08, "VIT_B9": 38.0, "VIT_C": 10.2, "VIT_E": 0.6, "VIT_K": 16.4,
-      "IRON": 0.3, "CALCIUM": 10.0, "MAGNESIUM": 12.0,
-      "ZINC": 0.35, "PHOSPHORUS": 36.0, "POTASSIUM": 236.0
+      "VIT_B1": 0.07,
+      "VIT_B2": 0.05,
+      "VIT_B3": 0.29,
+      "VIT_B5": 0.38,
+      "VIT_B6": 0.08,
+      "VIT_B9": 38,
+      "VIT_C": 10.2,
+      "VIT_E": 0.6,
+      "VIT_K": 16.4,
+      "IRON": 0.3,
+      "CALCIUM": 10,
+      "MAGNESIUM": 12,
+      "ZINC": 0.35,
+      "PHOSPHORUS": 36,
+      "POTASSIUM": 236
     }
   },
   {
     "name": "Хурма",
     "category": "Фрукты и ягоды",
     "vitamins": {
-      "VIT_A": 81.0, "VIT_B1": 0.03, "VIT_B2": 0.02, "VIT_B3": 0.1,
-      "VIT_C": 7.5, "VIT_E": 0.73,
-      "CALCIUM": 8.0, "MAGNESIUM": 9.0,
-      "ZINC": 0.11, "PHOSPHORUS": 17.0, "POTASSIUM": 161.0
+      "VIT_A": 81,
+      "VIT_B1": 0.03,
+      "VIT_B2": 0.02,
+      "VIT_B3": 0.1,
+      "VIT_C": 7.5,
+      "VIT_E": 0.73,
+      "CALCIUM": 8,
+      "MAGNESIUM": 9,
+      "ZINC": 0.11,
+      "PHOSPHORUS": 17,
+      "POTASSIUM": 161
     }
   },
   {
     "name": "Гречка",
     "category": "Зерновые и бобовые",
     "vitamins": {
-      "VIT_B1": 0.1, "VIT_B2": 0.43, "VIT_B3": 7.0, "VIT_B5": 1.23,
-      "VIT_B6": 0.21, "VIT_B9": 30.0, "VIT_E": 0.8,
-      "IRON": 2.2, "CALCIUM": 18.0, "MAGNESIUM": 231.0,
-      "ZINC": 2.4, "SELENIUM": 8.3, "PHOSPHORUS": 347.0, "POTASSIUM": 460.0
+      "VIT_B1": 0.1,
+      "VIT_B2": 0.43,
+      "VIT_B3": 7,
+      "VIT_B5": 1.23,
+      "VIT_B6": 0.21,
+      "VIT_B9": 30,
+      "VIT_E": 0.8,
+      "IRON": 2.2,
+      "CALCIUM": 18,
+      "MAGNESIUM": 231,
+      "ZINC": 2.4,
+      "SELENIUM": 8.3,
+      "PHOSPHORUS": 347,
+      "POTASSIUM": 460
     }
   },
   {
     "name": "Овсянка",
     "category": "Зерновые и бобовые",
     "vitamins": {
-      "VIT_B1": 0.76, "VIT_B2": 0.14, "VIT_B3": 0.96, "VIT_B5": 1.35,
-      "VIT_B6": 0.12, "VIT_B9": 56.0, "VIT_E": 0.42,
-      "IRON": 4.72, "CALCIUM": 54.0, "MAGNESIUM": 177.0,
-      "ZINC": 3.97, "SELENIUM": 28.9, "PHOSPHORUS": 523.0, "POTASSIUM": 429.0
+      "VIT_B1": 0.76,
+      "VIT_B2": 0.14,
+      "VIT_B3": 0.96,
+      "VIT_B5": 1.35,
+      "VIT_B6": 0.12,
+      "VIT_B9": 56,
+      "VIT_E": 0.42,
+      "IRON": 4.72,
+      "CALCIUM": 54,
+      "MAGNESIUM": 177,
+      "ZINC": 3.97,
+      "SELENIUM": 28.9,
+      "PHOSPHORUS": 523,
+      "POTASSIUM": 429
     }
   },
   {
     "name": "Чечевица",
     "category": "Зерновые и бобовые",
     "vitamins": {
-      "VIT_B1": 0.87, "VIT_B2": 0.21, "VIT_B3": 2.6, "VIT_B5": 2.14,
-      "VIT_B6": 0.54, "VIT_B9": 479.0,
-      "IRON": 6.51, "CALCIUM": 35.0, "MAGNESIUM": 47.0,
-      "ZINC": 3.27, "SELENIUM": 0.1, "PHOSPHORUS": 281.0, "POTASSIUM": 677.0
+      "VIT_B1": 0.87,
+      "VIT_B2": 0.21,
+      "VIT_B3": 2.6,
+      "VIT_B5": 2.14,
+      "VIT_B6": 0.54,
+      "VIT_B9": 479,
+      "IRON": 6.51,
+      "CALCIUM": 35,
+      "MAGNESIUM": 47,
+      "ZINC": 3.27,
+      "SELENIUM": 0.1,
+      "PHOSPHORUS": 281,
+      "POTASSIUM": 677
     }
   },
   {
     "name": "Нут",
     "category": "Зерновые и бобовые",
     "vitamins": {
-      "VIT_B1": 0.48, "VIT_B2": 0.21, "VIT_B3": 1.5, "VIT_B5": 1.59,
-      "VIT_B6": 0.54, "VIT_B9": 557.0, "VIT_E": 0.82,
-      "IRON": 6.24, "CALCIUM": 105.0, "MAGNESIUM": 115.0,
-      "ZINC": 3.43, "SELENIUM": 8.2, "PHOSPHORUS": 366.0, "POTASSIUM": 875.0
+      "VIT_B1": 0.48,
+      "VIT_B2": 0.21,
+      "VIT_B3": 1.5,
+      "VIT_B5": 1.59,
+      "VIT_B6": 0.54,
+      "VIT_B9": 557,
+      "VIT_E": 0.82,
+      "IRON": 6.24,
+      "CALCIUM": 105,
+      "MAGNESIUM": 115,
+      "ZINC": 3.43,
+      "SELENIUM": 8.2,
+      "PHOSPHORUS": 366,
+      "POTASSIUM": 875
     }
   },
   {
     "name": "Фасоль красная",
     "category": "Зерновые и бобовые",
     "vitamins": {
-      "VIT_B1": 0.53, "VIT_B2": 0.22, "VIT_B3": 2.1, "VIT_B5": 0.78,
-      "VIT_B6": 0.4, "VIT_B9": 394.0,
-      "IRON": 8.2, "CALCIUM": 143.0, "MAGNESIUM": 140.0,
-      "ZINC": 2.79, "SELENIUM": 3.2, "PHOSPHORUS": 407.0, "POTASSIUM": 1406.0
+      "VIT_B1": 0.53,
+      "VIT_B2": 0.22,
+      "VIT_B3": 2.1,
+      "VIT_B5": 0.78,
+      "VIT_B6": 0.4,
+      "VIT_B9": 394,
+      "IRON": 8.2,
+      "CALCIUM": 143,
+      "MAGNESIUM": 140,
+      "ZINC": 2.79,
+      "SELENIUM": 3.2,
+      "PHOSPHORUS": 407,
+      "POTASSIUM": 1406
     }
   },
   {
     "name": "Рис бурый",
     "category": "Зерновые и бобовые",
     "vitamins": {
-      "VIT_B1": 0.4, "VIT_B2": 0.09, "VIT_B3": 5.09, "VIT_B5": 1.49,
+      "VIT_B1": 0.4,
+      "VIT_B2": 0.09,
+      "VIT_B3": 5.09,
+      "VIT_B5": 1.49,
       "VIT_B6": 0.51,
-      "IRON": 1.47, "CALCIUM": 23.0, "MAGNESIUM": 143.0,
-      "ZINC": 2.02, "SELENIUM": 23.4, "PHOSPHORUS": 333.0, "POTASSIUM": 223.0
+      "IRON": 1.47,
+      "CALCIUM": 23,
+      "MAGNESIUM": 143,
+      "ZINC": 2.02,
+      "SELENIUM": 23.4,
+      "PHOSPHORUS": 333,
+      "POTASSIUM": 223
     }
   },
   {
     "name": "Киноа",
     "category": "Зерновые и бобовые",
     "vitamins": {
-      "VIT_B1": 0.36, "VIT_B2": 0.32, "VIT_B3": 1.52, "VIT_B5": 0.77,
-      "VIT_B6": 0.49, "VIT_B9": 184.0, "VIT_E": 2.44,
-      "IRON": 4.57, "CALCIUM": 47.0, "MAGNESIUM": 197.0,
-      "ZINC": 3.1, "SELENIUM": 8.5, "PHOSPHORUS": 457.0, "POTASSIUM": 563.0
+      "VIT_B1": 0.36,
+      "VIT_B2": 0.32,
+      "VIT_B3": 1.52,
+      "VIT_B5": 0.77,
+      "VIT_B6": 0.49,
+      "VIT_B9": 184,
+      "VIT_E": 2.44,
+      "IRON": 4.57,
+      "CALCIUM": 47,
+      "MAGNESIUM": 197,
+      "ZINC": 3.1,
+      "SELENIUM": 8.5,
+      "PHOSPHORUS": 457,
+      "POTASSIUM": 563
     }
   },
   {
     "name": "Булгур",
     "category": "Зерновые и бобовые",
     "vitamins": {
-      "VIT_B1": 0.23, "VIT_B2": 0.12, "VIT_B3": 5.11, "VIT_B5": 1.04,
-      "VIT_B6": 0.34, "VIT_B9": 27.0,
-      "IRON": 2.46, "CALCIUM": 35.0, "MAGNESIUM": 164.0,
-      "ZINC": 1.93, "PHOSPHORUS": 300.0, "POTASSIUM": 410.0
+      "VIT_B1": 0.23,
+      "VIT_B2": 0.12,
+      "VIT_B3": 5.11,
+      "VIT_B5": 1.04,
+      "VIT_B6": 0.34,
+      "VIT_B9": 27,
+      "IRON": 2.46,
+      "CALCIUM": 35,
+      "MAGNESIUM": 164,
+      "ZINC": 1.93,
+      "PHOSPHORUS": 300,
+      "POTASSIUM": 410
     }
   },
   {
     "name": "Горох",
     "category": "Зерновые и бобовые",
     "vitamins": {
-      "VIT_B1": 0.73, "VIT_B2": 0.15, "VIT_B3": 2.9, "VIT_B5": 1.76,
-      "VIT_B6": 0.17, "VIT_B9": 274.0,
-      "IRON": 4.43, "CALCIUM": 55.0, "MAGNESIUM": 115.0,
-      "ZINC": 3.01, "SELENIUM": 1.6, "PHOSPHORUS": 366.0, "POTASSIUM": 823.0
+      "VIT_B1": 0.73,
+      "VIT_B2": 0.15,
+      "VIT_B3": 2.9,
+      "VIT_B5": 1.76,
+      "VIT_B6": 0.17,
+      "VIT_B9": 274,
+      "IRON": 4.43,
+      "CALCIUM": 55,
+      "MAGNESIUM": 115,
+      "ZINC": 3.01,
+      "SELENIUM": 1.6,
+      "PHOSPHORUS": 366,
+      "POTASSIUM": 823
     }
   },
   {
     "name": "Миндаль",
     "category": "Орехи и семена",
     "vitamins": {
-      "VIT_B1": 0.21, "VIT_B2": 1.14, "VIT_B3": 3.62, "VIT_B5": 0.47,
-      "VIT_B6": 0.14, "VIT_B9": 44.0, "VIT_E": 25.6,
-      "IRON": 3.71, "CALCIUM": 269.0, "MAGNESIUM": 270.0,
-      "ZINC": 3.12, "SELENIUM": 4.1, "PHOSPHORUS": 481.0, "POTASSIUM": 733.0
+      "VIT_B1": 0.21,
+      "VIT_B2": 1.14,
+      "VIT_B3": 3.62,
+      "VIT_B5": 0.47,
+      "VIT_B6": 0.14,
+      "VIT_B9": 44,
+      "VIT_E": 25.6,
+      "IRON": 3.71,
+      "CALCIUM": 269,
+      "MAGNESIUM": 270,
+      "ZINC": 3.12,
+      "SELENIUM": 4.1,
+      "PHOSPHORUS": 481,
+      "POTASSIUM": 733
     }
   },
   {
     "name": "Семена подсолнечника",
     "category": "Орехи и семена",
     "vitamins": {
-      "VIT_B1": 1.48, "VIT_B2": 0.36, "VIT_B3": 8.33, "VIT_B5": 1.13,
-      "VIT_B6": 1.35, "VIT_B9": 227.0, "VIT_E": 35.2,
-      "IRON": 5.25, "CALCIUM": 78.0, "MAGNESIUM": 325.0,
-      "ZINC": 5.0, "SELENIUM": 53.0, "PHOSPHORUS": 660.0, "POTASSIUM": 645.0
+      "VIT_B1": 1.48,
+      "VIT_B2": 0.36,
+      "VIT_B3": 8.33,
+      "VIT_B5": 1.13,
+      "VIT_B6": 1.35,
+      "VIT_B9": 227,
+      "VIT_E": 35.2,
+      "IRON": 5.25,
+      "CALCIUM": 78,
+      "MAGNESIUM": 325,
+      "ZINC": 5,
+      "SELENIUM": 53,
+      "PHOSPHORUS": 660,
+      "POTASSIUM": 645
     }
   },
   {
     "name": "Грецкий орех",
     "category": "Орехи и семена",
     "vitamins": {
-      "VIT_B1": 0.34, "VIT_B2": 0.15, "VIT_B3": 1.13, "VIT_B5": 0.57,
-      "VIT_B6": 0.54, "VIT_B9": 98.0, "VIT_E": 0.7,
-      "IRON": 2.91, "CALCIUM": 98.0, "MAGNESIUM": 158.0,
-      "ZINC": 3.09, "SELENIUM": 4.9, "PHOSPHORUS": 346.0, "POTASSIUM": 441.0, "OMEGA3": 2.57
+      "VIT_B1": 0.34,
+      "VIT_B2": 0.15,
+      "VIT_B3": 1.13,
+      "VIT_B5": 0.57,
+      "VIT_B6": 0.54,
+      "VIT_B9": 98,
+      "VIT_E": 0.7,
+      "IRON": 2.91,
+      "CALCIUM": 98,
+      "MAGNESIUM": 158,
+      "ZINC": 3.09,
+      "SELENIUM": 4.9,
+      "PHOSPHORUS": 346,
+      "POTASSIUM": 441,
+      "OMEGA3": 2.57
     }
   },
   {
     "name": "Семена тыквы",
     "category": "Орехи и семена",
     "vitamins": {
-      "VIT_B1": 0.27, "VIT_B2": 0.15, "VIT_B3": 4.99, "VIT_B5": 0.75,
-      "VIT_E": 2.18, "VIT_K": 7.3,
-      "IRON": 8.82, "CALCIUM": 46.0, "MAGNESIUM": 592.0,
-      "ZINC": 7.81, "SELENIUM": 9.4, "PHOSPHORUS": 1233.0, "POTASSIUM": 809.0
+      "VIT_B1": 0.27,
+      "VIT_B2": 0.15,
+      "VIT_B3": 4.99,
+      "VIT_B5": 0.75,
+      "VIT_E": 2.18,
+      "VIT_K": 7.3,
+      "IRON": 8.82,
+      "CALCIUM": 46,
+      "MAGNESIUM": 592,
+      "ZINC": 7.81,
+      "SELENIUM": 9.4,
+      "PHOSPHORUS": 1233,
+      "POTASSIUM": 809
     }
   },
   {
     "name": "Кешью",
     "category": "Орехи и семена",
     "vitamins": {
-      "VIT_B1": 0.42, "VIT_B2": 0.06, "VIT_B3": 1.06, "VIT_B5": 0.86,
-      "VIT_B6": 0.42, "VIT_E": 0.9,
-      "IRON": 6.68, "CALCIUM": 37.0, "MAGNESIUM": 292.0,
-      "ZINC": 5.78, "SELENIUM": 19.9, "PHOSPHORUS": 593.0, "POTASSIUM": 660.0
+      "VIT_B1": 0.42,
+      "VIT_B2": 0.06,
+      "VIT_B3": 1.06,
+      "VIT_B5": 0.86,
+      "VIT_B6": 0.42,
+      "VIT_E": 0.9,
+      "IRON": 6.68,
+      "CALCIUM": 37,
+      "MAGNESIUM": 292,
+      "ZINC": 5.78,
+      "SELENIUM": 19.9,
+      "PHOSPHORUS": 593,
+      "POTASSIUM": 660
     }
   },
   {
     "name": "Льняное семя",
     "category": "Орехи и семена",
     "vitamins": {
-      "VIT_B1": 1.64, "VIT_B2": 0.16, "VIT_B3": 3.08, "VIT_B5": 0.99,
-      "VIT_B6": 0.47, "VIT_B9": 87.0, "VIT_E": 0.31,
-      "IRON": 5.73, "CALCIUM": 255.0, "MAGNESIUM": 392.0,
-      "ZINC": 4.34, "SELENIUM": 25.4, "PHOSPHORUS": 642.0, "POTASSIUM": 813.0, "OMEGA3": 22.8
+      "VIT_B1": 1.64,
+      "VIT_B2": 0.16,
+      "VIT_B3": 3.08,
+      "VIT_B5": 0.99,
+      "VIT_B6": 0.47,
+      "VIT_B9": 87,
+      "VIT_E": 0.31,
+      "IRON": 5.73,
+      "CALCIUM": 255,
+      "MAGNESIUM": 392,
+      "ZINC": 4.34,
+      "SELENIUM": 25.4,
+      "PHOSPHORUS": 642,
+      "POTASSIUM": 813,
+      "OMEGA3": 22.8
     }
   },
   {
     "name": "Кунжут",
     "category": "Орехи и семена",
     "vitamins": {
-      "VIT_B1": 0.79, "VIT_B2": 0.25, "VIT_B3": 4.52,
-      "VIT_B6": 0.79, "VIT_B9": 97.0, "VIT_E": 2.3,
-      "IRON": 14.6, "CALCIUM": 975.0, "MAGNESIUM": 351.0,
-      "ZINC": 7.75, "SELENIUM": 34.4, "PHOSPHORUS": 629.0, "POTASSIUM": 468.0
+      "VIT_B1": 0.79,
+      "VIT_B2": 0.25,
+      "VIT_B3": 4.52,
+      "VIT_B6": 0.79,
+      "VIT_B9": 97,
+      "VIT_E": 2.3,
+      "IRON": 14.6,
+      "CALCIUM": 975,
+      "MAGNESIUM": 351,
+      "ZINC": 7.75,
+      "SELENIUM": 34.4,
+      "PHOSPHORUS": 629,
+      "POTASSIUM": 468
     }
   },
   {
     "name": "Фундук",
     "category": "Орехи и семена",
     "vitamins": {
-      "VIT_B1": 0.64, "VIT_B2": 0.11, "VIT_B3": 1.8, "VIT_B5": 0.92,
-      "VIT_B6": 0.56, "VIT_B9": 113.0, "VIT_E": 15.0,
-      "IRON": 4.7, "CALCIUM": 114.0, "MAGNESIUM": 163.0,
-      "ZINC": 2.45, "SELENIUM": 2.4, "PHOSPHORUS": 290.0, "POTASSIUM": 680.0
+      "VIT_B1": 0.64,
+      "VIT_B2": 0.11,
+      "VIT_B3": 1.8,
+      "VIT_B5": 0.92,
+      "VIT_B6": 0.56,
+      "VIT_B9": 113,
+      "VIT_E": 15,
+      "IRON": 4.7,
+      "CALCIUM": 114,
+      "MAGNESIUM": 163,
+      "ZINC": 2.45,
+      "SELENIUM": 2.4,
+      "PHOSPHORUS": 290,
+      "POTASSIUM": 680
     }
   },
   {
     "name": "Семена чиа",
     "category": "Орехи и семена",
     "vitamins": {
-      "VIT_B1": 0.62, "VIT_B2": 0.17, "VIT_B3": 8.83,
-      "VIT_B9": 49.0, "VIT_E": 0.5,
-      "IRON": 7.72, "CALCIUM": 631.0, "MAGNESIUM": 335.0,
-      "ZINC": 4.58, "SELENIUM": 55.2, "PHOSPHORUS": 860.0, "POTASSIUM": 407.0, "OMEGA3": 17.83
+      "VIT_B1": 0.62,
+      "VIT_B2": 0.17,
+      "VIT_B3": 8.83,
+      "VIT_B9": 49,
+      "VIT_E": 0.5,
+      "IRON": 7.72,
+      "CALCIUM": 631,
+      "MAGNESIUM": 335,
+      "ZINC": 4.58,
+      "SELENIUM": 55.2,
+      "PHOSPHORUS": 860,
+      "POTASSIUM": 407,
+      "OMEGA3": 17.83
     }
   },
   {
     "name": "Кедровый орех",
     "category": "Орехи и семена",
     "vitamins": {
-      "VIT_B1": 0.36, "VIT_B2": 0.23, "VIT_B3": 4.39,
-      "VIT_B6": 0.09, "VIT_E": 9.33, "VIT_K": 53.9,
-      "IRON": 5.53, "CALCIUM": 16.0, "MAGNESIUM": 251.0,
-      "ZINC": 6.45, "SELENIUM": 0.7, "PHOSPHORUS": 575.0, "POTASSIUM": 597.0
+      "VIT_B1": 0.36,
+      "VIT_B2": 0.23,
+      "VIT_B3": 4.39,
+      "VIT_B6": 0.09,
+      "VIT_E": 9.33,
+      "VIT_K": 53.9,
+      "IRON": 5.53,
+      "CALCIUM": 16,
+      "MAGNESIUM": 251,
+      "ZINC": 6.45,
+      "SELENIUM": 0.7,
+      "PHOSPHORUS": 575,
+      "POTASSIUM": 597
     }
   },
   {
     "name": "Оливковое масло",
     "category": "Масла и жиры",
     "vitamins": {
-      "VIT_E": 14.35, "VIT_K": 60.2,
+      "VIT_E": 14.35,
+      "VIT_K": 60.2,
       "IRON": 0.56
     }
   },
@@ -682,217 +1330,467 @@
     "name": "Масло сливочное",
     "category": "Масла и жиры",
     "vitamins": {
-      "VIT_A": 684.0, "VIT_D": 1.5, "VIT_E": 2.32, "VIT_K": 7.0,
+      "VIT_A": 684,
+      "VIT_D": 1.5,
+      "VIT_E": 2.32,
+      "VIT_K": 7,
       "VIT_B12": 0.17,
-      "CALCIUM": 24.0, "SELENIUM": 1.0, "PHOSPHORUS": 24.0, "POTASSIUM": 24.0
+      "CALCIUM": 24,
+      "SELENIUM": 1,
+      "PHOSPHORUS": 24,
+      "POTASSIUM": 24
     }
   },
   {
     "name": "Грибы шампиньоны",
     "category": "Овощи",
     "vitamins": {
-      "VIT_B1": 0.08, "VIT_B2": 0.4, "VIT_B3": 3.61, "VIT_B5": 1.5,
-      "VIT_B6": 0.1, "VIT_B9": 17.0, "VIT_D": 0.2,
-      "IRON": 0.5, "CALCIUM": 3.0, "MAGNESIUM": 9.0,
-      "ZINC": 0.52, "SELENIUM": 9.3, "PHOSPHORUS": 86.0, "POTASSIUM": 318.0
+      "VIT_B1": 0.08,
+      "VIT_B2": 0.4,
+      "VIT_B3": 3.61,
+      "VIT_B5": 1.5,
+      "VIT_B6": 0.1,
+      "VIT_B9": 17,
+      "VIT_D": 0.2,
+      "IRON": 0.5,
+      "CALCIUM": 3,
+      "MAGNESIUM": 9,
+      "ZINC": 0.52,
+      "SELENIUM": 9.3,
+      "PHOSPHORUS": 86,
+      "POTASSIUM": 318
     }
   },
   {
     "name": "Грибы лисички",
     "category": "Овощи",
     "vitamins": {
-      "VIT_B1": 0.02, "VIT_B2": 0.21, "VIT_B3": 4.09, "VIT_B5": 1.08,
+      "VIT_B1": 0.02,
+      "VIT_B2": 0.21,
+      "VIT_B3": 4.09,
+      "VIT_B5": 1.08,
       "VIT_D": 5.3,
-      "IRON": 3.47, "CALCIUM": 15.0, "MAGNESIUM": 13.0,
-      "ZINC": 0.71, "PHOSPHORUS": 57.0, "POTASSIUM": 506.0
+      "IRON": 3.47,
+      "CALCIUM": 15,
+      "MAGNESIUM": 13,
+      "ZINC": 0.71,
+      "PHOSPHORUS": 57,
+      "POTASSIUM": 506
     }
   },
   {
     "name": "Водоросли (нори)",
     "category": "Овощи",
     "vitamins": {
-      "VIT_A": 260.0, "VIT_B1": 0.1, "VIT_B2": 0.45, "VIT_B3": 1.6,
-      "VIT_B9": 146.0, "VIT_B12": 2.4, "VIT_C": 39.0, "VIT_E": 1.0, "VIT_K": 4.0,
-      "IRON": 1.8, "CALCIUM": 70.0, "MAGNESIUM": 2.0,
-      "ZINC": 1.05, "SELENIUM": 0.7, "PHOSPHORUS": 58.0, "POTASSIUM": 356.0, "OMEGA3": 0.1
+      "VIT_A": 260,
+      "VIT_B1": 0.1,
+      "VIT_B2": 0.45,
+      "VIT_B3": 1.6,
+      "VIT_B9": 146,
+      "VIT_B12": 2.4,
+      "VIT_C": 39,
+      "VIT_E": 1,
+      "VIT_K": 4,
+      "IRON": 1.8,
+      "CALCIUM": 70,
+      "MAGNESIUM": 2,
+      "ZINC": 1.05,
+      "SELENIUM": 0.7,
+      "PHOSPHORUS": 58,
+      "POTASSIUM": 356,
+      "OMEGA3": 0.1
     }
   },
   {
     "name": "Картофель",
     "category": "Овощи",
     "vitamins": {
-      "VIT_B1": 0.08, "VIT_B2": 0.03, "VIT_B3": 1.06, "VIT_B5": 0.3,
-      "VIT_B6": 0.3, "VIT_B9": 15.0, "VIT_C": 19.7,
-      "IRON": 0.81, "CALCIUM": 12.0, "MAGNESIUM": 23.0,
-      "ZINC": 0.3, "SELENIUM": 0.4, "PHOSPHORUS": 57.0, "POTASSIUM": 425.0
+      "VIT_B1": 0.08,
+      "VIT_B2": 0.03,
+      "VIT_B3": 1.06,
+      "VIT_B5": 0.3,
+      "VIT_B6": 0.3,
+      "VIT_B9": 15,
+      "VIT_C": 19.7,
+      "IRON": 0.81,
+      "CALCIUM": 12,
+      "MAGNESIUM": 23,
+      "ZINC": 0.3,
+      "SELENIUM": 0.4,
+      "PHOSPHORUS": 57,
+      "POTASSIUM": 425
     }
   },
   {
     "name": "Огурцы",
     "category": "Овощи",
     "vitamins": {
-      "VIT_B1": 0.03, "VIT_B5": 0.26,
-      "VIT_C": 2.8, "VIT_K": 16.4,
-      "CALCIUM": 16.0, "MAGNESIUM": 13.0,
-      "ZINC": 0.2, "PHOSPHORUS": 24.0, "POTASSIUM": 147.0
+      "VIT_B1": 0.03,
+      "VIT_B5": 0.26,
+      "VIT_C": 2.8,
+      "VIT_K": 16.4,
+      "CALCIUM": 16,
+      "MAGNESIUM": 13,
+      "ZINC": 0.2,
+      "PHOSPHORUS": 24,
+      "POTASSIUM": 147
     }
   },
   {
     "name": "Кабачок",
     "category": "Овощи",
     "vitamins": {
-      "VIT_A": 25.0, "VIT_B1": 0.05, "VIT_B2": 0.04, "VIT_B3": 0.45, "VIT_B5": 0.2,
-      "VIT_B6": 0.16, "VIT_B9": 24.0, "VIT_C": 17.9,
-      "CALCIUM": 16.0, "MAGNESIUM": 18.0,
-      "ZINC": 0.32, "PHOSPHORUS": 38.0, "POTASSIUM": 261.0
+      "VIT_A": 25,
+      "VIT_B1": 0.05,
+      "VIT_B2": 0.04,
+      "VIT_B3": 0.45,
+      "VIT_B5": 0.2,
+      "VIT_B6": 0.16,
+      "VIT_B9": 24,
+      "VIT_C": 17.9,
+      "CALCIUM": 16,
+      "MAGNESIUM": 18,
+      "ZINC": 0.32,
+      "PHOSPHORUS": 38,
+      "POTASSIUM": 261
     }
   },
   {
     "name": "Курага",
     "category": "Сухофрукты",
     "vitamins": {
-      "VIT_A": 180.0, "VIT_B1": 0.1, "VIT_B2": 0.07, "VIT_B3": 2.59, "VIT_B5": 0.52,
-      "VIT_B6": 0.14, "VIT_E": 4.33,
-      "IRON": 2.66, "CALCIUM": 55.0, "MAGNESIUM": 32.0,
-      "ZINC": 0.39, "PHOSPHORUS": 71.0, "POTASSIUM": 1162.0
+      "VIT_A": 180,
+      "VIT_B1": 0.1,
+      "VIT_B2": 0.07,
+      "VIT_B3": 2.59,
+      "VIT_B5": 0.52,
+      "VIT_B6": 0.14,
+      "VIT_E": 4.33,
+      "IRON": 2.66,
+      "CALCIUM": 55,
+      "MAGNESIUM": 32,
+      "ZINC": 0.39,
+      "PHOSPHORUS": 71,
+      "POTASSIUM": 1162
     }
   },
   {
     "name": "Чернослив",
     "category": "Сухофрукты",
     "vitamins": {
-      "VIT_B1": 0.05, "VIT_B2": 0.19, "VIT_B3": 1.88, "VIT_B5": 0.42,
-      "VIT_B6": 0.21, "VIT_B9": 4.0, "VIT_K": 59.5,
-      "IRON": 0.93, "CALCIUM": 43.0, "MAGNESIUM": 41.0,
-      "ZINC": 0.44, "PHOSPHORUS": 69.0, "POTASSIUM": 732.0
+      "VIT_B1": 0.05,
+      "VIT_B2": 0.19,
+      "VIT_B3": 1.88,
+      "VIT_B5": 0.42,
+      "VIT_B6": 0.21,
+      "VIT_B9": 4,
+      "VIT_K": 59.5,
+      "IRON": 0.93,
+      "CALCIUM": 43,
+      "MAGNESIUM": 41,
+      "ZINC": 0.44,
+      "PHOSPHORUS": 69,
+      "POTASSIUM": 732
     }
   },
   {
     "name": "Изюм",
     "category": "Сухофрукты",
     "vitamins": {
-      "VIT_B1": 0.11, "VIT_B2": 0.13, "VIT_B3": 0.77, "VIT_B5": 0.1,
+      "VIT_B1": 0.11,
+      "VIT_B2": 0.13,
+      "VIT_B3": 0.77,
+      "VIT_B5": 0.1,
       "VIT_B6": 0.17,
-      "IRON": 1.88, "CALCIUM": 50.0, "MAGNESIUM": 32.0,
-      "ZINC": 0.22, "PHOSPHORUS": 101.0, "POTASSIUM": 749.0
+      "IRON": 1.88,
+      "CALCIUM": 50,
+      "MAGNESIUM": 32,
+      "ZINC": 0.22,
+      "PHOSPHORUS": 101,
+      "POTASSIUM": 749
     }
   },
   {
     "name": "Финики",
     "category": "Сухофрукты",
     "vitamins": {
-      "VIT_B1": 0.05, "VIT_B2": 0.06, "VIT_B3": 1.61, "VIT_B5": 0.81,
-      "VIT_B6": 0.25, "VIT_B9": 15.0,
-      "IRON": 0.9, "CALCIUM": 64.0, "MAGNESIUM": 54.0,
-      "ZINC": 0.44, "SELENIUM": 3.0, "PHOSPHORUS": 62.0, "POTASSIUM": 696.0
+      "VIT_B1": 0.05,
+      "VIT_B2": 0.06,
+      "VIT_B3": 1.61,
+      "VIT_B5": 0.81,
+      "VIT_B6": 0.25,
+      "VIT_B9": 15,
+      "IRON": 0.9,
+      "CALCIUM": 64,
+      "MAGNESIUM": 54,
+      "ZINC": 0.44,
+      "SELENIUM": 3,
+      "PHOSPHORUS": 62,
+      "POTASSIUM": 696
     }
   },
   {
     "name": "Тофу",
     "category": "Соевые продукты",
     "vitamins": {
-      "VIT_B1": 0.06, "VIT_B2": 0.05, "VIT_B3": 0.2,
-      "VIT_B6": 0.05, "VIT_B9": 15.0,
-      "IRON": 5.36, "CALCIUM": 350.0, "MAGNESIUM": 30.0,
-      "ZINC": 0.8, "SELENIUM": 8.9, "PHOSPHORUS": 97.0, "POTASSIUM": 121.0
+      "VIT_B1": 0.06,
+      "VIT_B2": 0.05,
+      "VIT_B3": 0.2,
+      "VIT_B6": 0.05,
+      "VIT_B9": 15,
+      "IRON": 5.36,
+      "CALCIUM": 350,
+      "MAGNESIUM": 30,
+      "ZINC": 0.8,
+      "SELENIUM": 8.9,
+      "PHOSPHORUS": 97,
+      "POTASSIUM": 121
     }
   },
   {
     "name": "Соевые бобы",
     "category": "Соевые продукты",
     "vitamins": {
-      "VIT_B1": 0.87, "VIT_B2": 0.87, "VIT_B3": 1.62, "VIT_B5": 0.79,
-      "VIT_B6": 0.38, "VIT_B9": 375.0, "VIT_C": 6.0, "VIT_E": 0.85, "VIT_K": 47.0,
-      "IRON": 15.7, "CALCIUM": 277.0, "MAGNESIUM": 280.0,
-      "ZINC": 4.89, "SELENIUM": 17.8, "PHOSPHORUS": 704.0, "POTASSIUM": 1797.0
+      "VIT_B1": 0.87,
+      "VIT_B2": 0.87,
+      "VIT_B3": 1.62,
+      "VIT_B5": 0.79,
+      "VIT_B6": 0.38,
+      "VIT_B9": 375,
+      "VIT_C": 6,
+      "VIT_E": 0.85,
+      "VIT_K": 47,
+      "IRON": 15.7,
+      "CALCIUM": 277,
+      "MAGNESIUM": 280,
+      "ZINC": 4.89,
+      "SELENIUM": 17.8,
+      "PHOSPHORUS": 704,
+      "POTASSIUM": 1797
     }
   },
   {
     "name": "Рыбий жир (масло)",
     "category": "Масла и жиры",
     "vitamins": {
-      "VIT_A": 9000.0, "VIT_D": 250.0, "VIT_E": 2.0,
-      "OMEGA3": 25.0
+      "VIT_A": 9000,
+      "VIT_D": 250,
+      "VIT_E": 2,
+      "OMEGA3": 25
     }
   },
   {
     "name": "Квашеная капуста",
     "category": "Овощи",
     "vitamins": {
-      "VIT_B1": 0.02, "VIT_B2": 0.02, "VIT_B3": 0.14,
-      "VIT_B6": 0.13, "VIT_B9": 24.0, "VIT_C": 14.7, "VIT_K": 13.0,
-      "IRON": 1.47, "CALCIUM": 30.0, "MAGNESIUM": 13.0,
-      "ZINC": 0.19, "PHOSPHORUS": 20.0, "POTASSIUM": 170.0
+      "VIT_B1": 0.02,
+      "VIT_B2": 0.02,
+      "VIT_B3": 0.14,
+      "VIT_B6": 0.13,
+      "VIT_B9": 24,
+      "VIT_C": 14.7,
+      "VIT_K": 13,
+      "IRON": 1.47,
+      "CALCIUM": 30,
+      "MAGNESIUM": 13,
+      "ZINC": 0.19,
+      "PHOSPHORUS": 20,
+      "POTASSIUM": 170
     }
   },
   {
     "name": "Зелёный горошек",
     "category": "Овощи",
     "vitamins": {
-      "VIT_A": 38.0, "VIT_B1": 0.27, "VIT_B2": 0.13, "VIT_B3": 2.09, "VIT_B5": 0.1,
-      "VIT_B6": 0.17, "VIT_B9": 65.0, "VIT_C": 40.0, "VIT_E": 0.13, "VIT_K": 24.8,
-      "IRON": 1.47, "CALCIUM": 25.0, "MAGNESIUM": 33.0,
-      "ZINC": 1.24, "SELENIUM": 1.8, "PHOSPHORUS": 108.0, "POTASSIUM": 244.0
+      "VIT_A": 38,
+      "VIT_B1": 0.27,
+      "VIT_B2": 0.13,
+      "VIT_B3": 2.09,
+      "VIT_B5": 0.1,
+      "VIT_B6": 0.17,
+      "VIT_B9": 65,
+      "VIT_C": 40,
+      "VIT_E": 0.13,
+      "VIT_K": 24.8,
+      "IRON": 1.47,
+      "CALCIUM": 25,
+      "MAGNESIUM": 33,
+      "ZINC": 1.24,
+      "SELENIUM": 1.8,
+      "PHOSPHORUS": 108,
+      "POTASSIUM": 244
     }
   },
   {
     "name": "Брюссельская капуста",
     "category": "Овощи",
     "vitamins": {
-      "VIT_A": 38.0, "VIT_B1": 0.14, "VIT_B2": 0.09, "VIT_B3": 0.75, "VIT_B5": 0.31,
-      "VIT_B6": 0.22, "VIT_B9": 61.0, "VIT_C": 85.0, "VIT_E": 0.88, "VIT_K": 177.0,
-      "IRON": 1.4, "CALCIUM": 42.0, "MAGNESIUM": 23.0,
-      "ZINC": 0.42, "SELENIUM": 1.6, "PHOSPHORUS": 69.0, "POTASSIUM": 389.0
+      "VIT_A": 38,
+      "VIT_B1": 0.14,
+      "VIT_B2": 0.09,
+      "VIT_B3": 0.75,
+      "VIT_B5": 0.31,
+      "VIT_B6": 0.22,
+      "VIT_B9": 61,
+      "VIT_C": 85,
+      "VIT_E": 0.88,
+      "VIT_K": 177,
+      "IRON": 1.4,
+      "CALCIUM": 42,
+      "MAGNESIUM": 23,
+      "ZINC": 0.42,
+      "SELENIUM": 1.6,
+      "PHOSPHORUS": 69,
+      "POTASSIUM": 389
     }
   },
   {
     "name": "Малина",
     "category": "Фрукты и ягоды",
     "vitamins": {
-      "VIT_B1": 0.03, "VIT_B2": 0.04, "VIT_B3": 0.6, "VIT_B5": 0.33,
-      "VIT_B6": 0.06, "VIT_B9": 21.0, "VIT_C": 26.2, "VIT_E": 0.87, "VIT_K": 7.8,
-      "IRON": 0.69, "CALCIUM": 25.0, "MAGNESIUM": 22.0,
-      "ZINC": 0.42, "PHOSPHORUS": 29.0, "POTASSIUM": 151.0
+      "VIT_B1": 0.03,
+      "VIT_B2": 0.04,
+      "VIT_B3": 0.6,
+      "VIT_B5": 0.33,
+      "VIT_B6": 0.06,
+      "VIT_B9": 21,
+      "VIT_C": 26.2,
+      "VIT_E": 0.87,
+      "VIT_K": 7.8,
+      "IRON": 0.69,
+      "CALCIUM": 25,
+      "MAGNESIUM": 22,
+      "ZINC": 0.42,
+      "PHOSPHORUS": 29,
+      "POTASSIUM": 151
     }
   },
   {
     "name": "Грейпфрут",
     "category": "Фрукты и ягоды",
     "vitamins": {
-      "VIT_A": 33.0, "VIT_B1": 0.04, "VIT_B2": 0.03, "VIT_B3": 0.2, "VIT_B5": 0.28,
-      "VIT_B6": 0.04, "VIT_B9": 13.0, "VIT_C": 31.2,
-      "CALCIUM": 22.0, "MAGNESIUM": 9.0,
-      "ZINC": 0.07, "PHOSPHORUS": 18.0, "POTASSIUM": 135.0
+      "VIT_A": 33,
+      "VIT_B1": 0.04,
+      "VIT_B2": 0.03,
+      "VIT_B3": 0.2,
+      "VIT_B5": 0.28,
+      "VIT_B6": 0.04,
+      "VIT_B9": 13,
+      "VIT_C": 31.2,
+      "CALCIUM": 22,
+      "MAGNESIUM": 9,
+      "ZINC": 0.07,
+      "PHOSPHORUS": 18,
+      "POTASSIUM": 135
     }
   },
   {
     "name": "Петрушка",
     "category": "Зелень и травы",
     "vitamins": {
-      "VIT_A": 421.0, "VIT_B1": 0.09, "VIT_B2": 0.1, "VIT_B3": 1.31,
-      "VIT_B6": 0.09, "VIT_B9": 152.0, "VIT_C": 133.0, "VIT_E": 1.74, "VIT_K": 1640.0,
-      "IRON": 6.2, "CALCIUM": 138.0, "MAGNESIUM": 50.0,
-      "ZINC": 1.07, "SELENIUM": 0.1, "PHOSPHORUS": 58.0, "POTASSIUM": 554.0
+      "VIT_A": 421,
+      "VIT_B1": 0.09,
+      "VIT_B2": 0.1,
+      "VIT_B3": 1.31,
+      "VIT_B6": 0.09,
+      "VIT_B9": 152,
+      "VIT_C": 133,
+      "VIT_E": 1.74,
+      "VIT_K": 1640,
+      "IRON": 6.2,
+      "CALCIUM": 138,
+      "MAGNESIUM": 50,
+      "ZINC": 1.07,
+      "SELENIUM": 0.1,
+      "PHOSPHORUS": 58,
+      "POTASSIUM": 554
     }
   },
   {
     "name": "Укроп",
     "category": "Зелень и травы",
     "vitamins": {
-      "VIT_A": 386.0, "VIT_B1": 0.06, "VIT_B2": 0.3, "VIT_B3": 1.57,
-      "VIT_B6": 0.19, "VIT_B9": 150.0, "VIT_C": 85.0,
-      "IRON": 6.59, "CALCIUM": 208.0, "MAGNESIUM": 55.0,
-      "ZINC": 0.91, "PHOSPHORUS": 66.0, "POTASSIUM": 738.0
+      "VIT_A": 386,
+      "VIT_B1": 0.06,
+      "VIT_B2": 0.3,
+      "VIT_B3": 1.57,
+      "VIT_B6": 0.19,
+      "VIT_B9": 150,
+      "VIT_C": 85,
+      "IRON": 6.59,
+      "CALCIUM": 208,
+      "MAGNESIUM": 55,
+      "ZINC": 0.91,
+      "PHOSPHORUS": 66,
+      "POTASSIUM": 738
     }
   },
   {
     "name": "Руккола",
     "category": "Зелень и травы",
     "vitamins": {
-      "VIT_A": 119.0, "VIT_B1": 0.04, "VIT_B2": 0.09, "VIT_B3": 0.31, "VIT_B5": 0.44,
-      "VIT_B6": 0.07, "VIT_B9": 97.0, "VIT_C": 15.0, "VIT_E": 0.43, "VIT_K": 108.6,
-      "IRON": 1.46, "CALCIUM": 160.0, "MAGNESIUM": 47.0,
-      "ZINC": 0.47, "SELENIUM": 0.3, "PHOSPHORUS": 52.0, "POTASSIUM": 369.0
+      "VIT_A": 119,
+      "VIT_B1": 0.04,
+      "VIT_B2": 0.09,
+      "VIT_B3": 0.31,
+      "VIT_B5": 0.44,
+      "VIT_B6": 0.07,
+      "VIT_B9": 97,
+      "VIT_C": 15,
+      "VIT_E": 0.43,
+      "VIT_K": 108.6,
+      "IRON": 1.46,
+      "CALCIUM": 160,
+      "MAGNESIUM": 47,
+      "ZINC": 0.47,
+      "SELENIUM": 0.3,
+      "PHOSPHORUS": 52,
+      "POTASSIUM": 369
+    }
+  },
+  {
+    "name": "Вода",
+    "category": "База рецептов",
+    "vitamins": {}
+  },
+  {
+    "name": "Лук репчатый",
+    "category": "Овощи",
+    "vitamins": {
+      "VIT_B1": 0.05,
+      "VIT_B2": 0.03,
+      "VIT_B3": 0.12,
+      "VIT_B5": 0.12,
+      "VIT_B6": 0.12,
+      "VIT_B9": 19,
+      "VIT_C": 7.4,
+      "VIT_K": 0.4,
+      "IRON": 0.21,
+      "CALCIUM": 23,
+      "MAGNESIUM": 10,
+      "ZINC": 0.17,
+      "SELENIUM": 0.5,
+      "PHOSPHORUS": 29,
+      "POTASSIUM": 146
+    }
+  },
+  {
+    "name": "Хлеб цельнозерновой",
+    "category": "Зерновые продукты",
+    "vitamins": {
+      "VIT_B1": 0.4,
+      "VIT_B2": 0.12,
+      "VIT_B3": 4.8,
+      "VIT_B5": 0.7,
+      "VIT_B6": 0.2,
+      "VIT_B9": 90,
+      "VIT_E": 1.5,
+      "IRON": 2.5,
+      "CALCIUM": 100,
+      "MAGNESIUM": 80,
+      "ZINC": 1.6,
+      "PHOSPHORUS": 200,
+      "POTASSIUM": 230
     }
   }
 ]

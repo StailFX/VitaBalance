@@ -8,6 +8,8 @@ import api from '../api/client'
 import PageTransition from '../components/PageTransition'
 import { TableSkeleton } from '../components/Skeleton'
 import AnimateIn, { StaggerChildren } from '../components/AnimateIn'
+import { useInView, useCountUp } from '../hooks/useAnimations'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 import { useTheme } from '../context/ThemeContext'
 import { getChartColors } from '../utils/chartColors'
 import type { VitaminAnalysisItem, AnalysisSnapshot, ComparisonItem, VitaminStatus } from '../types'
@@ -38,13 +40,12 @@ interface HeatmapRow {
   cells: HeatmapCell[]
 }
 
-interface SummaryCard {
+interface SummaryCardConfig {
   label: string
-  value: string
-  description: string
-  accent: string
+  value: number
   surface: string
-  border: string
+  valueColor: string
+  labelColor: string
 }
 
 export default function Analytics() {
@@ -57,6 +58,7 @@ export default function Analytics() {
   const [comparison, setComparison] = useState<ComparisonItem[] | null>(null)
   const [compLoading, setCompLoading] = useState(false)
   const { dark } = useTheme()
+  const isMobile = useMediaQuery('(max-width: 640px)')
   const chartColors = useMemo(() => getChartColors(dark), [dark])
 
   useEffect(() => {
@@ -128,9 +130,40 @@ export default function Analytics() {
   const defCount = analysis.filter(a => a.status === 'deficiency').length
   const normalCount = analysis.filter(a => a.status === 'normal').length
   const excessCount = analysis.filter(a => a.status === 'excess').length
+  const noDataCount = analysis.filter(a => a.status === 'no_data').length
   const avgSeverity = analysis.length > 0
     ? Math.round(analysis.reduce((sum, a) => sum + a.severity, 0) / analysis.length)
     : 0
+  const summaryCards: SummaryCardConfig[] = [
+    {
+      label: 'Дефицитов',
+      value: defCount,
+      surface: 'bg-red-100 border-red-300 dark:bg-red-950/70 dark:border-red-800',
+      valueColor: 'text-red-950 dark:text-red-50',
+      labelColor: 'text-red-700 dark:text-red-200',
+    },
+    {
+      label: 'В норме',
+      value: normalCount,
+      surface: 'bg-emerald-100 border-emerald-300 dark:bg-emerald-950/70 dark:border-emerald-800',
+      valueColor: 'text-emerald-950 dark:text-emerald-50',
+      labelColor: 'text-emerald-700 dark:text-emerald-200',
+    },
+    {
+      label: 'Избыток',
+      value: excessCount,
+      surface: 'bg-amber-100 border-amber-300 dark:bg-amber-950/70 dark:border-amber-800',
+      valueColor: 'text-amber-950 dark:text-amber-50',
+      labelColor: 'text-amber-700 dark:text-amber-200',
+    },
+    {
+      label: 'Нет данных',
+      value: noDataCount,
+      surface: 'bg-slate-100 border-slate-300 dark:bg-slate-900 dark:border-slate-700',
+      valueColor: 'text-slate-900 dark:text-slate-50',
+      labelColor: 'text-slate-600 dark:text-slate-300',
+    },
+  ]
 
   if (loading) {
     return (
@@ -161,156 +194,48 @@ export default function Analytics() {
 
   const formatDate = (d: string) => new Date(d).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' })
   const formatDateFull = (d: string) => new Date(d).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' })
-  const latestHistoryDate = history[0]?.date ?? null
-  const heroTitle = history.length > 1
-    ? 'Аналитика показывает, как меняется витаминный баланс со временем'
-    : 'Аналитика уже собирает первую контрольную точку'
-  const heroText = availableDates.length >= 2
-    ? 'Здесь можно смотреть динамику по датам, сравнивать две точки между собой и держать под рукой текущий обзор без постоянного переключения между разделами.'
-    : 'Пока записей немного, но страница уже полезна как первая сводка. После следующего ввода данных сравнение и тепловая карта станут намного информативнее.'
-  const summaryCards: SummaryCard[] = [
-    {
-      label: 'Дефициты',
-      value: `${defCount}`,
-      description: 'Столько показателей сейчас находятся ниже комфортного диапазона.',
-      accent: 'text-red-600 dark:text-red-300',
-      surface: 'from-red-50 via-white to-white dark:from-red-500/12 dark:via-white/[0.04] dark:to-white/[0.02]',
-      border: 'border-red-100 dark:border-red-500/20',
-    },
-    {
-      label: 'В норме',
-      value: `${normalCount}`,
-      description: 'Эти показатели сейчас выглядят устойчиво и не требуют немедленного внимания.',
-      accent: 'text-emerald-600 dark:text-emerald-300',
-      surface: 'from-emerald-50 via-white to-white dark:from-emerald-500/12 dark:via-white/[0.04] dark:to-white/[0.02]',
-      border: 'border-emerald-100 dark:border-emerald-500/20',
-    },
-    {
-      label: 'История',
-      value: `${history.length}`,
-      description: 'Столько снимков уже накоплено для динамики и сравнений.',
-      accent: 'text-cyan-600 dark:text-cyan-300',
-      surface: 'from-cyan-50 via-white to-white dark:from-cyan-500/12 dark:via-white/[0.04] dark:to-white/[0.02]',
-      border: 'border-cyan-100 dark:border-cyan-500/20',
-    },
-    {
-      label: 'Средняя тяжесть',
-      value: `${avgSeverity}%`,
-      description: excessCount > 0 ? 'Показатель учитывает и дефициты, и избытки в общей картине.' : 'Условная средняя интенсивность текущих отклонений.',
-      accent: 'text-primary-600 dark:text-primary-300',
-      surface: 'from-primary-50 via-white to-white dark:from-primary-500/12 dark:via-white/[0.04] dark:to-white/[0.02]',
-      border: 'border-primary-100 dark:border-primary-500/20',
-    },
-  ]
 
   return (
     <PageTransition>
-      <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
-        <section className="relative overflow-hidden rounded-[2rem] border border-gray-200 dark:border-white/[0.08] bg-white dark:bg-white/[0.03] shadow-xl shadow-gray-200/40 dark:shadow-primary-500/[0.05]">
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute -top-10 left-0 h-44 w-44 rounded-full bg-primary-500/[0.08] dark:bg-primary-500/[0.14] blur-3xl" />
-            <div className="absolute top-1/3 right-0 h-56 w-56 rounded-full bg-cyan-500/[0.08] dark:bg-cyan-500/[0.12] blur-3xl" />
-            <div
-              className="absolute inset-0 opacity-[0.04] dark:opacity-[0.06]"
-              style={{
-                backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
-                backgroundSize: '30px 30px',
-              }}
-            />
-          </div>
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="mb-8">
+          <span className="section-eyebrow inline-block px-4 py-1.5 rounded-full bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 text-xs font-semibold uppercase tracking-wider mb-4">
+            Аналитика
+          </span>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Витаминная аналитика</h1>
+          <p className="text-gray-500 dark:text-gray-300 mt-1">Heatmap, сравнение и обзор вашего баланса</p>
+        </div>
 
-          <div className="relative grid xl:grid-cols-[1.15fr_0.85fr] gap-6 p-6 sm:p-8">
-            <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/70 dark:bg-white/[0.06] border border-primary-200/60 dark:border-primary-500/20 backdrop-blur-sm mb-5">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-500" />
-                </span>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Витаминная аналитика</span>
-              </div>
-
-              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white leading-tight mb-4">
-                {heroTitle}
-              </h1>
-              <p className="text-base sm:text-lg text-gray-500 dark:text-gray-300 leading-relaxed max-w-xl mb-6">
-                {heroText}
-              </p>
-
-              <div className="flex flex-wrap gap-3 mb-6">
-                <Link
-                  to="/analysis"
-                  className="btn-primary text-white px-6 py-3 rounded-2xl font-semibold inline-flex items-center gap-2"
-                >
-                  Вернуться к анализу
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                  </svg>
-                </Link>
-                <Link
-                  to="/analysis/history"
-                  className="px-6 py-3 rounded-2xl bg-gray-100/90 dark:bg-white/[0.05] text-gray-700 dark:text-gray-200 font-semibold border border-gray-200 dark:border-white/[0.08] hover:bg-white dark:hover:bg-white/[0.08] transition-colors inline-flex items-center gap-2"
-                >
-                  История изменений
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </Link>
-              </div>
-
-              <div className="flex flex-wrap gap-2.5">
-                <span className="px-3 py-1.5 rounded-full bg-white/75 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] text-sm text-gray-600 dark:text-gray-300">
-                  {latestHistoryDate ? `Последняя запись: ${formatDateFull(latestHistoryDate)}` : 'История еще не сформирована'}
-                </span>
-                <span className="px-3 py-1.5 rounded-full bg-white/75 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] text-sm text-gray-600 dark:text-gray-300">
-                  {availableDates.length >= 2 ? 'Сравнение между датами доступно' : 'Для сравнения нужна еще хотя бы одна запись'}
-                </span>
-                <span className="px-3 py-1.5 rounded-full bg-white/75 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] text-sm text-gray-600 dark:text-gray-300">
-                  Активная вкладка: {tab === 'heatmap' ? 'Heatmap' : tab === 'compare' ? 'Сравнение' : 'Обзор'}
-                </span>
-              </div>
+        {/* Summary cards */}
+        <StaggerChildren variant="fade-up" stagger={80} className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {summaryCards.map((card) => (
+            <div key={card.label} className={`rounded-2xl p-5 border shadow-sm ${card.surface}`}>
+              <div className={`text-3xl font-bold ${card.valueColor}`}>{card.value}</div>
+              <div className={`text-sm mt-1 font-medium ${card.labelColor}`}>{card.label}</div>
             </div>
+          ))}
+        </StaggerChildren>
 
-            <StaggerChildren variant="fade-up" stagger={70} className="grid gap-3 self-start sm:grid-cols-2">
-              {summaryCards.map((card) => (
-                <div
-                  key={card.label}
-                  className={`rounded-[1.5rem] border ${card.border} bg-gradient-to-br ${card.surface} p-4 sm:p-5`}
-                >
-                  <div className={`text-xs uppercase tracking-[0.18em] ${card.accent} mb-2`}>{card.label}</div>
-                  <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{card.value}</div>
-                  <p className="text-sm text-gray-500 dark:text-gray-300 mt-2">{card.description}</p>
-                </div>
-              ))}
-            </StaggerChildren>
-          </div>
-        </section>
-
-        <AnimateIn
-          variant="blur"
-          className="bg-white dark:bg-white/[0.03] rounded-[1.75rem] border border-gray-200 dark:border-white/[0.08] shadow-sm p-4"
-        >
-          <div className="overflow-x-auto">
-            <div className="bg-gray-100 dark:bg-white/[0.06] rounded-2xl p-1.5 inline-flex min-w-max gap-1">
-              {([
-                { key: 'heatmap' as const, label: 'Heatmap' },
-                { key: 'compare' as const, label: 'Сравнение' },
-                { key: 'overview' as const, label: 'Обзор' },
-              ]).map((t) => (
-                <button
-                  key={t.key}
-                  onClick={() => setTab(t.key)}
-                  className={`px-5 py-2 rounded-xl text-sm font-medium transition-all ${
-                    tab === t.key
-                      ? 'bg-white dark:bg-white/[0.08] text-primary-600 dark:text-primary-400 shadow-sm'
-                      : 'text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200'
-                  }`}
-                >
-                  {t.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </AnimateIn>
+        {/* Tab switcher */}
+        <div className="mb-8 flex w-full flex-wrap gap-1 rounded-2xl bg-gray-100 p-1.5 dark:bg-white/[0.06] sm:inline-flex sm:w-auto">
+          {([
+            { key: 'heatmap' as const, label: 'Heatmap' },
+            { key: 'compare' as const, label: 'Сравнение' },
+            { key: 'overview' as const, label: 'Обзор' },
+          ]).map(t => (
+            <button
+              key={t.key}
+              onClick={() => setTab(t.key)}
+              className={`flex-1 rounded-xl px-4 py-2 text-sm font-medium transition-all sm:flex-none sm:px-5 ${
+                tab === t.key
+                  ? 'bg-white dark:bg-white/[0.08] text-primary-600 dark:text-primary-400 shadow-sm'
+                  : 'text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200'
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
 
         {/* Heatmap Tab */}
         {tab === 'heatmap' && (
@@ -321,15 +246,15 @@ export default function Analytics() {
             {heatmapData.length === 0 ? (
               <p className="text-gray-400 text-center py-8">Недостаточно данных для heatmap</p>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
+              <div className="-mx-2 overflow-x-auto px-2 sm:mx-0 sm:px-0">
+                <table className="min-w-max w-full">
                   <thead>
                     <tr>
-                      <th className="text-left text-xs font-semibold text-gray-500 dark:text-gray-400 pb-3 pr-4 sticky left-0 bg-white dark:bg-[#161b22] z-10 min-w-[140px]">
+                      <th className="sticky left-0 z-10 min-w-[112px] bg-white pb-3 pr-3 text-left text-[11px] font-semibold text-gray-500 dark:bg-[#161b22] dark:text-gray-400 sm:min-w-[140px] sm:pr-4 sm:text-xs">
                         Витамин
                       </th>
                       {([...history].reverse()).map(h => (
-                        <th key={h.date} className="text-center text-[10px] font-medium text-gray-400 pb-3 px-1 min-w-[44px]">
+                        <th key={h.date} className="min-w-[36px] px-1 pb-3 text-center text-[10px] font-medium text-gray-400 sm:min-w-[44px]">
                           {formatDate(h.date)}
                         </th>
                       ))}
@@ -338,7 +263,7 @@ export default function Analytics() {
                   <tbody>
                     {heatmapData.map(row => (
                       <tr key={row.vitamin} className="group">
-                        <td className="text-sm font-medium text-gray-700 dark:text-gray-300 py-1.5 pr-4 sticky left-0 bg-white dark:bg-[#161b22] z-10">
+                        <td className="sticky left-0 z-10 bg-white py-1.5 pr-3 text-xs font-medium text-gray-700 dark:bg-[#161b22] dark:text-gray-300 sm:pr-4 sm:text-sm">
                           {row.vitamin.replace('Витамин ', '')}
                         </td>
                         {row.cells.map((cell, i) => {
@@ -346,7 +271,7 @@ export default function Analytics() {
                           return (
                             <td key={i} className="px-1 py-1.5">
                               <div
-                                className={`w-8 h-8 rounded-lg ${sc.bg} mx-auto relative cursor-default transition-transform hover:scale-125`}
+                                className={`relative mx-auto h-7 w-7 cursor-default rounded-lg transition-transform hover:scale-125 sm:h-8 sm:w-8 ${sc.bg}`}
                                 style={{ opacity: cell.status === 'no_data' ? 0.3 : (cell.status === 'deficiency' ? 1 : 0.8) }}
                                 title={`${row.vitamin}: ${cell.value !== null ? `${cell.value} ${cell.unit}` : 'нет данных'} (${formatDateFull(cell.date)})`}
                               />
@@ -361,7 +286,7 @@ export default function Analytics() {
             )}
 
             {/* Legend */}
-            <div className="flex items-center gap-4 mt-6 pt-4 border-t border-gray-100 dark:border-white/[0.06]">
+            <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-gray-100 pt-4 dark:border-white/[0.06] sm:gap-4">
               {(Object.entries(STATUS_COLORS) as [VitaminStatus, StatusColorEntry][]).map(([key, val]) => (
                 <div key={key} className="flex items-center gap-2">
                   <div className={`w-4 h-4 rounded ${val.bg}`} style={{ opacity: key === 'no_data' ? 0.3 : 0.8 }} />
@@ -378,20 +303,20 @@ export default function Analytics() {
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Сравнение периодов</h2>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">Выберите две даты для сравнения витаминных показателей</p>
 
-            <div className="flex flex-wrap items-end gap-4 mb-8">
+            <div className="mb-8 grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:items-end">
               <div>
                 <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">Дата 1</label>
                 <select
                   value={compDate1}
                   onChange={(e) => setCompDate1(e.target.value)}
-                  className="px-4 py-2.5 bg-gray-50 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.1] rounded-xl text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 outline-none"
+                  className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-primary-500 dark:border-white/[0.1] dark:bg-white/[0.05] dark:text-white"
                 >
                   {availableDates.map(d => (
                     <option key={d} value={d}>{formatDateFull(d)}</option>
                   ))}
                 </select>
               </div>
-              <div className="text-gray-400 pb-2">
+              <div className="hidden pb-2 text-center text-gray-400 sm:block">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                 </svg>
@@ -401,7 +326,7 @@ export default function Analytics() {
                 <select
                   value={compDate2}
                   onChange={(e) => setCompDate2(e.target.value)}
-                  className="px-4 py-2.5 bg-gray-50 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.1] rounded-xl text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 outline-none"
+                  className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-primary-500 dark:border-white/[0.1] dark:bg-white/[0.05] dark:text-white"
                 >
                   {availableDates.map(d => (
                     <option key={d} value={d}>{formatDateFull(d)}</option>
@@ -433,10 +358,10 @@ export default function Analytics() {
 
                     return (
                       <div key={item.vitamin_name} className="bg-gray-50 dark:bg-white/[0.02] rounded-2xl p-4">
-                        <div className="flex items-center justify-between mb-3">
+                        <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                           <h3 className="font-semibold text-sm text-gray-900 dark:text-white">{item.vitamin_name}</h3>
                           {item.change_percent !== null && (
-                            <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
+                            <span className={`w-fit rounded-full px-2.5 py-1 text-xs font-bold ${
                               improved ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400' :
                               worsened ? 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400' :
                               'bg-gray-100 dark:bg-gray-800 text-gray-500'
@@ -445,7 +370,7 @@ export default function Analytics() {
                             </span>
                           )}
                         </div>
-                        <div className="grid gap-4 sm:grid-cols-2">
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
                           <div>
                             <div className="text-[10px] text-gray-400 uppercase tracking-wider mb-1">{formatDate(compDate1)}</div>
                             <div className="flex items-center gap-2">
@@ -458,7 +383,7 @@ export default function Analytics() {
                                   }}
                                 />
                               </div>
-                              <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 min-w-[50px] text-right">
+                              <span className="min-w-[42px] text-right text-sm font-semibold text-gray-700 dark:text-gray-300 sm:min-w-[50px]">
                                 {item.date1_value !== null ? item.date1_value : '—'}
                               </span>
                             </div>
@@ -476,7 +401,7 @@ export default function Analytics() {
                                   }}
                                 />
                               </div>
-                              <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 min-w-[50px] text-right">
+                              <span className="min-w-[42px] text-right text-sm font-semibold text-gray-700 dark:text-gray-300 sm:min-w-[50px]">
                                 {item.date2_value !== null ? item.date2_value : '—'}
                               </span>
                             </div>
@@ -501,9 +426,9 @@ export default function Analytics() {
                   return (
                     <div className="bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-200 dark:border-white/[0.08] shadow-sm p-6">
                       <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">Радарное сравнение</h3>
-                      <div className="h-72">
+                      <div className="h-64 sm:h-72">
                         <ResponsiveContainer width="100%" height="100%">
-                          <RadarChart data={radarData}>
+                          <RadarChart accessibilityLayer={!isMobile} data={radarData}>
                             <PolarGrid stroke={chartColors.grid} />
                             <PolarAngleAxis dataKey="vitamin" tick={{ fontSize: 11, fill: chartColors.axis }} />
                             <PolarRadiusAxis tick={{ fontSize: 9, fill: chartColors.axis }} />
@@ -520,7 +445,7 @@ export default function Analytics() {
                           </RadarChart>
                         </ResponsiveContainer>
                       </div>
-                      <div className="flex items-center justify-center gap-6 mt-3">
+                      <div className="mt-3 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
                         <div className="flex items-center gap-2">
                           <div className="w-3 h-3 rounded-full bg-[#6366f1]" />
                           <span className="text-xs text-gray-500 dark:text-gray-400">{formatDateFull(compDate1)}</span>
@@ -549,9 +474,10 @@ export default function Analytics() {
             <div className="card p-6">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Текущие показатели</h2>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">Процент от нормы по каждому витамину</p>
-              <div className="h-80">
+              <div className="h-[320px] sm:h-80">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
+                    accessibilityLayer={!isMobile}
                     data={analysis.filter(a => a.value !== null).map(a => ({
                       name: a.vitamin_name.replace('Витамин ', '').split(' ')[0],
                       percent: a.norm_max > 0 ? Math.round((a.value! / a.norm_max) * 100) : 0,
@@ -561,7 +487,7 @@ export default function Analytics() {
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
                     <XAxis type="number" tick={{ fontSize: 11, fill: chartColors.axis }} stroke={chartColors.axisLine} domain={[0, 'auto']} unit="%" />
-                    <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: chartColors.axis }} stroke={chartColors.axisLine} width={80} />
+                    <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: chartColors.axis }} stroke={chartColors.axisLine} width={isMobile ? 64 : 80} />
                     <Tooltip
                       contentStyle={{
                         backgroundColor: chartColors.tooltipBg,

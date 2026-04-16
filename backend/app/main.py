@@ -9,8 +9,9 @@ from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from sqlalchemy import text
 
+from app import models as _models  # noqa: F401
 from app.config import settings
-from app.database import engine
+from app.database import Base, engine
 from app.routers import auth, profile, vitamins, recipes, favorites, notifications
 
 logging.basicConfig(level=logging.INFO)
@@ -76,7 +77,9 @@ async def startup_check_db():
         try:
             async with engine.begin() as conn:
                 await conn.execute(text("SELECT 1"))
+                await conn.run_sync(Base.metadata.create_all)
             logger.info("Database connection OK")
+            logger.info("Database schema ensured")
             return
         except Exception as e:
             logger.warning("DB connection attempt %d/15 failed: %s", attempt, e)

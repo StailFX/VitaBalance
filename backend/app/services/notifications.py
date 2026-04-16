@@ -4,7 +4,7 @@ Deduplication: only creates a notification if there is no unread notification
 of the same type for this user in the last 24 hours, preventing spam on
 repeated analysis page loads.
 """
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from typing import List
 
 from sqlalchemy import select, func
@@ -18,7 +18,7 @@ async def _has_recent_notification(
     user_id: int, notif_type: str, db: AsyncSession, hours: int = 24
 ) -> bool:
     """Check if user already has an unread notification of this type within N hours."""
-    cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
+    cutoff = datetime.utcnow() - timedelta(hours=hours)
     count = await db.scalar(
         select(func.count(Notification.id)).where(
             Notification.user_id == user_id,

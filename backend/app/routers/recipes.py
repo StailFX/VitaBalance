@@ -18,10 +18,12 @@ router = APIRouter()
 
 @router.get("/recommended", response_model=List[RecipeShort])
 async def recommended_recipes(
+    limit: int = Query(default=20, ge=1, le=50),
+    offset: int = Query(default=0, ge=0),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    recipes = await get_recommended_recipes(current_user.id, db)
+    recipes = await get_recommended_recipes(current_user.id, db, limit=limit, offset=offset)
     return recipes
 
 
@@ -70,7 +72,7 @@ async def search_recipes(
     if max_time is not None:
         query = query.where(Recipe.cook_time_minutes <= max_time)
 
-    if sort == "title":
+    if sort in {"title", "name"}:
         query = query.order_by(Recipe.title)
     elif sort == "time":
         query = query.order_by(Recipe.cook_time_minutes)

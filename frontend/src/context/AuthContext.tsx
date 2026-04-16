@@ -1,6 +1,4 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
-import api from '../api/client'
-import { setLogoutCallback } from '../api/client'
 import type { UserOut } from '../types'
 
 interface AuthContextValue {
@@ -20,20 +18,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const token = localStorage.getItem('token')
-    if (token) {
-      api.get<UserOut>('/profile/me')
-        .then((res) => setUser(res.data))
-        .catch(() => {
-          localStorage.removeItem('token')
-          localStorage.removeItem('refreshToken')
-        })
-        .finally(() => setLoading(false))
-    } else {
+    if (!token) {
       setLoading(false)
+      return
+    }
+
+    let cancelled = false
+
+    import('../api/client')
+      .then(({ default: api }) => api.get<UserOut>('/profile/me'))
+      .then((res) => {
+        if (!cancelled) {
+          setUser(res.data)
+        }
+      })
+      .catch(() => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('refreshToken')
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setLoading(false)
+        }
+      })
+
+    return () => {
+      cancelled = true
     }
   }, [])
 
   const login = async (email: string, password: string): Promise<void> => {
+    const { default: api } = await import('../api/client')
     const formData = new URLSearchParams()
     formData.append('username', email)
     formData.append('password', password)
@@ -47,6 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const register = async (email: string, password: string): Promise<void> => {
+    const { default: api } = await import('../api/client')
     await api.post('/auth/register', { email, password })
     await login(email, password)
   }
@@ -58,8 +74,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
-    setLogoutCallback(logout)
-  }, [logout])
+    const token = localStorage.getItem('token')
+    if (!token) return
+
+    let cancelled = false
+
+    import('../api/client').then(({ setLogoutCallback }) => {
+      if (!cancelled) {
+        setLogoutCallback(logout)
+      }
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [logout, user])
 
   return (
     <AuthContext.Provider value={{ user, setUser, login, register, logout, loading }}>

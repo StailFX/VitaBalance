@@ -1,7 +1,9 @@
+import { lazy, Suspense, useState, useEffect, useRef, type ReactNode } from 'react'
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
-import { useState, useEffect, useRef, ReactNode } from 'react'
+
+const LayoutFooter = lazy(() => import('./LayoutFooter'))
 
 interface NavLinkProps {
   to: string
@@ -29,7 +31,7 @@ function NavLink({ to, children }: NavLinkProps) {
 }
 
 export default function Layout() {
-  const { user, logout } = useAuth()
+  const { user, logout, loading } = useAuth()
   const { dark, toggle } = useTheme()
   const navigate = useNavigate()
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -55,6 +57,8 @@ export default function Layout() {
   }, [])
 
   const userInitial = user?.email ? user.email.charAt(0).toUpperCase() : null
+  const hasStoredToken = typeof window !== 'undefined' && Boolean(window.localStorage.getItem('token'))
+  const authPending = loading && hasStoredToken
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100 dark:bg-[#0d1117] mesh-bg">
@@ -149,6 +153,18 @@ export default function Layout() {
                   )}
                 </div>
               </>
+            ) : authPending ? (
+              <>
+                <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-2" />
+                <div className="flex items-center gap-1">
+                  <div className="h-9 w-[6.5rem] rounded-xl bg-gray-200 dark:bg-gray-800 animate-pulse" />
+                  <div className="h-9 w-[5.5rem] rounded-xl bg-gray-200 dark:bg-gray-800 animate-pulse" />
+                  <div className="h-9 w-[6rem] rounded-xl bg-gray-200 dark:bg-gray-800 animate-pulse" />
+                  <div className="h-9 w-[5rem] rounded-xl bg-gray-200 dark:bg-gray-800 animate-pulse" />
+                  <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-2" />
+                  <div className="w-9 h-9 rounded-full bg-gray-200 dark:bg-gray-800 animate-pulse" />
+                </div>
+              </>
             ) : (
               <>
                 <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-2" />
@@ -236,6 +252,11 @@ export default function Layout() {
                 <Link to="/dashboard" className="block py-2 text-gray-600 dark:text-gray-300" onClick={() => setMobileOpen(false)}>Кабинет</Link>
                 <button onClick={() => { handleLogout(); setMobileOpen(false); }} className="block py-2 text-red-500">Выйти</button>
               </>
+            ) : authPending ? (
+              <>
+                <div className="h-10 rounded-xl bg-gray-200 dark:bg-gray-800 animate-pulse" />
+                <div className="h-10 rounded-xl bg-gray-200 dark:bg-gray-800 animate-pulse" />
+              </>
             ) : (
               <>
                 <Link to="/login" className="block py-2 text-gray-600 dark:text-gray-300" onClick={() => setMobileOpen(false)}>Вход</Link>
@@ -250,44 +271,9 @@ export default function Layout() {
         <Outlet />
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-gray-200 dark:border-white/[0.06] bg-white/60 dark:bg-white/[0.02] backdrop-blur-sm py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
-                  <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                  </svg>
-                </div>
-                <span className="text-lg font-bold text-gray-900 dark:text-white">VitaBalance</span>
-              </div>
-              <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                Персонализированный подбор рациона питания на основе анализа витаминного баланса.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-3 text-gray-800 dark:text-gray-200">Навигация</h4>
-              <div className="space-y-2 text-sm text-gray-500 dark:text-gray-400">
-                <Link to="/vitamins" className="block hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Справочник витаминов</Link>
-                <Link to="/products" className="block hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Поиск продуктов</Link>
-                <Link to="/recipes" className="block hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Рецепты</Link>
-                <Link to="/register" className="block hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Регистрация</Link>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-3 text-gray-800 dark:text-gray-200">Важно</h4>
-              <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                Сервис не заменяет консультацию врача. Рекомендации носят информационный характер. Для точной диагностики обратитесь к специалисту.
-              </p>
-            </div>
-          </div>
-          <div className="border-t border-gray-200 dark:border-white/[0.06] pt-6 text-center text-xs text-gray-400 dark:text-gray-500">
-            &copy; 2026 VitaBalance. Все права защищены.
-          </div>
-        </div>
-      </footer>
+      <Suspense fallback={<div className="content-auto py-10" />}>
+        <LayoutFooter />
+      </Suspense>
     </div>
   )
 }
