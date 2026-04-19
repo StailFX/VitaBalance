@@ -1,8 +1,8 @@
 from collections import defaultdict
-from datetime import date, datetime
-from typing import Dict, List, Optional
+from datetime import datetime
+from typing import Dict, List, Optional, Tuple
 
-from sqlalchemy import func as sa_func, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.user_data import UserVitaminEntry
@@ -11,31 +11,21 @@ from app.services.cache import cached_vitamins
 from app.services.utils import classify_vitamin_status, get_norms_for_gender, get_user_gender
 
 
-async def get_vitamin_history(
-    user_id: int,
-    db: AsyncSession,
-    limit: int = 30,
-    offset: int = 0,
-) -> List[AnalysisSnapshot]:
-    """Get paginated vitamin entry history grouped by submission timestamp."""
-    gender = await get_user_gender(user_id, db)
-    vitamins = {vitamin.id: vitamin for vitamin in await cached_vitamins(db)}
+def _snapshot_key(entry_date: datetime) -> str:
+    return entry_date.isoformat()
 
-    result = await db.execute(
-        select(UserVitaminEntry)
-        .where(UserVitaminEntry.user_id == user_id)
-        .order_by(UserVitaminEntry.entry_date.desc(), UserVitaminEntry.id.desc())
-    )
-    entries = result.scalars().all()
-    if not entries:
-        return []
 
+def _group_snapshots(
+    entries: List[UserVitaminEntry],
+    vitamins: Dict[int, object],
+    gender: Optional[str],
+) -> Tuple[List[str], Dict[str, Dict[int, HistoryVitaminEntry]]]:
     grouped: Dict[str, Dict[int, HistoryVitaminEntry]] = defaultdict(dict)
     grouped_sources: Dict[str, Dict[int, str]] = defaultdict(dict)
     snapshot_order: List[str] = []
 
     for entry in entries:
-        snapshot_key = entry.entry_date.replace(microsecond=0).isoformat()
+        snapshot_key = _snapshot_key(entry.entry_date)
         if snapshot_key not in grouped:
             snapshot_order.append(snapshot_key)
 
@@ -62,6 +52,59 @@ async def get_vitamin_history(
         )
         grouped_sources[snapshot_key][vitamin.id] = entry.source
 
+    return snapshot_order, grouped
+
+
+def _resolve_snapshot_key(requested: str, snapshot_order: List[str]) -> Optional[str]:
+    normalized = requested.strip()
+    if not normalized:
+        return None
+    if normalized in snapshot_order:
+        return normalized
+
+    normalized_no_z = normalized.removesuffix("Z")
+    for snapshot_key in snapshot_order:
+        if snapshot_key == normalized_no_z:
+            return snapshot_key
+        if snapshot_key.split(".")[0] == normalized_no_z.split(".")[0]:
+            return snapshot_key
+
+    requested_day = normalized.split("T", 1)[0]
+    for snapshot_key in snapshot_order:
+        if snapshot_key.startswith(f"{requested_day}T"):
+            return snapshot_key
+
+    return None
+
+
+async def _load_snapshot_map(
+    user_id: int,
+    db: AsyncSession,
+) -> Tuple[List[str], Dict[str, Dict[int, HistoryVitaminEntry]], Dict[int, object], Optional[str]]:
+    gender = await get_user_gender(user_id, db)
+    vitamins = {vitamin.id: vitamin for vitamin in await cached_vitamins(db)}
+
+    result = await db.execute(
+        select(UserVitaminEntry)
+        .where(UserVitaminEntry.user_id == user_id)
+        .order_by(UserVitaminEntry.entry_date.desc(), UserVitaminEntry.id.desc())
+    )
+    entries = result.scalars().all()
+    if not entries:
+        return [], {}, vitamins, gender
+
+    snapshot_order, grouped = _group_snapshots(entries, vitamins, gender)
+    return snapshot_order, grouped, vitamins, gender
+
+
+async def get_vitamin_history(
+    user_id: int,
+    db: AsyncSession,
+    limit: int = 30,
+    offset: int = 0,
+) -> List[AnalysisSnapshot]:
+    """Get paginated vitamin entry history grouped by exact submission timestamp."""
+    snapshot_order, grouped, _, _ = await _load_snapshot_map(user_id, db)
     selected_snapshots = snapshot_order[offset: offset + limit]
 
     return [
@@ -75,58 +118,30 @@ async def get_vitamin_history(
 
 async def compare_vitamin_analysis(
     user_id: int,
-    d1: date,
-    d2: date,
+    snapshot1: str,
+    snapshot2: str,
     db: AsyncSession,
 ) -> List[ComparisonItem]:
-    """Compare vitamin levels between two dates."""
-    gender = await get_user_gender(user_id, db)
-    vitamins = {vitamin.id: vitamin for vitamin in await cached_vitamins(db)}
+    """Compare vitamin levels between two exact history snapshots."""
+    snapshot_order, grouped, vitamins, gender = await _load_snapshot_map(user_id, db)
 
-    async def get_closest_entries(target_date: date) -> Dict[int, float]:
-        target_dt = datetime(target_date.year, target_date.month, target_date.day)
-        result = await db.execute(
-            select(UserVitaminEntry)
-            .where(UserVitaminEntry.user_id == user_id)
-            .order_by(
-                sa_func.abs(sa_func.extract("epoch", UserVitaminEntry.entry_date - target_dt)),
-                UserVitaminEntry.entry_date.desc(),
-                UserVitaminEntry.id.desc(),
-            )
-            .limit(50)
-        )
-        entries = result.scalars().all()
-        if not entries:
-            return {}
-
-        nearest_date: Optional[str] = None
-        grouped: Dict[int, float] = {}
-        grouped_sources: Dict[int, str] = {}
-        for entry in entries:
-            entry_date_key = entry.entry_date.strftime("%Y-%m-%d")
-            if nearest_date is None:
-                nearest_date = entry_date_key
-            if entry_date_key != nearest_date:
-                break
-            existing_source = grouped_sources.get(entry.vitamin_id)
-            if existing_source == "lab" and entry.source != "lab":
-                continue
-            grouped[entry.vitamin_id] = entry.value
-            grouped_sources[entry.vitamin_id] = entry.source
-        return grouped
-
-    entries1 = await get_closest_entries(d1)
-    entries2 = await get_closest_entries(d2)
+    snapshot_key1 = _resolve_snapshot_key(snapshot1, snapshot_order)
+    snapshot_key2 = _resolve_snapshot_key(snapshot2, snapshot_order)
+    entries1 = grouped.get(snapshot_key1, {}) if snapshot_key1 else {}
+    entries2 = grouped.get(snapshot_key2, {}) if snapshot_key2 else {}
 
     all_vitamin_ids = set(entries1.keys()) | set(entries2.keys())
     comparison: List[ComparisonItem] = []
+
     for vitamin_id in sorted(all_vitamin_ids):
         vitamin = vitamins.get(vitamin_id)
         if not vitamin:
             continue
 
-        value1 = entries1.get(vitamin_id)
-        value2 = entries2.get(vitamin_id)
+        entry1 = entries1.get(vitamin_id)
+        entry2 = entries2.get(vitamin_id)
+        value1 = entry1.value if entry1 else None
+        value2 = entry2.value if entry2 else None
         norm_min, norm_max = get_norms_for_gender(vitamin, gender)
 
         def get_status(value: Optional[float], nmin: float = norm_min, nmax: float = norm_max) -> str:

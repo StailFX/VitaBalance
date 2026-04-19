@@ -1,6 +1,7 @@
+from datetime import datetime
 from typing import List
 
-from sqlalchemy import select, delete, func
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.vitamin import Vitamin, SymptomVitaminMap
@@ -113,14 +114,7 @@ async def process_symptoms(user_id: int, symptom_ids: List[int], db: AsyncSessio
     # Get vitamins for norm data (cached)
     all_vitamins = {v.id: v for v in await cached_vitamins(db)}
 
-    # Delete old symptom-based entries and create new ones atomically.
-    # Transaction managed by get_db() session.begin() — auto-commit/rollback.
-    await db.execute(
-        delete(UserVitaminEntry).where(
-            UserVitaminEntry.user_id == user_id,
-            UserVitaminEntry.source == "symptom",
-        )
-    )
+    snapshot_at = datetime.utcnow()
 
     # Create entries: higher weight = more deficiency (value further below norm)
     for vit_id, total_weight in vitamin_weights.items():
@@ -139,4 +133,5 @@ async def process_symptoms(user_id: int, symptom_ids: List[int], db: AsyncSessio
             vitamin_id=vit_id,
             value=estimated_value,
             source="symptom",
+            entry_date=snapshot_at,
         ))

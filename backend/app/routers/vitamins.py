@@ -1,10 +1,10 @@
 import logging
+from datetime import date, datetime
 from typing import List, Optional
-from datetime import date
 
 from fastapi import APIRouter, Depends, Query, HTTPException
 from fastapi.responses import Response
-from sqlalchemy import select, delete, func
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -63,15 +63,7 @@ async def create_entries(
     if len(entries) == 0:
         raise HTTPException(status_code=400, detail="At least one entry required")
 
-    # Delete old lab entries and insert new ones atomically.
-    # Transaction is managed by get_db() via session.begin() — auto-commits
-    # on success, auto-rolls back on any exception. No data loss possible.
-    await db.execute(
-        delete(UserVitaminEntry).where(
-            UserVitaminEntry.user_id == current_user.id,
-            UserVitaminEntry.source == "lab",
-        )
-    )
+    snapshot_at = datetime.utcnow()
 
     for entry in entries:
         db.add(UserVitaminEntry(
@@ -79,6 +71,7 @@ async def create_entries(
             vitamin_id=entry.vitamin_id,
             value=entry.value,
             source=entry.source,
+            entry_date=snapshot_at,
         ))
     return {"message": f"Сохранено {len(entries)} записей"}
 
@@ -168,18 +161,12 @@ async def export_analysis_pdf(
 
 @router.get("/analysis/compare", response_model=List[ComparisonItem])
 async def compare_analysis(
-    date1: str = Query(..., description="First date (YYYY-MM-DD)"),
-    date2: str = Query(..., description="Second date (YYYY-MM-DD)"),
+    date1: str = Query(..., description="First snapshot timestamp"),
+    date2: str = Query(..., description="Second snapshot timestamp"),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    try:
-        d1 = date.fromisoformat(date1)
-        d2 = date.fromisoformat(date2)
-    except ValueError:
-        raise HTTPException(status_code=400, detail="Неверный формат даты, используйте YYYY-MM-DD")
-
-    return await compare_vitamin_analysis(current_user.id, d1, d2, db)
+    return await compare_vitamin_analysis(current_user.id, date1, date2, db)
 
 
 @router.get("/history", response_model=List[AnalysisSnapshot])

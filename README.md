@@ -1,243 +1,226 @@
 # VitaBalance
 
-Веб-сервис персонализированного подбора рациона питания на основе витаминного баланса.
+VitaBalance — веб‑сервис для оценки витаминного баланса, просмотра истории замеров и подбора продуктов, рецептов и плана питания под текущие дефициты.
 
-Анализирует данные пользователя (лабораторные анализы или анкету самочувствия), определяет дефициты и профициты витаминов, и подбирает рецепты для нормализации баланса.
+Проект состоит из React/Vite frontend, FastAPI backend и PostgreSQL. Приложение поддерживает два источника входных данных:
 
-## Стек технологий
+- лабораторные значения витаминов и минералов;
+- анкета симптомов как fallback-оценка дефицитов, когда анализов нет.
 
-| Слой | Технологии |
-|------|-----------|
-| **Frontend** | React 19, TypeScript 5, Vite 8, Tailwind CSS 4, Recharts |
-| **Backend** | Python, FastAPI, SQLAlchemy 2.0 (async), Alembic |
-| **БД** | PostgreSQL 16 |
-| **Инфра** | Docker, Docker Compose, Nginx, Let's Encrypt (HTTPS) |
-| **Авторизация** | JWT (access + refresh токены), bcrypt |
-| **Интеграции** | USDA FoodData Central API |
+## Что умеет проект сейчас
 
-## Функционал
+- регистрация, логин, refresh токены, профиль пользователя;
+- ввод лабораторных значений и анкеты самочувствия;
+- анализ статусов `deficiency / normal / excess / no_data`;
+- история снимков по точным timestamp сохранения;
+- аналитика: heatmap, сравнение snapshot’ов, обзор по проценту от нормы;
+- PDF-экспорт результатов анализа;
+- подбор продуктов по витаминам и поиску;
+- рекомендованные рецепты и дневной план питания;
+- избранное, уведомления, светлая/тёмная тема, мобильная адаптация;
+- PWA-оболочка и статический фронт через nginx.
 
-- **Регистрация и авторизация** — JWT access/refresh токены, хеширование паролей (bcrypt), rate limiting
-- **Личный кабинет** — профиль (пол, возраст, рост, вес), история анализов, экспорт в PDF
-- **Ввод данных** — лабораторные анализы витаминов или анкета симптомов самочувствия
-- **Анализ витаминного баланса** — определение дефицитов/профицитов 20 витаминов и минералов с учётом пола, визуализация (Recharts)
-- **Аналитика** — тепловая карта, сравнение периодов, обзор витаминного профиля
-- **Подбор рецептов** — алгоритм ранжирования рецептов по релевантности дефицитам
-- **План питания** — автогенерация дневного рациона под ваши дефициты
-- **Справочник витаминов** — описание, функции, симптомы дефицита/избытка, нормы
-- **Поиск продуктов** — по названию и содержанию витаминов, импорт из USDA API
-- **Избранные рецепты** — сохранение, сортировка, управление
-- **История анализов** — тренды изменений, сравнение дат
-- **Уведомления** — toast-уведомления о критических дефицитах после анализа (дедупликация 24ч)
-- **Тёмная/светлая тема** — адаптивный дизайн, mobile-first
-- **PWA** — установка на устройство, офлайн-заглушка
-- **Анимации** — scroll-анимации, stagger-эффекты, анимированные счётчики
+## Текущие seed-данные
 
-## Отслеживаемые витамины и минералы
+- `20` витаминов и минералов;
+- `94` продукта;
+- `60` рецептов;
+- `108` symptom mapping записей.
 
-| Витамины | Минералы | Другое |
-|----------|----------|--------|
-| A (Ретинол) | Железо | Омега-3 |
-| B1 (Тиамин) | Кальций | |
-| B2 (Рибофлавин) | Магний | |
-| B3 (Ниацин) | Цинк | |
-| B5 (Пантотеновая кислота) | Селен | |
-| B6 (Пиридоксин) | Фосфор | |
-| B9 (Фолиевая кислота) | Калий | |
-| B12 (Кобаламин) | | |
-| C (Аскорбиновая кислота) | | |
-| D (Кальциферол) | | |
-| E (Токоферол) | | |
-| K (Филлохинон) | | |
+## Технологии
 
-## База данных
+| Слой | Стек |
+| --- | --- |
+| Frontend | React 19, TypeScript, Vite, Tailwind CSS, Recharts, React Router |
+| Backend | FastAPI, SQLAlchemy 2 async ORM, Pydantic, slowapi |
+| База данных | PostgreSQL 16 |
+| Инфра | Docker, Docker Compose, nginx |
+| Авторизация | JWT access/refresh tokens |
+| Интеграции | USDA FoodData Central |
 
-- **20** витаминов и минералов с нормами (муж/жен)
-- **91** продукт с полным витаминным составом (12 категорий)
-- **35** рецептов с ингредиентами и пошаговыми инструкциями
-- **108** маппингов симптомов на витамины
+## Архитектура в двух словах
 
-## Быстрый старт
+```text
+Browser / PWA
+  -> nginx (frontend container)
+  -> /api/v1/* proxy
+  -> FastAPI
+  -> SQLAlchemy async session
+  -> PostgreSQL
+```
+
+Ключевой доменный принцип:
+
+- каждый submit лабораторных данных сохраняется как отдельный snapshot;
+- каждый submit анкеты симптомов тоже сохраняется как отдельный snapshot;
+- лабораторные значения всегда имеют приоритет над symptom-based оценками;
+- symptom flow умеет только оценивать дефициты и не определяет норму/избыток.
+
+## Структура репозитория
+
+```text
+.
+├── backend/
+│   ├── app/
+│   │   ├── main.py
+│   │   ├── config.py
+│   │   ├── database.py
+│   │   ├── auth_utils.py
+│   │   ├── models/
+│   │   ├── routers/
+│   │   ├── schemas/
+│   │   ├── services/
+│   │   ├── seed.py
+│   │   ├── reseed.py
+│   │   └── seed_data/
+│   ├── alembic/
+│   ├── Dockerfile
+│   └── requirements.txt
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── api/
+│   │   ├── components/
+│   │   ├── config/
+│   │   ├── context/
+│   │   ├── hooks/
+│   │   ├── pages/
+│   │   ├── types/
+│   │   └── utils/
+│   ├── Dockerfile
+│   ├── nginx.conf
+│   └── vite.config.ts
+├── docs/
+├── docker-compose.yml
+├── ARCHITECTURE.md
+└── .github/workflows/deploy.yml
+```
+
+## Docker запуск
 
 ### Требования
 
-- Docker и Docker Compose
+- Docker
+- Docker Compose
+- заполненный `.env` в корне проекта
 
-### Запуск
+### Важные переменные окружения
+
+Минимально нужны:
+
+```env
+POSTGRES_USER=...
+POSTGRES_PASSWORD=...
+POSTGRES_DB=...
+SECRET_KEY=...
+USDA_API_KEY=...
+```
+
+Backend контейнер сам собирает:
+
+- `DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}`
+- `DATABASE_URL_SYNC=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}`
+
+### Старт
 
 ```bash
-# 1. Клонировать репозиторий
-git clone https://github.com/StailFX/VitaBalance.git
-cd VitaBalance
-
-# 2. Создать .env файл
-cp backend/.env.example backend/.env
-# Отредактировать SECRET_KEY в .env
-
-# 3. Запустить все сервисы
 docker compose up -d --build
-
-# 4. Загрузить начальные данные
-docker exec vita-balance-backend-1 python -m app.seed
+docker compose exec backend python -m app.seed
 ```
 
-Приложение будет доступно:
-- **Frontend:** http://localhost
-- **Backend API:** http://localhost:8000
-- **Swagger UI:** http://localhost:8000/docs
+### Порты в docker-compose
 
-### Обновление данных в существующей БД
+- frontend: `127.0.0.1:3010 -> 80`
+- backend: `127.0.0.1:8010 -> 8000`
+- PostgreSQL наружу не публикуется
+
+Если поверх контейнеров стоит системный nginx на VPS, он обычно проксирует:
+
+- `https://vita-balance.ru/` -> frontend `127.0.0.1:3010`
+- `https://vita-balance.ru/api/` -> backend `127.0.0.1:8010`
+
+### Обновление seed-данных без потери пользовательских данных
 
 ```bash
-docker exec vita-balance-backend-1 python -m app.reseed
+docker compose exec backend python -m app.reseed
 ```
 
-Скрипт `reseed.py` безопасно обновляет витамины, продукты, рецепты и симптомы — добавляет новые и обновляет существующие без потери пользовательских данных.
+`reseed.py` обновляет витамины, продукты, рецепты и symptom mapping, не удаляя пользовательские записи.
 
-### Локальная разработка (без Docker)
+## Локальная разработка без Docker
+
+### Backend
 
 ```bash
-# Backend
 cd backend
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload
+```
 
-# Frontend
+### Frontend
+
+```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-## Структура проекта
+Обычно в dev frontend работает на `http://localhost:5173`.
 
-```
-VitaBalance/
-├── backend/
-│   ├── app/
-│   │   ├── main.py              # FastAPI приложение, CORS, middleware
-│   │   ├── config.py            # Настройки (pydantic-settings)
-│   │   ├── database.py          # SQLAlchemy async engine, session.begin()
-│   │   ├── auth_utils.py        # JWT создание/верификация токенов
-│   │   ├── seed.py              # Первоначальное заполнение БД
-│   │   ├── reseed.py            # Обновление данных в существующей БД
-│   │   ├── models/              # SQLAlchemy ORM модели
-│   │   ├── schemas/             # Pydantic схемы валидации
-│   │   ├── routers/             # API endpoints
-│   │   │   ├── auth.py          # Регистрация, логин, refresh, сброс пароля
-│   │   │   ├── profile.py       # CRUD профиля пользователя
-│   │   │   ├── vitamins.py      # Витамины, анализы, история, продукты
-│   │   │   ├── recipes.py       # Рецепты, рекомендации, план питания
-│   │   │   ├── favorites.py     # Избранные рецепты
-│   │   │   └── notifications.py # Уведомления
-│   │   ├── services/            # Бизнес-логика
-│   │   │   ├── analysis.py      # Алгоритм анализа витаминов
-│   │   │   ├── recommendation.py # Алгоритм подбора рецептов
-│   │   │   ├── usda.py          # Интеграция с USDA FoodData Central API
-│   │   │   ├── cache.py         # Кэширование справочных данных
-│   │   │   ├── history.py       # Работа с историей анализов
-│   │   │   └── notifications.py # Логика уведомлений (с дедупликацией 24ч)
-│   │   └── seed_data/           # JSON с начальными данными
-│   ├── alembic/                 # Миграции БД
-│   ├── Dockerfile
-│   └── requirements.txt
-├── frontend/
-│   ├── src/
-│   │   ├── types/               # TypeScript типы (доменные модели)
-│   │   │   ├── index.ts         # Реэкспорт всех типов
-│   │   │   ├── auth.ts          # TokenResponse, LoginPayload
-│   │   │   ├── user.ts          # UserOut, UserProfile, ProfileUpdate
-│   │   │   ├── vitamins.ts      # Vitamin, SymptomMapping, VitaminEntry
-│   │   │   ├── analysis.ts      # VitaminStatus, AnalysisSnapshot
-│   │   │   ├── recipes.ts       # RecipeShort, RecipeDetail, MealPlanItem
-│   │   │   ├── products.ts      # ProductSearchResult
-│   │   │   └── notifications.ts # NotificationItem, UnreadCount
-│   │   ├── components/          # Переиспользуемые компоненты (.tsx)
-│   │   │   ├── Layout.tsx       # Навбар, футер, навигация
-│   │   │   ├── AnimateIn.tsx    # Scroll-анимации, stagger-эффекты
-│   │   │   └── PageTransition.tsx
-│   │   ├── pages/               # 15 страниц приложения (.tsx)
-│   │   │   ├── Home.tsx         # Главная с анимациями и статистикой
-│   │   │   ├── AnalysisResults.tsx # Результаты анализа (Recharts)
-│   │   │   ├── Analytics.tsx    # Аналитика: тепловая карта, сравнение
-│   │   │   ├── MealPlan.tsx     # План питания
-│   │   │   └── ...
-│   │   ├── context/             # React Context (.tsx) — Auth, Theme, Toast
-│   │   ├── hooks/               # Хуки (.ts) — useInView, useCountUp
-│   │   ├── api/                 # Axios клиент (.ts) с типизацией
-│   │   └── utils/               # Утилиты (.ts) — иконки, цвета графиков
-│   ├── tsconfig.json            # TypeScript конфигурация
-│   ├── vite.config.ts           # Vite конфигурация
-│   ├── Dockerfile
-│   └── nginx.conf
-└── docker-compose.yml
+## Полезные сценарии
+
+### 1. Пользователь ввёл анализы
+
+- frontend отправляет список значений в `POST /api/v1/vitamins/entries`;
+- backend сохраняет один новый snapshot с общим `entry_date`;
+- история и аналитика видят новый замер как отдельную запись.
+
+### 2. Пользователь заполнил симптомы
+
+- frontend отправляет `symptom_ids` в `POST /api/v1/vitamins/entries/symptoms`;
+- backend оценивает вероятные дефициты;
+- symptom snapshot не затирает лабораторные данные;
+- для витаминов без анализов используются symptom-based значения;
+- нормы и избытки из симптомов не вычисляются.
+
+### 3. План питания
+
+`GET /api/v1/recipes/meal-plan` не хранит “один вечный план” в БД. План пересчитывается из текущего анализа и топ-рекомендованных рецептов, поэтому может меняться после новых замеров.
+
+## Основные API группы
+
+- `/api/v1/auth/*` — авторизация, refresh, reset password;
+- `/api/v1/profile/*` — профиль пользователя;
+- `/api/v1/vitamins/*` — справочник, ввод данных, анализ, история, продукты;
+- `/api/v1/recipes/*` — рецепты, рекомендации, план питания;
+- `/api/v1/favorites/*` — избранные рецепты;
+- `/api/v1/notifications/*` — уведомления.
+
+## CI/CD и деплой
+
+В репозитории есть workflow [`.github/workflows/deploy.yml`](/Users/stailfx/Desktop/KursachArtem/.github/workflows/deploy.yml).
+
+Что делает deploy:
+
+1. реагирует на push в `main`;
+2. подключается к VPS по SSH;
+3. делает `git fetch origin main`;
+4. обновляет рабочую копию на сервере;
+5. запускает `docker compose up -d --build --remove-orphans`;
+6. прогревает backend;
+7. запускает `python -m app.seed`.
+
+Если менялись рецепты, продукты или симптомы, после деплоя стоит дополнительно прогнать:
+
+```bash
+docker compose exec backend python -m app.reseed
 ```
 
-## API Endpoints
+## Документация
 
-### Аутентификация
-| Метод | Путь | Описание |
-|-------|------|----------|
-| POST | `/api/v1/auth/register` | Регистрация |
-| POST | `/api/v1/auth/login` | Авторизация |
-| POST | `/api/v1/auth/refresh` | Обновление access токена |
-| PUT | `/api/v1/auth/change-password` | Смена пароля |
-| POST | `/api/v1/auth/password-reset/request` | Запрос сброса пароля |
-| POST | `/api/v1/auth/password-reset/confirm` | Подтверждение сброса |
-
-### Профиль
-| Метод | Путь | Описание |
-|-------|------|----------|
-| GET | `/api/v1/profile/me` | Получить профиль |
-| PUT | `/api/v1/profile/me` | Обновить профиль |
-
-### Витамины и анализы
-| Метод | Путь | Описание |
-|-------|------|----------|
-| GET | `/api/v1/vitamins/` | Список витаминов |
-| GET | `/api/v1/vitamins/symptoms` | Список симптомов |
-| GET | `/api/v1/vitamins/stats` | Статистика (кол-во данных) |
-| POST | `/api/v1/vitamins/entries` | Сохранить анализы |
-| POST | `/api/v1/vitamins/entries/symptoms` | Отправить анкету симптомов |
-| DELETE | `/api/v1/vitamins/entries/{id}` | Удалить запись |
-| GET | `/api/v1/vitamins/analysis` | Результат анализа |
-| GET | `/api/v1/vitamins/analysis/compare` | Сравнение двух дат |
-| GET | `/api/v1/vitamins/history` | История анализов |
-| GET | `/api/v1/vitamins/products` | Поиск продуктов |
-| GET | `/api/v1/vitamins/products/usda-search` | Поиск в USDA |
-| POST | `/api/v1/vitamins/products/usda-import` | Импорт из USDA |
-| POST | `/api/v1/vitamins/products/usda-bulk-import` | Массовый импорт из USDA |
-
-### Рецепты
-| Метод | Путь | Описание |
-|-------|------|----------|
-| GET | `/api/v1/recipes/recommended` | Рекомендованные рецепты |
-| GET | `/api/v1/recipes/meal-plan` | План питания на день |
-| GET | `/api/v1/recipes/search` | Поиск рецептов |
-| GET | `/api/v1/recipes/{id}` | Детали рецепта |
-
-### Избранное
-| Метод | Путь | Описание |
-|-------|------|----------|
-| GET | `/api/v1/favorites/` | Список избранного |
-| POST | `/api/v1/favorites/{recipe_id}` | Добавить в избранное |
-| DELETE | `/api/v1/favorites/{recipe_id}` | Удалить из избранного |
-
-### Уведомления
-| Метод | Путь | Описание |
-|-------|------|----------|
-| GET | `/api/v1/notifications/` | Список уведомлений |
-| GET | `/api/v1/notifications/count` | Количество непрочитанных |
-
-## Алгоритм подбора рецептов
-
-1. Из данных пользователя (анализы или анкета) получаются значения витаминов
-2. Значения сравниваются с нормами (с учётом пола) — определяются дефициты с severity (% отклонения)
-3. Для каждого рецепта через ингредиенты рассчитывается витаминный состав
-4. **Relevance score** = сумма (содержание витамина в рецепте × severity дефицита) для каждого дефицитного витамина
-5. Рецепты сортируются по score — наиболее релевантные выше
-
-## Лицензия
-
-MIT
+- [ARCHITECTURE.md](/Users/stailfx/Desktop/KursachArtem/ARCHITECTURE.md) — актуальная техническая карта проекта;
+- [frontend/README.md](/Users/stailfx/Desktop/KursachArtem/frontend/README.md) — frontend-specific notes;
+- [docs/media-guide.md](/Users/stailfx/Desktop/KursachArtem/docs/media-guide.md) — работа с рецептами, картинками и иконками;
+- [docs/recipe-image-sources.md](/Users/stailfx/Desktop/KursachArtem/docs/recipe-image-sources.md) — источники локальных recipe images.

@@ -12,6 +12,7 @@ import { useInView, useCountUp } from '../hooks/useAnimations'
 import { useMediaQuery } from '../hooks/useMediaQuery'
 import { useTheme } from '../context/ThemeContext'
 import { getChartColors } from '../utils/chartColors'
+import { formatMoscowDateTime } from '../utils/datetime'
 import type { VitaminAnalysisItem, AnalysisSnapshot, ComparisonItem, VitaminStatus } from '../types'
 
 interface StatusColorEntry {
@@ -192,8 +193,9 @@ export default function Analytics() {
     )
   }
 
-  const formatDate = (d: string) => new Date(d).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' })
-  const formatDateFull = (d: string) => new Date(d).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' })
+  const formatDate = (d: string) => new Date(`${d.replace('Z', '')}Z`).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' })
+  const formatDateFull = (d: string) => formatMoscowDateTime(d, false)
+  const formatSnapshotLabel = (d: string) => formatMoscowDateTime(d, true)
 
   return (
     <PageTransition>
@@ -312,7 +314,7 @@ export default function Analytics() {
                   className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-primary-500 dark:border-white/[0.1] dark:bg-white/[0.05] dark:text-white"
                 >
                   {availableDates.map(d => (
-                    <option key={d} value={d}>{formatDateFull(d)}</option>
+                    <option key={d} value={d}>{formatSnapshotLabel(d)}</option>
                   ))}
                 </select>
               </div>
@@ -329,7 +331,7 @@ export default function Analytics() {
                   className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-primary-500 dark:border-white/[0.1] dark:bg-white/[0.05] dark:text-white"
                 >
                   {availableDates.map(d => (
-                    <option key={d} value={d}>{formatDateFull(d)}</option>
+                    <option key={d} value={d}>{formatSnapshotLabel(d)}</option>
                   ))}
                 </select>
               </div>
@@ -448,11 +450,11 @@ export default function Analytics() {
                       <div className="mt-3 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
                         <div className="flex items-center gap-2">
                           <div className="w-3 h-3 rounded-full bg-[#6366f1]" />
-                          <span className="text-xs text-gray-500 dark:text-gray-400">{formatDateFull(compDate1)}</span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">{formatDateFull(compDate1)}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="w-3 h-3 rounded-full bg-[#10b981]" />
-                          <span className="text-xs text-gray-500 dark:text-gray-400">{formatDateFull(compDate2)}</span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">{formatDateFull(compDate2)}</span>
                         </div>
                       </div>
                     </div>
