@@ -13,6 +13,7 @@
   --color-primary-700: #4338ca;
   --color-primary-800: #3730a3;
   --color-primary-900: #312e81;
+  --color-primary-950: #1e1b4b;
 
   --color-accent-50: #ecfdf5;
   --color-accent-100: #d1fae5;
@@ -22,9 +23,21 @@
   --color-accent-500: #10b981;
   --color-accent-600: #059669;
   --color-accent-700: #047857;
+  --color-accent-800: #065f46;
+  --color-accent-900: #064e3b;
+  --color-accent-950: #022c22;
 
+  --color-cyan-50: #ecfeff;
+  --color-cyan-100: #cffafe;
+  --color-cyan-200: #a5f3fc;
+  --color-cyan-300: #67e8f9;
   --color-cyan-400: #22d3ee;
   --color-cyan-500: #06b6d4;
+  --color-cyan-600: #0891b2;
+  --color-cyan-700: #0e7490;
+  --color-cyan-800: #155e75;
+  --color-cyan-900: #164e63;
+  --color-cyan-950: #083344;
 }
 
 /* === Animations === */
@@ -154,11 +167,24 @@
   .animate-float-reverse,
   .animate-pulse-slow,
   .animate-glow,
-  .animate-mesh,
-  .animate-shimmer {
+  .animate-mesh {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  .animate-slide-up,
+  .animate-fade-in {
+    animation-duration: 0.28s;
+  }
+
+  button,
+  a,
+  input,
+  textarea,
+  select,
+  [class*="transition-"] {
+    transition-duration: 180ms;
   }
 
   .hover-lift:hover,
@@ -178,6 +204,11 @@
   .mesh-bg::before {
     background:
       linear-gradient(180deg, rgba(99, 102, 241, 0.08) 0%, rgba(6, 182, 212, 0.05) 42%, transparent 100%);
+  }
+
+  .dark .mesh-bg::before {
+    background:
+      linear-gradient(180deg, rgba(16, 185, 129, 0.035) 0%, rgba(6, 182, 212, 0.025) 42%, transparent 100%);
   }
 }
 

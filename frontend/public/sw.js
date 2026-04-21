@@ -1,5 +1,5 @@
-const ASSET_CACHE = 'vitabalance-assets-v3'
-const PAGE_CACHE = 'vitabalance-pages-v3'
+const ASSET_CACHE = 'vitabalance-assets-v4'
+const PAGE_CACHE = 'vitabalance-pages-v4'
 const STATIC_ASSETS = ['/favicon.svg', '/manifest.json']
 
 self.addEventListener('install', (event) => {

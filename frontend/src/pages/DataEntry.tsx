@@ -194,7 +194,7 @@ export default function DataEntry() {
 
         {mode === 'lab' ? (
           <form onSubmit={handleLabSubmit} className="bg-white dark:bg-white/[0.03] rounded-3xl border border-gray-200 dark:border-white/[0.08] shadow-sm overflow-hidden">
-            <div className="surface-tint-card bg-gradient-to-r from-primary-50 via-blue-50 to-cyan-50 dark:from-primary-900/20 dark:to-blue-900/20 px-6 py-4 border-b border-slate-200/70 dark:border-white/[0.06]">
+            <div className="surface-tint-card bg-gradient-to-r from-primary-50 via-blue-50 to-cyan-50 dark:from-primary-950/45 dark:via-slate-900/70 dark:to-cyan-950/35 px-6 py-4 border-b border-slate-200/70 dark:border-white/[0.06]">
               <div className="flex items-center gap-3">
                 <div className="surface-icon w-10 h-10 rounded-xl bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center">
                   <svg className="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

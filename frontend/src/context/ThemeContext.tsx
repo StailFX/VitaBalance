@@ -21,6 +21,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     } else {
       root.classList.remove('dark')
     }
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', dark ? '#0d1117' : '#f3f6fb')
     localStorage.setItem('theme', dark ? 'dark' : 'light')
   }, [dark])
 

@@ -15,7 +15,7 @@
     />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://vita-balance.ru/" />
-    <meta name="theme-color" content="#6366f1" />
+    <meta name="theme-color" content="#f3f6fb" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta property="og:type" content="website" />
@@ -36,6 +36,23 @@
     <meta name="twitter:image" content="https://vita-balance.ru/icons/icon-512.png" />
     <link rel="apple-touch-icon" href="/icons/icon-192.png" />
     <title>VitaBalance — Витаминный баланс</title>
+    <script>
+      ;(() => {
+        try {
+          const storedTheme = localStorage.getItem('theme')
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isDark = storedTheme ? storedTheme === 'dark' : prefersDark
+
+          document.documentElement.classList.toggle('dark', isDark)
+          document.querySelector('meta[name="theme-color"]')?.setAttribute(
+            'content',
+            isDark ? '#0d1117' : '#f3f6fb'
+          )
+        } catch {
+          /* Keep initial paint safe if storage is blocked. */
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>
